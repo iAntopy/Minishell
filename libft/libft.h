@@ -6,7 +6,7 @@
 /*   By: iamongeo <marvin@42quebec.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/28 16:20:53 by iamongeo          #+#    #+#             */
-/*   Updated: 2022/11/03 00:04:42 by iamongeo         ###   ########.fr       */
+/*   Updated: 2022/11/16 20:45:55 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -248,12 +248,12 @@ typedef struct s_list
 
 t_list	*ft_lstnew(void *content);
 t_list	*ft_lstcreate(void *content, size_t size_of);
-int		ft_lstinsert(t_list **lst, unsigned int index, t_list *new);
-void	ft_lstadd_front(t_list **lst, t_list *new);
-void	ft_lstadd_back(t_list **lst, t_list *new);
+int		ft_lstinsert(t_list **lst, unsigned int index, t_list *new_elem);
+void	ft_lstadd_front(t_list **lst, t_list *new_elem);
+void	ft_lstadd_back(t_list **lst, t_list *new_elem);
 int		ft_lstsize(t_list *lst);
 t_list	*ft_lstlast(t_list *lst);
-void	ft_lstadd_back(t_list **lst, t_list *new);
+void	ft_lstadd_back(t_list **lst, t_list *new_elem);
 void	*ft_lstpop(t_list **lst, unsigned int index);
 void	ft_lstdelone(t_list *lst, void (*del)(void *));
 void	ft_lstclear(t_list **lst, void (*del)(void *));

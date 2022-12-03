@@ -6,7 +6,7 @@
 /*   By: iamongeo <marvin@42quebec.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/28 16:20:53 by iamongeo          #+#    #+#             */
-/*   Updated: 2022/11/03 00:04:42 by iamongeo         ###   ########.fr       */
+/*   Updated: 2022/11/16 19:50:50 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,8 @@ int		ft_strequ(char const *s1, char const *s2);
 int		ft_strnequ(char const *s1, char const *s2, size_t n);
 char	*ft_substr(char const *s, unsigned int start, size_t len);
 char	*ft_strjoin(char const *s1, char const *s2);
-char	*ft_strtrim(char const *s1, char const *set);
+char	*ft_strtrim(char const *s, char const *set);
+char	*ft_strtrim_space(char const *s);
 char	**ft_split(char const *s, char c);
 char	**ft_split_set(char const *s, char *set);
 char	**ft_split_space(char const *s);
@@ -111,7 +112,7 @@ char	*ft_strupper(char *str);
 
 char	substring_substitution(char *str, char **subst);
 void	restore_substring(char *str, char sc);
-void	restore_substrings_in_tab(char **tab, char sc);
+void	restore_substrings_in_tab(char **strtab, char sc);
 
 void	ft_putchar(int c);
 void	ft_putstr(char const *s);
@@ -158,10 +159,10 @@ char	**get_env_paths(char **env);
 int		find_file_in_paths(char *fname, char **paths, char **fpath, int mode);
 
 /// STR TAB UTILS /// for malloced char ptr tabs such as ft_split returned tab.
-int		strtab_len(char **tab);
-void	*strtab_clear(char ***tab);	// takes ptr of ptr to array of (char *)
-void	strtab_swap(char **tab, int index1, int index2);
-void	strtab_print(char **tab);
+int		strtab_len(char **strtab);
+void	*strtab_clear(char ***strtab);	// takes ptr of ptr to array of (char *)
+void	strtab_swap(char **strtab, int index1, int index2);
+void	strtab_print(char **strtab);
 
 /////// GET_NEXT_LINE ////////
 # ifndef GNL_BUFFER_SIZE
