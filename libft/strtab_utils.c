@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/28 04:23:34 by iamongeo          #+#    #+#             */
-/*   Updated: 2022/10/12 18:27:51 by iamongeo         ###   ########.fr       */
+/*   Updated: 2022/12/04 07:17:13 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,4 +69,19 @@ void	strtab_print(char **tab)
 		tab++;
 	}
 	ft_printf("@---------------@@@--------------@\n");
+}
+
+char	**strtab_copy(char **tab)
+{
+	char	**new_tab;
+	char	**n;
+
+	if (!tab || !ft_malloc_p(sizeof(char *) * (strtab_len(tab) + 1),
+		(void **)&new_tab))
+		return (NULL);
+	n = new_tab;
+	while (*tab)
+		*(n++) = ft_strdup(*(tab++));
+	*n = NULL;
+	return (new_tab);
 }

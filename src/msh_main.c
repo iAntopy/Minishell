@@ -6,7 +6,7 @@
 /*   By: iamongeo <marvin@42quebec.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/16 19:16:03 by iamongeo          #+#    #+#             */
-/*   Updated: 2022/11/16 20:15:03 by iamongeo         ###   ########.fr       */
+/*   Updated: 2022/12/04 08:07:26 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,10 @@
 
 int	msh_clear(t_msh *msh, int exit_code)
 {
+	if (msh->paths)
+		strtab_clear(&msh->paths);
+	if (msh->envp)
+		strtab_clear(&msh->envp);
 	if (msh->rawline)
 		ft_free_p((void **)&msh->rawline);
 	rl_clear_history();
@@ -32,9 +36,14 @@ int	msh_parse_rawline(t_msh *msh)
 	
 }
 
-int	msh_init(t_msh *msh)
+int	msh_init(t_msh *msh, char **envp)
 {
-	msh->path = 
+	if (!msh || !envp)
+		return (repport_missing_input(__FUNCTION__));
+	msh->paths = get_env_paths(envp);
+	if (!msh->paths || msh_envp_copy(envp, &msh->envp) < 0)
+		return (repport_malloc_err(__FUNCTION__));
+	return (0);
 }
 
 int	main(int argc, char **argv, char **envp)

@@ -6,7 +6,7 @@
 /*   By: iamongeo <marvin@42quebec.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/28 16:20:53 by iamongeo          #+#    #+#             */
-/*   Updated: 2022/11/16 20:45:55 by iamongeo         ###   ########.fr       */
+/*   Updated: 2022/12/04 07:18:01 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,6 +162,7 @@ int		strtab_len(char **tab);
 void	*strtab_clear(char ***tab);	// takes ptr of ptr to array of (char *)
 void	strtab_swap(char **tab, int index1, int index2);
 void	strtab_print(char **tab);
+char	**strtab_copy(char **tab);
 
 /////// GET_NEXT_LINE ////////
 # ifndef GNL_BUFFER_SIZE

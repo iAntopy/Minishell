@@ -6,18 +6,20 @@
 /*   By: iamongeo <marvin@42quebec.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/02 16:47:43 by iamongeo          #+#    #+#             */
-/*   Updated: 2022/12/02 21:11:49 by iamongeo         ###   ########.fr       */
+/*   Updated: 2022/12/04 04:52:06 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../incl/minishell.h"
 
-static const char	*meta_chars[8] = {"<<", ">>", "<", ">", "||", "|", "&&", NULL};
-static const int	meta_lens[7] = {2, 2, 1, 1, 2, 1, 2};
+#define _META_CHARS "<>|&*"
 
 int	is_meta_char(char *c, int *len)
 {
-	int	i;
+	static const int	meta_lens[8] = {2, 2, 1, 1, 2, 1, 2, 1};
+	static const char	*meta_chars[9] = {
+		"<<", ">>", "<", ">", "||", "|", "&&", "*", NULL};
+	int					i;
 
 	if (len)
 		*len = 0;
@@ -34,7 +36,15 @@ int	is_meta_char(char *c, int *len)
 	return (0);
 }
 
-static size_t	spaced_meta_chars_size_counter(char *str)
+int	contains_meta_char(char *str)
+{
+	while (*str)
+		if (ft_strchr(_META_CHARS, *(str++)))
+			return (1);
+	return (0);
+}
+
+static size_t	spaced_meta_chars_size(char *str)
 {
 	char	quote_switch;
 	size_t	i;
@@ -50,48 +60,44 @@ static size_t	spaced_meta_chars_size_counter(char *str)
 			quote_switch = str[i++];
 			while (str[i] && str[i] != quote_switch)
 				i++;
+			if (!str[i])
+				return (0);
 		}
 		else if (!quote_switch && is_meta_char(str + i, NULL))
 			extra_spaces += 2;
 	}
-	return (i + extra_spaces);
+	return (sizeof(char) * (i + extra_spaces + 1));
 }
 
 char	*spaceout_meta_chars(char *str)
 {
 	char	*ret;
 	char	*r;
-	size_t	size;
 	char	quote_switch;
-	size_t	i;
 	int		meta_len;
 
-	if (!str)
+	ret = NULL;
+	if (!str || !ft_malloc_p(spaced_meta_chars_size(str), (void **)&ret))
 		return (NULL);
-	size = spaced_meta_chars_size_counter(str);
-	if (!ft_malloc_p(sizeof(char) * (size + 1), (void **)&ret))
-		return (NULL);
-	i = -1;
 	quote_switch = 0;
 	r = ret;
-	while (str[++i])
+	while (*str)
 	{
-		if (str[i] == '\"' || str[i] == '\'')
-			quote_switch = str[i] * (quote_switch == 0);
-		if (!quote_switch && is_meta_char(str + i, &meta_len))
+		if (*str == '\"' || *str == '\'')
+			quote_switch = (*str) * (quote_switch == 0);
+		if (!quote_switch && is_meta_char(str, &meta_len))
 		{
 			*(r++) = ' ';
-			ft_memcpy(r, str + i, meta_len);
-			r += meta_len;
-			str += meta_len - 1;
+			r = ft_memcpy(r, str, meta_len) + meta_len;
 			*(r++) = ' ';
+			str += meta_len;
 		}
 		else
-			*(r++) = str[i];
+			*(r++) = *(str++);
 	}	
 	return (ret);
 }
-
+/*
 int	main(int argc, char **argv)
 {
 	char	*ret;
@@ -100,7 +106,15 @@ int	main(int argc, char **argv)
 		return (1);
 	ret = NULL;
 	ret = spaceout_meta_chars(argv[1]);
+	if (!ret)
+	{
+		ft_eprintf("spacedout_meta_chars returned NULL.");
+		ft_eprintf("Either missing input, malloc error\
+		 or unclosed (double) quotes.\n");
+		return (1);
+	}
 	printf("input str : %s\n", argv[1]);
 	printf("spaced out  str : %s\n", ret);
 	return (0);
 }
+*/

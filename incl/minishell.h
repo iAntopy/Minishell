@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/16 01:39:11 by iamongeo          #+#    #+#             */
-/*   Updated: 2022/12/02 21:25:50 by iamongeo         ###   ########.fr       */
+/*   Updated: 2022/12/04 07:32:17 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@
 # include <stdio.h>
 # include <readline/readline.h>
 # include <readline/history.h>
-# include <term.h>
-# include <curses.h>
+//# include <term.h>
+//# include <curses.h>
 
 # include "libft.h"
 
@@ -45,5 +45,15 @@ enum	e_err_codes
 	E_MALLOC,
 	E_RAWLINE_CLR
 };
+
+// builtins
+int	msh_builtin_echo(t_msh *msh, char **argv);
+//int	msh_builtin_cd(t_msh *msh, char *path);
+int	msh_builtin_env(char **envp);
+int	msh_builtin_pwd(void);
+
+// ERROR HANDLING
+int	repport_missing_input(const char *fn);
+int	repport_malloc_err(const char *fn);
 
 #endif
