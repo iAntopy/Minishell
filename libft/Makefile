@@ -1,7 +1,7 @@
 FUNC_NAMES_M =	issign isspace isalpha isdigit isalnum isascii			\
 		isprint strlen memset bzero memcpy memmove strlcpy		\
 		strlcat isupper islower toupper tolower				\
-		strchr strrchr strchr_set strrchr_set				\
+		strchr strrchr strchr_set strrchr_set strchr_space		\
 		strcmp strncmp memchr memcmp memclear strnstr			\
 		atoi atol atoi_base itoa 					\
 		calloc strlcat substr strjoin strtrim strdup			\

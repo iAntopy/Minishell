@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 06:08:27 by iamongeo          #+#    #+#             */
-/*   Updated: 2022/12/04 07:49:04 by iamongeo         ###   ########.fr       */
+/*   Updated: 2022/12/05 07:37:42 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,11 +88,33 @@ int	msh_envp_copy(char **envp, char ***ret)
 
 	if (!envp || !ret)
 		return (repport_missing_input(__FUNCTION__));
+	envp_cpy = NULL;
 	envp_cpy = strtab_copy(envp);
 	if (!envp_cpy)
 		return (repport_malloc_err(__FUNCTION__));
 	*ret = envp_cpy;
 	return (0);
+}
+
+char	*msh_getenv(t_msh *msh, char *var)
+{
+	char	**envp;
+
+	if (!msh || !msh->envp || !var)
+		return (NULL);
+	printf("msh getenv : entered with var : %s\n", var);
+	envp = msh->envp;
+	while (*envp)
+	{
+		if (ft_strnstr(*envp, var, 64))
+		{
+			printf("msh getenv : match found \n");
+			return (ft_strchr(*envp, '=') + 1);
+		}
+		envp++;
+	}
+	printf("msh getenv : no match for var %s\n", var);
+	return (NULL);
 }
 /*
 int	main(int argc, char **argv, char **envp)
@@ -102,10 +124,10 @@ int	main(int argc, char **argv, char **envp)
 	if (msh_envp_copy(envp, &msh.envp) < 0)
 		return (1);
 	strtab_print(msh.envp);
-	msh_envp_add_entry(&msh, "ASS", "blaster");
-	msh_envp_add_entry(&msh, "BUTTZ", "JIGGLER");
+	msh_envp_add_entry(&msh, "JINGLE", "JANGLES");
+	msh_envp_add_entry(&msh, "HOHOHO", "les cocos");
 	strtab_print(msh.envp);
-	msh_envp_remove_entry(&msh, "ASS");
+	msh_envp_remove_entry(&msh, "JINGLE");
 	strtab_print(msh.envp);
 	strtab_clear(&msh.envp);
 	return (0);

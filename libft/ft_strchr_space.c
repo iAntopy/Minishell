@@ -1,23 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlen.c                                        :+:      :+:    :+:   */
+/*   ft_strchr_space.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iamongeo <marvin@42quebec.com>             +#+  +:+       +#+        */
+/*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/03/28 15:53:15 by iamongeo          #+#    #+#             */
-/*   Updated: 2022/12/05 07:40:07 by iamongeo         ###   ########.fr       */
+/*   Created: 2022/12/05 05:43:46 by iamongeo          #+#    #+#             */
+/*   Updated: 2022/12/05 05:48:11 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int	ft_strlen(char const *str)
-{
-	int	i;
+#include "libft.h"
 
-	if (!str)
-		return (0);
-	i = 0;
-	while (str[i])
-		i++;
-	return (i);
+char	*ft_strchr_space(const char *s)
+{
+	if (!s)
+		return (NULL);
+	while (*s && !ft_isspace(*s))
+		s++;
+	if (*s)
+		return ((char *)s);
+	return (NULL);
 }

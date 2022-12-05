@@ -1,18 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   spaceout_meta_chars.c                              :+:      :+:    :+:   */
+/*   meta_chars_utils.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: iamongeo <marvin@42quebec.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/02 16:47:43 by iamongeo          #+#    #+#             */
-/*   Updated: 2022/12/04 04:52:06 by iamongeo         ###   ########.fr       */
+/*   Updated: 2022/12/05 08:08:33 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../incl/minishell.h"
-
-#define _META_CHARS "<>|&*"
+#include "minishell.h"
 
 int	is_meta_char(char *c, int *len)
 {
@@ -44,7 +42,7 @@ int	contains_meta_char(char *str)
 	return (0);
 }
 
-static size_t	spaced_meta_chars_size(char *str)
+static size_t	spaced_size(char *str)
 {
 	char	quote_switch;
 	size_t	i;
@@ -69,18 +67,18 @@ static size_t	spaced_meta_chars_size(char *str)
 	return (sizeof(char) * (i + extra_spaces + 1));
 }
 
-char	*spaceout_meta_chars(char *str)
+// Assumes that str contains meta chars as validated by contains_meta_char(str).
+int	spaceout_meta_chars(char *str, char **ret)
 {
-	char	*ret;
 	char	*r;
 	char	quote_switch;
 	int		meta_len;
 
-	ret = NULL;
-	if (!str || !ft_malloc_p(spaced_meta_chars_size(str), (void **)&ret))
-		return (NULL);
+	*ret = NULL;
+	if (!str || !ret || !ft_malloc_p(spaced_size(str), (void **)ret))
+		return (-1);
 	quote_switch = 0;
-	r = ret;
+	r = *ret;
 	while (*str)
 	{
 		if (*str == '\"' || *str == '\'')
@@ -89,13 +87,15 @@ char	*spaceout_meta_chars(char *str)
 		{
 			*(r++) = ' ';
 			r = ft_memcpy(r, str, meta_len) + meta_len;
-			*(r++) = ' ';
 			str += meta_len;
+			while (*str && ft_isspace(*str))
+				str++;
 		}
 		else
 			*(r++) = *(str++);
-	}	
-	return (ret);
+	}
+	*r = '\0';
+	return (0);
 }
 /*
 int	main(int argc, char **argv)
