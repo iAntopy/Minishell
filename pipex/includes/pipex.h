@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/28 23:19:58 by iamongeo          #+#    #+#             */
-/*   Updated: 2022/10/12 22:29:31 by iamongeo         ###   ########.fr       */
+/*   Updated: 2022/12/05 21:23:58 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@
 # ifndef CMD_MAX
 #  define CMD_MAX 2
 # endif
-# define HDOC_SIZE 4096
+# define HDOC_SIZE 200000//4096
 
 typedef struct s_pipex_super_struct
 {

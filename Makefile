@@ -6,7 +6,7 @@
 #    By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/16 01:26:25 by iamongeo          #+#    #+#              #
-#    Updated: 2022/12/05 06:30:38 by iamongeo         ###   ########.fr        #
+#    Updated: 2022/12/06 19:57:34 by iamongeo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,21 +31,37 @@ INCL		= inc/
 
 LIBFT		= libft/libft.a
 
-CC		= gcc
-CFLAGS		= -Wall -Wextra -Werror -lreadline -ltermcap
+#READDIR		= readline-8.2/
+#READLIB		= $(READDIR)libreadline.a
+#READMAKE	= $(READDIR)Makefile
 
-NAME		= minishell
+CC		= gcc
+CFLAGS		= -Wall -Wextra -Werror #-lreadline #-ltermcap
+
+LIBS	= $(LIBFT) -lreadline
+
+NAME	= minishell
 
 %.o:		%.c
-		-$(CC) $(CFLAGS) -I$(INCL) -c $< -o $@
+		-$(CC) $(CFLAGS) -I$(INCL) -c $< -o $@ #$(READDIR)
 
-$(NAME):	$(LIBFT) $(OBJ_M)
-		$(CC) $(CFLAGS) -o $(NAME) $(OBJ_M) $(LIBFT)
+$(NAME):	$(LIBFT) $(OBJ_M) #$(READLIB)
+		$(CC) $(CFLAGS) -o $(NAME) $(OBJ_M) $(LIBS) #$(READLIB)
 
 $(LIBFT):
 		make -C libft/
 
-all:		$(NAME) $(NAME_BONUS)
+#$(READDIR):
+#		tar -xf --keep-newer-files readline-8.2.tar.gz
+
+#$(READMAKE):	$(READDIR)
+#		cd $(READDIR); ./configure
+
+#$(READLIB):	$(READMAKE)
+#		make -C $(READDIR)
+#		cp $(READDIR)*.h $(INCL)
+
+all:	$(NAME) $(NAME_BONUS)
 
 clean:
 		rm -f $(OBJ_M) $(OBJ_B) $(LIBFT)

@@ -6,7 +6,7 @@
 /*   By: iamongeo <marvin@42quebec.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/16 19:16:03 by iamongeo          #+#    #+#             */
-/*   Updated: 2022/12/05 07:25:18 by iamongeo         ###   ########.fr       */
+/*   Updated: 2022/12/06 22:17:15 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ int	msh_init(t_msh *msh, char **envp)
 	return (0);
 }
 
+/*
 int	msh_start_job_manager(t_msh *msh)
 {
 	int	pid;
@@ -67,7 +68,8 @@ int	msh_start_job_manager(t_msh *msh)
 		msh->job_pid = pid;
 	return (0);
 }
-
+*/
+/*
 void	terminal_infos_tests(void)
 {
 	int	slot;
@@ -93,7 +95,7 @@ void	terminal_infos_tests(void)
 //	printf("baud rate where padding needed : %d\n", tnum);
 	printf("msec for carridge return : %d\n", tnum);
 }
-
+*/
 int	main(int argc, char **argv, char **envp)
 {
 	t_msh	msh;
@@ -115,12 +117,15 @@ int	main(int argc, char **argv, char **envp)
 			continue ;
 		if (msh.rawline[0])// && msh.rawline[0] != '\n')
 			add_history(msh.rawline);
-		msh_start_job_manager(&msh);
+		jm_manage_job(&msh);
+		printf("main : post manage job call\n");
+//		msh_start_job_manager(&msh);
 		///
 		/// set sigactions 
 		/// and waitpid msh.job_pid
 		/// then set msh.job_pid to 0
 		///
+		
 		waitpid(msh.job_pid, &msh.exit_status, 0);
 		printf("main : post waitpid exit status : %d\n", WEXITSTATUS(msh.exit_status));
 		ft_free_p((void **)&msh.rawline);

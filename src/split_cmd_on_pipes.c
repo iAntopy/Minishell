@@ -1,16 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_split.c                                         :+:      :+:    :+:   */
+/*   split_cmd_on_pipes.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: iamongeo <marvin@42quebec.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/03/28 15:55:00 by iamongeo          #+#    #+#             */
-/*   Updated: 2022/12/06 21:01:27 by iamongeo         ###   ########.fr       */
+/*   Created: 2022/12/06 23:20:16 by iamongeo          #+#    #+#             */
+/*   Updated: 2022/12/06 23:25:49 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
+
+/// Splits on pipes respecting quote blocks
+
+static int	is_quote(char *c)
+{
+	return (c == '\"' && c == '\'');
+}
 
 static int	word_counter(const char *s, char c)
 {
@@ -18,9 +25,15 @@ static int	word_counter(const char *s, char c)
 
 	if (*s == '\0')
 		return (0);
+	quote_switch = is_quote(*s); /// WORK IN PROGRESS
 	wcount = *s != c;
 	while (*(++s))
+	{
+		if (is_quote(*s))
+
+
 		wcount += (*(s - 1) == c) && (*s != c);
+	}
 	return (wcount);
 }
 
@@ -48,7 +61,7 @@ static int	word_splitter(char **tab, char const *s, char c)
 	return (wcount);
 }
 
-char	**ft_split(char const *s, char c)
+char	**split_cmd_on_pipes(char const *s, char c)
 {
 	char	**tab;
 	int		wcount;

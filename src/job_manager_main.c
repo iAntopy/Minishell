@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/05 00:26:12 by iamongeo          #+#    #+#             */
-/*   Updated: 2022/12/05 08:04:18 by iamongeo         ###   ########.fr       */
+/*   Updated: 2022/12/06 20:02:19 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,17 +21,17 @@ typedef struct	s_job
 	char	**pipe_split;
 }	t_job;
 
-int	jm_clear_exit(t_job *job, int exit_status)
+int	jm_clear(t_job *job, int return_status)
 {
 	if (!job)
-		return (exit_status);
+		return (-1);
 	if (job->var_subst)
 		ft_free_p((void **)&job->var_subst);
 	if (job->substr_subst)
 		ft_free_p((void **)&job->substr_subst);
 	if (job->spaced)
 		ft_free_p((void **)&job->spaced);
-	exit(exit_status);
+	return (return_status);
 }
 
 int	jm_manage_job(t_msh *msh)
@@ -48,7 +48,7 @@ int	jm_manage_job(t_msh *msh)
 	cur_line = msh->rawline;
 
 	if (ft_strchr(cur_line, '$') && msh_substitute_env_vars(msh, cur_line, &job.var_subst) < 0)
-		return (jm_clear_exit(&job, repport_jm_mlc_err(__FUNCTION__)));
+		return (jm_clear(&job, repport_jm_mlc_err(__FUNCTION__)));
 	printf("WOWSERS !\n");
 	if (job.var_subst)
 		cur_line = job.var_subst;
@@ -56,14 +56,14 @@ int	jm_manage_job(t_msh *msh)
 
 	if (contains_meta_char(cur_line)
 		&& spaceout_meta_chars(cur_line, &job.spaced) < 0)
-		return (jm_clear_exit(&job, repport_jm_mlc_err(__FUNCTION__)));
+		return (jm_clear(&job, repport_jm_mlc_err(__FUNCTION__)));
 	if (job.spaced)
 		cur_line = job.spaced;
 	ft_printf("jm : post meta char spacing : %s\n", cur_line);
 
 	job.sc = substring_substitution(cur_line, &job.substr_subst);
 	if (job.sc < 0)
-		return (jm_clear_exit(&job, repport_jm_mlc_err(__FUNCTION__)));
+		return (jm_clear(&job, repport_jm_mlc_err(__FUNCTION__)));
 	if (job.substr_subst)
 		cur_line = job.substr_subst;
 
@@ -71,5 +71,5 @@ int	jm_manage_job(t_msh *msh)
 	strtab_print(job.pipe_split);
 	printf("jm : cur_line after substitution and spacing : %s\n", cur_line);
 //	printf("jm : msh_getenv TERM : %s\n", msh_getenv(msh, "TERM"));
-	return (jm_clear_exit(&job, EXIT_SUCCESS));
+	return (jm_clear(&job, EXIT_SUCCESS));
 }

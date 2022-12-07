@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/16 01:39:11 by iamongeo          #+#    #+#             */
-/*   Updated: 2022/12/05 06:34:59 by iamongeo         ###   ########.fr       */
+/*   Updated: 2022/12/05 19:26:05 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,8 @@
 
 # include "libft.h"
 
-# include <curses.h>
-# include <term.h>
+//# include <curses.h>
+//# include <term.h>
 
 # ifndef rl_clear_history
 #  define rl_clear_history clear_history
