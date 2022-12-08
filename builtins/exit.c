@@ -1,25 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pwd.c                                              :+:      :+:    :+:   */
+/*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/12/04 05:06:50 by iamongeo          #+#    #+#             */
-/*   Updated: 2022/12/08 04:54:30 by iamongeo         ###   ########.fr       */
+/*   Created: 2022/12/08 04:08:20 by iamongeo          #+#    #+#             */
+/*   Updated: 2022/12/08 04:32:22 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	msh_builtin_pwd(t_msh *msh)
+static int	parse_exit_cmd(char *cmd, int *exit_status)
 {
-	char	buff[PATH_MAX + 2];
+	while (!ft_isspace(*cmd))
+		cmd++;
+	while (ft_isspace(*cmd))
+		cmd++;
+	if (cmd)
+		*exit_status = ft_atoi(cmd);
+	*exit_status = EXIT_SUCCESS;
+	return (0);
+}
 
-	(void)msh;
-	// TODO : Change PWD and OLDPWD in envp with msh_envp_[remove/add]_entry()
-	if (getcwd(buff, PATH_MAX + 1) == NULL)
+int	msh_builtin_exit(t_msh *msh, char *cmd)
+{
+	int	exit_status;
+
+	if (!msh || !cmd)
 		return (-1);
-	ft_printf("%s\n", buff);
+	parse_exit_cmd(cmd, &exit_status);
+	msh->request_exit = 1;
+	msh->shell_exit_status = exit_status;
 	return (0);
 }

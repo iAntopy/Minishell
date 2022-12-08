@@ -6,70 +6,89 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/05 00:26:12 by iamongeo          #+#    #+#             */
-/*   Updated: 2022/12/06 20:02:19 by iamongeo         ###   ########.fr       */
+/*   Updated: 2022/12/08 02:51:14 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-typedef struct	s_job
-{
-	char	sc;		// substitution character
-	char	*var_subst;	// 
-	char	*spaced;	// spaced meta char from spaceout_meta_chars()
-	char	*substr_subst;		// substituted substrings
-	char	**pipe_split;
-}	t_job;
-
-int	jm_clear(t_job *job, int return_status)
+int	job_clear(t_job *job, int return_status)
 {
 	if (!job)
 		return (-1);
-	if (job->var_subst)
-		ft_free_p((void **)&job->var_subst);
-	if (job->substr_subst)
-		ft_free_p((void **)&job->substr_subst);
-	if (job->spaced)
-		ft_free_p((void **)&job->spaced);
+	if (job->parsed)
+		ft_free_p((void **)&job->parsed);
+	if (job->pids)
+		ft_free_p((void **)&job->pids);
+	close_pipe(job->pp, job->pp + 1);
+	close_pipe(&job->rd_pipe, NULL);
 	return (return_status);
 }
+/*
+int	job_executor(t_job *job)
+{
+	if (!job || !job->msh)
+		return (repport_missing_input(__FUNCTION__));
+	printf("job exec : pipe split : \n");
+	strtab_print(job->pipe_split);
+	job->nb_cmds = strtab_len(job->pipe_split);
+	if (ft_malloc_p(sizeof(pid_t) * job->nb_cmds,
+		(void **)&job->pids))
+		return (repport_jm_mlc_err(__FUNCTION__));
+	
+	return (0);
+}
+*/
 
-int	jm_manage_job(t_msh *msh)
+static void	free_swap_lines(char **old, char **new)
+{
+	if (!(*new))
+		return ;
+	ft_free_p((void **)old);
+	*old = *new;
+	*new = NULL;
+}
+
+int	job_manager(t_msh *msh)
 {
 	t_job	job;
 	char	*cur_line;
 //	char	**pipe_split;
 
 	ft_memclear(&job, sizeof(t_job));
+	job.msh = msh;
 	cur_line = NULL;
 	if (!msh)
 		return (repport_missing_input(__FUNCTION__));
 	ft_printf("job manager main : line received : %s\n", msh->rawline);
-	cur_line = msh->rawline;
+	job.parsed = msh->rawline;
 
-	if (ft_strchr(cur_line, '$') && msh_substitute_env_vars(msh, cur_line, &job.var_subst) < 0)
-		return (jm_clear(&job, repport_jm_mlc_err(__FUNCTION__)));
-	printf("WOWSERS !\n");
-	if (job.var_subst)
-		cur_line = job.var_subst;
-	printf("jm : cur line after env var substitutions : %s\n", job.var_subst);
+	if (ft_strchr(job.parsed, '$') && msh_substitute_env_vars(msh, job.parsed, &cur_line) < 0)
+		return (job_clear(&job, repport_jm_mlc_err(__FUNCTION__)));
+	printf("jm : cur line after env var substitutions : %s\n", cur_line);
+	free_swap_lines(&job.parsed, &cur_line);
+	
+	printf("jm : parsed line after env var substitutions : %s\n", job.parsed);
 
-	if (contains_meta_char(cur_line)
-		&& spaceout_meta_chars(cur_line, &job.spaced) < 0)
-		return (jm_clear(&job, repport_jm_mlc_err(__FUNCTION__)));
-	if (job.spaced)
-		cur_line = job.spaced;
-	ft_printf("jm : post meta char spacing : %s\n", cur_line);
+	if (contains_meta_char(job.parsed)
+		&& spaceout_meta_chars(job.parsed, &cur_line) < 0)
+		return (job_clear(&job, -1));
+	free_swap_lines(&job.parsed, &cur_line);
+	ft_printf("jm : post meta char spacing : %s\n", job.parsed);
 
-	job.sc = substring_substitution(cur_line, &job.substr_subst);
+	if (ft_strchr_set(job.parsed, "\'\""))
+		job.sc = substring_substitution(job.parsed, &cur_line);
 	if (job.sc < 0)
-		return (jm_clear(&job, repport_jm_mlc_err(__FUNCTION__)));
-	if (job.substr_subst)
-		cur_line = job.substr_subst;
+		return (job_clear(&job, repport_jm_mlc_err(__FUNCTION__)));
+	free_swap_lines(&job.parsed, &cur_line);
 
-	job.pipe_split = ft_split(cur_line, '|');
-	strtab_print(job.pipe_split);
-	printf("jm : cur_line after substitution and spacing : %s\n", cur_line);
-//	printf("jm : msh_getenv TERM : %s\n", msh_getenv(msh, "TERM"));
-	return (jm_clear(&job, EXIT_SUCCESS));
+
+	if (split_cmd_on_pipes(job.parsed, &job.pipe_split) < 0)//ft_split(cur_line, '|');
+		return (job_clear(&job, repport_jm_mlc_err(__FUNCTION__)));
+	printf("jm : cur_line after substitution and spacing : %s\n", job.parsed);
+
+	if (job_executor(&job) < 0)
+		return (job_clear(&job, -1));
+
+	return (job_clear(&job, EXIT_SUCCESS));
 }

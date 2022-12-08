@@ -6,17 +6,30 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 05:39:33 by iamongeo          #+#    #+#             */
-/*   Updated: 2022/12/04 06:00:58 by iamongeo         ###   ########.fr       */
+/*   Updated: 2022/12/08 04:29:40 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	msh_builtin_echo(t_msh *msh, char **strs)
+static int	parse_echo_cmd(char *cmd, char ***strs)
+{
+	(void)cmd;
+	(void)strs;
+	return (0);
+}
+
+int	msh_builtin_echo(t_msh *msh, char *cmd)//char **strs)
 {
 	int	new_line;
+	char	**strs;
 
-	if (!strs)
+	// TODO : parse cmd to substitute environment variables with 
+	//		substitute_env_vars(t_msh *msh, char *line, char **ret)
+	//		then print without quotes chars.
+	//		ps : first word in cmd is 'echo'.
+	(void)msh;
+	if (parse_echo_cmd(cmd, &strs) < 0)
 		return (-1);
 	new_line = 1;
 	while (*strs)

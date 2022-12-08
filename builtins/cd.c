@@ -1,25 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pwd.c                                              :+:      :+:    :+:   */
+/*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/12/04 05:06:50 by iamongeo          #+#    #+#             */
-/*   Updated: 2022/12/08 04:54:30 by iamongeo         ###   ########.fr       */
+/*   Created: 2022/12/08 04:00:34 by iamongeo          #+#    #+#             */
+/*   Updated: 2022/12/08 04:07:50 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	msh_builtin_pwd(t_msh *msh)
+static int	parse_cd_cmd(char *cmd, char **path)
 {
-	char	buff[PATH_MAX + 2];
+	(void)cmd;
+	(void)path;
+	// TODO :	find second word in cmd that should be a path and put '\0'
+	//		and the end. return ptr to start of second word.
+	return (0);
+}
 
-	(void)msh;
-	// TODO : Change PWD and OLDPWD in envp with msh_envp_[remove/add]_entry()
-	if (getcwd(buff, PATH_MAX + 1) == NULL)
+int	msh_builtin_cd(t_msh *msh, char *cmd)
+{
+	char	*path;
+
+	if (!msh || !cmd)
 		return (-1);
-	ft_printf("%s\n", buff);
+	parse_cd_cmd(cmd, &path);
+	// TODO : Change PWD and OLDPWD in envp with msh_envp_[remove/add]_entry()
+
 	return (0);
 }

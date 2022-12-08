@@ -6,7 +6,7 @@
 /*   By: iamongeo <marvin@42quebec.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/06 23:20:16 by iamongeo          #+#    #+#             */
-/*   Updated: 2022/12/06 23:25:49 by iamongeo         ###   ########.fr       */
+/*   Updated: 2022/12/07 18:52:28 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,67 +14,85 @@
 
 /// Splits on pipes respecting quote blocks
 
-static int	is_quote(char *c)
+static char	is_quote(char c, char *quote_switch)
 {
-	return (c == '\"' && c == '\'');
+	*quote_switch = '\0';
+	if (c == '\"' || c == '\'')
+		*quote_switch = c;
+	return (*quote_switch);
 }
 
-static int	word_counter(const char *s, char c)
+static int	node_counter(char *s)
 {
 	int		wcount;
+	char	quote_switch;
 
 	if (*s == '\0')
 		return (0);
-	quote_switch = is_quote(*s); /// WORK IN PROGRESS
-	wcount = *s != c;
-	while (*(++s))
-	{
-		if (is_quote(*s))
-
-
-		wcount += (*(s - 1) == c) && (*s != c);
-	}
-	return (wcount);
-}
-
-static int	word_splitter(char **tab, char const *s, char c)
-{
-	int	wcount;
-	int	j;
-
-	wcount = 0;
+	wcount = ft_strncmp(s, " | ", 3) != 0;
 	while (*s)
 	{
-		j = 0;
-		while (*s && (*s == c))
-			s++;
-		if (*s)
-		{
-			while (*(s + j) && (*(s + j) != c))
-				j++;
-			tab[wcount] = ft_substr(s, 0, j);
-			if (!tab[wcount++])
-				return (-1);
-		}
-		s += j;
+		if (is_quote(*s, &quote_switch))
+			while (*(++s) && *s != is_quote(*s, &quote_switch))
+				continue ;
+		else
+			wcount += (ft_strncmp(s, " | ", 3) == 0) && *(s + 3);
+			//wcount += (*s == c) && *(s + 1) && (*(s + 1) != c);
+		s++;
 	}
 	return (wcount);
 }
 
-char	**split_cmd_on_pipes(char const *s, char c)
+static int	pipe_splitter(char **tab, char *str)
 {
-	char	**tab;
+	int		wcount;
+	char	quote_switch;
+	char	*s;
+
+	if (!str)
+		return (-1);
+	wcount = 0;
+	s = (char *)str;
+	while (*s)
+	{
+		if (is_quote(*s, &quote_switch))
+			while (*(++s) && *s != is_quote(*s, &quote_switch))
+				continue ;
+		if (ft_strncmp(s, " | ", 3) == 0)
+		{
+			if (s != str)
+				tab[wcount++] = ft_strndup(str, s - str);
+			str = s + 3;
+			s = str - 1;
+		}
+		else if (!(*(s + 1)))
+			tab[wcount++] = ft_strndup(str, SIZE_MAX);
+		s++;
+	}
+	return (wcount);
+}
+
+int	split_cmd_on_pipes(char *s, char ***ret)
+{
+//	char	**tab;
 	int		wcount;
 
 	if (!s)
-		return (NULL);
-	tab = NULL;
-	wcount = word_counter(s, c);
-	if (!ft_calloc_p(sizeof(char *) * (wcount + 1), (void **)&tab))
-		return (NULL);
-	if (wcount && word_splitter(tab, s, c) <= 0)
-		return (strtab_clear(&tab));
-	return (tab);
+		return (-1);
+//	tab = NULL;
+	*ret = NULL;
+	wcount = node_counter(s);
+	printf("split cmd : wcount %d\n", wcount);
+	if (!ft_calloc_p(sizeof(char *) * (wcount + 1), (void **)ret))
+		return (-1);
+	if (wcount && pipe_splitter(*ret, s) <= 0)
+	{
+		strtab_clear(ret);
+		return (-1);
+	}
+	printf("strtab after pipe split : \n");
+	strtab_print(*ret);
+	return (0);
 }
 /*
 int	main(int argc, char **argv)
@@ -85,7 +103,7 @@ int	main(int argc, char **argv)
 
 	if (argc < 2)
 		return (1);
-	tab = ft_split(argv[1], ' ');
+	tab = split_cmd_on_pipes(argv[1]);
 	if (!tab)
 	{
 		ft_printf("tab is NULL \n");

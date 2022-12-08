@@ -6,7 +6,7 @@
 /*   By: iamongeo <marvin@42quebec.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/16 19:16:03 by iamongeo          #+#    #+#             */
-/*   Updated: 2022/12/06 22:17:15 by iamongeo         ###   ########.fr       */
+/*   Updated: 2022/12/08 04:28:30 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,7 @@ int	main(int argc, char **argv, char **envp)
 		return (msh_clear(&msh, E_MSH_INIT));
 
 //	terminal_infos_tests();
-	while (1)
+	while (!msh.request_exit)
 	{
 		if (msh.rawline)
 			msh_clear(&msh, E_RAWLINE_CLR_ERR);
@@ -117,7 +117,7 @@ int	main(int argc, char **argv, char **envp)
 			continue ;
 		if (msh.rawline[0])// && msh.rawline[0] != '\n')
 			add_history(msh.rawline);
-		jm_manage_job(&msh);
+		job_manager(&msh);
 		printf("main : post manage job call\n");
 //		msh_start_job_manager(&msh);
 		///
@@ -126,9 +126,9 @@ int	main(int argc, char **argv, char **envp)
 		/// then set msh.job_pid to 0
 		///
 		
-		waitpid(msh.job_pid, &msh.exit_status, 0);
+//		waitpid(msh.job_pid, &msh.exit_status, 0);
 		printf("main : post waitpid exit status : %d\n", WEXITSTATUS(msh.exit_status));
 		ft_free_p((void **)&msh.rawline);
 	}
-	return (msh_clear(&msh, EXIT_SUCCESS));
+	return (msh_clear(&msh, msh.shell_exit_status));
 }

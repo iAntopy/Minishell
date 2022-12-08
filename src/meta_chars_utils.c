@@ -6,7 +6,7 @@
 /*   By: iamongeo <marvin@42quebec.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/02 16:47:43 by iamongeo          #+#    #+#             */
-/*   Updated: 2022/12/05 08:08:33 by iamongeo         ###   ########.fr       */
+/*   Updated: 2022/12/08 02:33:38 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ static size_t	spaced_size(char *str)
 	size_t	i;
 	size_t	extra_spaces;
 
+
 	quote_switch = '\0';
 	extra_spaces = 0;
 	i = -1;
@@ -67,36 +68,83 @@ static size_t	spaced_size(char *str)
 	return (sizeof(char) * (i + extra_spaces + 1));
 }
 
+static int	parse_single_meta_char(char **r_p, char **str_p, int *meta_len)
+{
+	char	*r;
+	char	*str;
+
+	r = *r_p;
+	str = *str_p;
+	*(r++) = ' ';
+	r = ft_memcpy(r, str, *meta_len) + *meta_len;
+	if (*str == '|' || *str == '&')
+		*(r++) = ' ';
+	str += *meta_len;
+	while (*str && ft_isspace(*str))
+		str++;
+	if (is_meta_char(str, meta_len))
+		return (repport_parsing_error(__FUNCTION__, str, *meta_len));
+	*r_p = r;
+	*str_p = str;
+	return (0);
+}
+
 // Assumes that str contains meta chars as validated by contains_meta_char(str).
+
+
 int	spaceout_meta_chars(char *str, char **ret)
 {
+	char	*out;
 	char	*r;
 	char	quote_switch;
 	int		meta_len;
 
-	*ret = NULL;
-	if (!str || !ret || !ft_malloc_p(spaced_size(str), (void **)ret))
-		return (-1);
+	out = NULL;
+	if (!str || !ret || !ft_malloc_p(spaced_size(str), (void **)&out))
+		return (repport_jm_mlc_err(__FUNCTION__));
 	quote_switch = 0;
-	r = *ret;
+	r = out;
 	while (*str)
 	{
 		if (*str == '\"' || *str == '\'')
 			quote_switch = (*str) * (quote_switch == 0);
-		if (!quote_switch && is_meta_char(str, &meta_len))
-		{
+		if (!quote_switch && is_meta_char(str, &meta_len)
+			&& parse_single_meta_char(&r, &str, &meta_len) < 0)
+//		{
+			return (ft_free_p((void **)ret) - 2);
+//			return (-1);
+//		}
+		else
+			*(r++) = *(str++);
+	}
+	*r = '\0';
+	if (*ret)
+		ft_free_p((void **)ret);
+	*ret = out;
+	return (0);
+}
+
+/*
 			*(r++) = ' ';
 			r = ft_memcpy(r, str, meta_len) + meta_len;
+			if (*str == '|' || *str == '&')
+				*(r++) = ' ';
 			str += meta_len;
 			while (*str && ft_isspace(*str))
 				str++;
-		}
+			if (is_meta_char(str, &meta_len))
+			{
+				ft_free_p((void **)ret);
+				return (repport_parsing_error(__FUNCTION__, str, meta_len));
+			}
+
 		else
 			*(r++) = *(str++);
 	}
 	*r = '\0';
 	return (0);
 }
+*/
 /*
 int	main(int argc, char **argv)
 {

@@ -1,34 +1,44 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   unset.c                                            :+:      :+:    :+:   */
+/*   pipe_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/12/04 08:32:40 by iamongeo          #+#    #+#             */
-/*   Updated: 2022/12/08 04:26:56 by iamongeo         ###   ########.fr       */
+/*   Created: 2022/12/08 02:19:04 by iamongeo          #+#    #+#             */
+/*   Updated: 2022/12/08 02:41:04 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int	parse_unset_cmd(char *cmd, char **var)
+int	close_pipe(int *rd, int *wr)
 {
-	(void)cmd;
-	(void)var;
-	// TODO :	find second word and put '\0' after it.
-	//		then *var = start of second word.
+	if (rd && *rd >= 3)
+	{
+		close(*rd);
+		*rd = -1;
+	}
+	if (wr && *wr >= 3)
+	{
+		close(*wr);
+		*wr = -1;
+	}
 	return (0);
 }
 
-int	msh_builtin_unset(t_msh *msh, char *cmd)//char *var)
+int	init_pipe(int pp[2], int *rd_pipe, int i, int nb_cmds)
 {
-	char	*var;
+	int	isfirst;
+	int	islast;
 
-	// TODO : maybe validate the variable name if required.
-	if (parse_unset_cmd(cmd, &var) < 0)
-		return (-1);
-	if (msh_envp_remove_entry(msh, var) < 0)
-		return (-1);
+	isfirst = (i == 0);
+	islast = (i == (nb_cmds - 1));
+	if (!islast && pipe(pp) < 0)
+		return (repport_pipe_err(__FUNCTION__));
+	if (isfirst)
+		*rd_pipe = STDIN_FILENO;
+	if (islast)
+		pp[1] = STDOUT_FILENO;
 	return (0);
 }

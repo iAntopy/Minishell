@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/05 05:04:41 by iamongeo          #+#    #+#             */
-/*   Updated: 2022/12/05 08:12:52 by iamongeo         ###   ########.fr       */
+/*   Updated: 2022/12/08 02:47:25 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ static size_t	find_substituted_str_size(t_msh *msh, char *line, char **vals)
 int	msh_substitute_env_vars(t_msh *msh, char *line, char **ret)
 {
 	char	*vals[256];
+	char	*out;
 	size_t	size;
 	char	*l;
 	char	*r;
@@ -63,15 +64,15 @@ int	msh_substitute_env_vars(t_msh *msh, char *line, char **ret)
 	printf("subst env vars : entered : msh %p, envp %p, line %p, ret %p\n", msh, msh->envp, line, ret);
 	if (!msh || !msh->envp || !line || !ret)
 		return (repport_missing_input(__FUNCTION__));
-	printf("subst env vars : checked \n");
+//	printf("subst env vars : checked \n");
 	size = find_substituted_str_size(msh, line, (char **)vals);
-	printf("subst env vars : size = %zu \n", size);
-	if (!ft_malloc_p(sizeof(char) * size, (void **)ret))
+//	printf("subst env vars : size = %zu \n", size);
+	if (!ft_malloc_p(sizeof(char) * size, (void **)&out))
 		return (repport_malloc_err(__FUNCTION__));
-	printf("subst env vars : malloced \n");
+//	printf("subst env vars : malloced \n");
 	quote_switch = 0;
 	l = line;
-	r = *ret;
+	r = out;
 	v = 0;
 	while (l && *l)
 	{
@@ -91,6 +92,9 @@ int	msh_substitute_env_vars(t_msh *msh, char *line, char **ret)
 			*(r++) = *(l++);
 	}
 	*r = '\0';
+	if (*ret)
+		ft_free_p((void **)ret);
+	*ret = out;
 	printf("subst env vars : ret at end : %s\n", *ret);
 	return (0);
 }
