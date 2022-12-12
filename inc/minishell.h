@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/16 01:39:11 by iamongeo          #+#    #+#             */
-/*   Updated: 2022/12/08 04:55:21 by iamongeo         ###   ########.fr       */
+/*   Updated: 2022/12/08 18:52:51 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define MINISHELL_H
 
 # include <sys/wait.h>
+# include <signal.h>
 # include <stdlib.h>
 # include <unistd.h>
 # include <fcntl.h>
