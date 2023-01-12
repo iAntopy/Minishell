@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   msh_main.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iamongeo <marvin@42quebec.com>             +#+  +:+       +#+        */
+/*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/16 19:16:03 by iamongeo          #+#    #+#             */
-/*   Updated: 2022/12/08 04:28:30 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/01/11 22:32:04 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	msh_clear(t_msh *msh, int exit_code)
 		strtab_clear(&msh->envp);
 	if (msh->rawline)
 		ft_free_p((void **)&msh->rawline);
-	rl_clear_history();
+	clear_history();
 	return (exit_code);
 }
 /*
@@ -113,6 +113,7 @@ int	main(int argc, char **argv, char **envp)
 			msh_clear(&msh, E_RAWLINE_CLR_ERR);
 
 		msh.rawline = readline(READLINE_PROMPT);
+//		printf("main : rawline received %p : %s\n", msh.rawline, msh.rawline);
 		if (!msh.rawline || msh.rawline[0] == '\0' || msh.rawline[0] == '\n')
 			continue ;
 		if (msh.rawline[0])// && msh.rawline[0] != '\n')
@@ -126,8 +127,8 @@ int	main(int argc, char **argv, char **envp)
 		/// then set msh.job_pid to 0
 		///
 		
-//		waitpid(msh.job_pid, &msh.exit_status, 0);
 		printf("main : post waitpid exit status : %d\n", WEXITSTATUS(msh.exit_status));
+		printf("main : rawline received %p : %s\n", msh.rawline, msh.rawline);
 		ft_free_p((void **)&msh.rawline);
 	}
 	return (msh_clear(&msh, msh.shell_exit_status));

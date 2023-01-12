@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/05 05:04:41 by iamongeo          #+#    #+#             */
-/*   Updated: 2022/12/08 02:47:25 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/01/11 19:04:42 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ static size_t	find_substituted_str_size(t_msh *msh, char *line, char **vals)
 		if (line[i] == '$')
 		{
 //			printf("find subst size : $ found at i = %zu\n", i);
+			
 			j = i;
 			while (line[++j] && !is_space_or_quote(line[j]))//!ft_isspace(line[j]) && line[j] != '\'' && line[j] != '\"')
 				var[j - i - 1] = line[j];

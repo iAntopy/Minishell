@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/16 01:39:11 by iamongeo          #+#    #+#             */
-/*   Updated: 2022/12/08 18:52:51 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/01/11 21:57:58 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,9 @@
 //# include <curses.h>
 //# include <term.h>
 
-# ifndef rl_clear_history
-#  define rl_clear_history clear_history
-# endif
+//# ifndef rl_clear_history
+//#  define rl_clear_history clear_history
+//# endif
 
 # define READLINE_PROMPT "minishell> "
 #define _META_CHARS "<>|&*"
@@ -67,10 +67,17 @@ enum	e_err_codes
 	E_JOB_MNG_FAILED
 };
 
+enum	e_builtin_status
+{
+	BUILTIN_FOUND = 0,
+	BUILTIN_FAILED = -1,
+	BUILTIN_NOT_FOUND = -2
+};
+
 // JOB MANAGER
 int	job_manager(t_msh *msh);
 int	job_executor(t_job *job);
-int	intercept_builtin_calls(t_job *job);
+int	intercept_builtin_call(t_job *job, char *cmd, int *builtin_status);
 int	parse_exec_cmd(t_msh *msh, char *cmd);
 int	init_pipe(int pp[2], int *rd_pipe, int i, int nb_cmds);
 int	close_pipe(int *rd_pipe, int *wr_pipe);

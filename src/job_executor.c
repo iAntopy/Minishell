@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 00:48:45 by iamongeo          #+#    #+#             */
-/*   Updated: 2022/12/08 04:56:48 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/01/11 20:21:36 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,23 +63,32 @@ static int	fork_child_processes(t_job *job)
 
 int	job_executor(t_job *job)
 {
+	int	builtin_status;
+	
 	if (!job)
 		return (repport_missing_input(__FUNCTION__));
 	printf("job exec : pipe split : \n");
 	strtab_print(job->pipe_split);
-	
-	if (intercept_builtin_calls(job) < 0)
-		return (repport_builtin_failure(__FUNCTION__));
 
 	job->nb_cmds = strtab_len(job->pipe_split);
+
+	if (job->nb_cmds == 1)
+	{
+		intercept_builtin_call(job, job->pipe_split[0], &builtin_status);
+		if (builtin_status == BUILTIN_FAILED)
+			return (repport_builtin_failure(__FUNCTION__));
+		else if (builtin_status == BUILTIN_FOUND)
+			return (0);
+	}
 	printf("job exec : mallocing pids\n");
 	if (!ft_malloc_p(sizeof(pid_t) * job->nb_cmds,
 		(void **)&job->pids))
 		return (repport_jm_mlc_err(__FUNCTION__));
 	printf("job exec : mallocing DONE\n");
 	printf("job exec : forking\n");
-	if (fork_child_processes(job) < 0)
-		return (-1);
+	(void)fork_child_processes;
+//	if (fork_child_processes(job) < 0)
+//		return (-1);
 	printf("job exec : forking DONE\n");
 	return (0);
 }

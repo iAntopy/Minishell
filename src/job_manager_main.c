@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/05 00:26:12 by iamongeo          #+#    #+#             */
-/*   Updated: 2022/12/08 02:51:14 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/01/11 21:36:50 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ int	job_clear(t_job *job, int return_status)
 		ft_free_p((void **)&job->parsed);
 	if (job->pids)
 		ft_free_p((void **)&job->pids);
+	if (job->pipe_split)
+		strtab_clear(&job->pipe_split);
 	close_pipe(job->pp, job->pp + 1);
 	close_pipe(&job->rd_pipe, NULL);
 	return (return_status);
@@ -61,7 +63,7 @@ int	job_manager(t_msh *msh)
 	if (!msh)
 		return (repport_missing_input(__FUNCTION__));
 	ft_printf("job manager main : line received : %s\n", msh->rawline);
-	job.parsed = msh->rawline;
+	job.parsed = ft_strtrim(msh->rawline, " ");
 
 	if (ft_strchr(job.parsed, '$') && msh_substitute_env_vars(msh, job.parsed, &cur_line) < 0)
 		return (job_clear(&job, repport_jm_mlc_err(__FUNCTION__)));

@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 06:08:27 by iamongeo          #+#    #+#             */
-/*   Updated: 2022/12/05 07:37:42 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/01/12 00:26:39 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,8 @@ int	msh_envp_add_entry(t_msh *msh, char *var, char *value)
 	i = -1;
 	while (envp[++i])
 		new_envp[i] = envp[i];
-	new_envp[len] = entry;
-	new_envp[len + 1] = NULL;
+	new_envp[i] = entry;
+	new_envp[i + 1] = NULL;
 	ft_free_p((void **)&envp);
 	msh->envp = new_envp;
 	return (0);
@@ -69,10 +69,10 @@ int	msh_envp_remove_entry(t_msh *msh, char *var)
 	if (!msh || !msh->envp || !var)
 		return (repport_missing_input(__FUNCTION__));
 	len = ft_strlen(var);
-	i = -1;
+	i = 0;
 	envp = msh->envp;
-	while (envp[++i] && ft_strncmp(var, envp[i], len) != 0)
-		continue ;
+	while (envp[i] && ft_strncmp(var, envp[i], len) != 0)
+		i++;
 	if (!envp[i])
 		return (0);
 	ft_free_p((void **)envp + i);
@@ -99,19 +99,21 @@ int	msh_envp_copy(char **envp, char ***ret)
 char	*msh_getenv(t_msh *msh, char *var)
 {
 	char	**envp;
+	int		i;
 
 	if (!msh || !msh->envp || !var)
 		return (NULL);
 	printf("msh getenv : entered with var : %s\n", var);
 	envp = msh->envp;
-	while (*envp)
+	i = 0;
+	while (envp[i])
 	{
-		if (ft_strnstr(*envp, var, 64))
+		if (ft_strncmp(envp[i], var, ft_strlen(var) == 0))
 		{
 			printf("msh getenv : match found \n");
-			return (ft_strchr(*envp, '=') + 1);
+			return (ft_strchr(envp[i], '=') + 1);
 		}
-		envp++;
+		i++;
 	}
 	printf("msh getenv : no match for var %s\n", var);
 	return (NULL);
