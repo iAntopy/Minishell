@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   envp_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tbeaudoi <tbeaudoi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 06:08:27 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/01/12 00:26:39 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/01/12 12:54:47 by tbeaudoi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,10 @@ static int	build_new_envp_entry(char *var, char *value, char **ret)
 {
 	char	*entry;
 	char	*e;
-	
+
 	entry = NULL;
 	if (!ft_malloc_p(sizeof(char) * (ft_strlen(var) + ft_strlen(value) + 2),
-		(void **)&entry))
+			(void **)&entry))
 		return (-1);
 	e = entry;
 	while (*var)
@@ -37,8 +37,8 @@ int	msh_envp_add_entry(t_msh *msh, char *var, char *value)
 	char	**envp;
 	char	**new_envp;
 	char	*entry;
-	int	len;
-	int	i;
+	int		len;
+	int		i;
 
 	if (!msh || !msh->envp || !var || !value)
 		return (repport_missing_input(__FUNCTION__));
@@ -64,8 +64,8 @@ int	msh_envp_remove_entry(t_msh *msh, char *var)
 {
 	char	**envp;
 	size_t	len;
-	int	i;
-	
+	int		i;
+
 	if (!msh || !msh->envp || !var)
 		return (repport_missing_input(__FUNCTION__));
 	len = ft_strlen(var);

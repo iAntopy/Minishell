@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   job_executor.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tbeaudoi <tbeaudoi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 00:48:45 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/01/11 20:21:36 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/01/12 14:38:06 by tbeaudoi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ static int	job_executor_force_exit(t_job *job, int *rd_pipe)
 static int	fork_child_processes(t_job *job)
 {
 	pid_t	pid;
-	int	i;
+	int		i;
 
 	printf("fork child procs : entered : job %p, nb cmds : %d\n", job, job->nb_cmds);
 	i = -1;
@@ -64,7 +64,7 @@ static int	fork_child_processes(t_job *job)
 int	job_executor(t_job *job)
 {
 	int	builtin_status;
-	
+
 	if (!job)
 		return (repport_missing_input(__FUNCTION__));
 	printf("job exec : pipe split : \n");
@@ -82,10 +82,10 @@ int	job_executor(t_job *job)
 	}
 	printf("job exec : mallocing pids\n");
 	if (!ft_malloc_p(sizeof(pid_t) * job->nb_cmds,
-		(void **)&job->pids))
+			(void **)&job->pids))
 		return (repport_jm_mlc_err(__FUNCTION__));
-	printf("job exec : mallocing DONE\n");
-	printf("job exec : forking\n");
+	//printf("job exec : mallocing DONE\n");
+	//printf("job exec : forking\n");
 	(void)fork_child_processes;
 //	if (fork_child_processes(job) < 0)
 //		return (-1);

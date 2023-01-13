@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tbeaudoi <tbeaudoi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 04:08:20 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/01/11 23:42:21 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/01/12 16:44:53 by tbeaudoi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ static int	validate_is_all_num(char *arg)
 {
 	while (arg && *arg)
 	{
-		if (!('0' <= *arg && *arg <='9'))
+		if (!('0' <= *arg && *arg <= '9'))
 			return (0);
 		arg++;
 	}
@@ -48,7 +48,7 @@ static int	parse_exit_cmd(char *cmd, int *exit_status)
 {
 	char	**split;
 	int		must_exit;
-	
+
 	*exit_status = 0;
 	must_exit = 1;
 	split = ft_split(cmd, ' ');
@@ -60,7 +60,8 @@ static int	parse_exit_cmd(char *cmd, int *exit_status)
 			*exit_status = -1;
 		else if (strtab_len(split) > 2 && repport_exit_too_many_args())
 			must_exit = 0;
-		*exit_status = ft_atoi(split[1]);
+		else
+			*exit_status = ft_atoi(split[1]);
 	}		
 	strtab_clear(&split);
 	return (must_exit);

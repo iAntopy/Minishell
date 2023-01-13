@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error_handling.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tbeaudoi <tbeaudoi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 07:27:37 by iamongeo          #+#    #+#             */
-/*   Updated: 2022/12/08 04:51:52 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/01/12 12:55:09 by tbeaudoi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ int	repport_pipe_err(const char *fn)
 int	repport_parsing_error(const char *fn, char *meta_c, int len)
 {
 	char	meta_buff[8];
+
 	if (!meta_c || !len)
 		return (-1);
 	ft_memcpy(meta_buff, meta_c, len);

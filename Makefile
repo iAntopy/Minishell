@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+         #
+#    By: tbeaudoi <tbeaudoi@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/16 01:26:25 by iamongeo          #+#    #+#              #
-#    Updated: 2023/01/11 23:21:15 by iamongeo         ###   ########.fr        #
+#    Updated: 2023/01/12 20:25:06 by tbeaudoi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,6 +24,7 @@ _SRC		=	msh_main.c			\
 			job_executor.c			\
 			parse_exec_command.c		\
 			pipe_utils.c			\
+			sig_handlers.c			\
 			intercept_builtin_calls.c
 
 _BLT		=	cd.c		\

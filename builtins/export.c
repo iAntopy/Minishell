@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tbeaudoi <tbeaudoi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 08:22:03 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/01/12 00:27:05 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/01/12 12:53:10 by tbeaudoi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 static int	parse_export_cmd(char *cmd, char **var, char **value)
 {
 	char	**split;
+
 	(void)var;
 	(void)value;
 	// TODO : parse cmd and set var and value. If no value is given 
@@ -31,7 +32,7 @@ static int	parse_export_cmd(char *cmd, char **var, char **value)
 		return (repport_malloc_err(__FUNCTION__));
 	*var = split[0];
 	*value = split[1];
-	free(split);	
+	free(split);
 	return (0);
 }
 
@@ -51,7 +52,7 @@ int	msh_builtin_export(t_msh *msh, char *cmd)
 	if (existing_value)
 		msh_envp_remove_entry(msh, var);
 	ret_val = msh_envp_add_entry(msh, var, value);
-	ft_free_p((void**)&var);
-	ft_free_p((void**)&value);
+	ft_free_p((void **)&var);
+	ft_free_p((void **)&value);
 	return (ret_val);
 }

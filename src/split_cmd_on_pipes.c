@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   split_cmd_on_pipes.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iamongeo <marvin@42quebec.com>             +#+  +:+       +#+        */
+/*   By: tbeaudoi <tbeaudoi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/06 23:20:16 by iamongeo          #+#    #+#             */
-/*   Updated: 2022/12/07 18:52:28 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/01/12 12:58:34 by tbeaudoi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,8 +74,8 @@ static int	pipe_splitter(char **tab, char *str)
 
 int	split_cmd_on_pipes(char *s, char ***ret)
 {
-//	char	**tab;
 	int		wcount;
+//	char	**tab;
 
 	if (!s)
 		return (-1);

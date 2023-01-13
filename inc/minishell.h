@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tbeaudoi <tbeaudoi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/16 01:39:11 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/01/11 21:57:58 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/01/12 20:27:31 by tbeaudoi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,46 +75,49 @@ enum	e_builtin_status
 };
 
 // JOB MANAGER
-int	job_manager(t_msh *msh);
-int	job_executor(t_job *job);
-int	intercept_builtin_call(t_job *job, char *cmd, int *builtin_status);
-int	parse_exec_cmd(t_msh *msh, char *cmd);
-int	init_pipe(int pp[2], int *rd_pipe, int i, int nb_cmds);
-int	close_pipe(int *rd_pipe, int *wr_pipe);
+int		job_manager(t_msh *msh);
+int		job_executor(t_job *job);
+int		intercept_builtin_call(t_job *job, char *cmd, int *builtin_status);
+int		parse_exec_cmd(t_msh *msh, char *cmd);
+int		init_pipe(int pp[2], int *rd_pipe, int i, int nb_cmds);
+int		close_pipe(int *rd_pipe, int *wr_pipe);
 
 // PARSING UTILS
-int	contains_meta_char(char *str);
-int	spaceout_meta_chars(char *str, char **ret);
-int	msh_substitute_env_vars(t_msh *msh, char *line, char **ret);
-int	split_cmd_on_pipes(char *cmd, char ***tab_p);
+int		contains_meta_char(char *str);
+int		spaceout_meta_chars(char *str, char **ret);
+int		msh_substitute_env_vars(t_msh *msh, char *line, char **ret);
+int		split_cmd_on_pipes(char *cmd, char ***tab_p);
 
 // BUILTINS
-int	msh_builtin_echo(t_msh *msh, char *cmd);
-int	msh_builtin_cd(t_msh *msh, char *cmd);
-int	msh_builtin_env(t_msh *msh);
-int	msh_builtin_pwd(t_msh *msh);
-int	msh_builtin_export(t_msh *msh, char *cmd);//, char *var, char *value);
-int	msh_builtin_unset(t_msh *msh, char *cmd);//char *var);
-int	msh_builtin_exit(t_msh *msh, char *cmd);//char *var);
-
+int		msh_builtin_echo(t_msh *msh, char *cmd);
+int		msh_builtin_cd(t_msh *msh, char *cmd);
+int		msh_builtin_env(t_msh *msh);
+int		msh_builtin_pwd(t_msh *msh);
+int		msh_builtin_export(t_msh *msh, char *cmd);//, char *var, char *value);
+int		msh_builtin_unset(t_msh *msh, char *cmd);//char *var);
+int		msh_builtin_exit(t_msh *msh, char *cmd);//char *var);
 
 // ENVIRONMENT VARIABLES UTILS
-int	msh_envp_add_entry(t_msh *msh, char *var, char *value);
-int	msh_envp_remove_entry(t_msh *msh, char *var);
-int	msh_envp_copy(char **envp, char ***ret);
+int		msh_envp_add_entry(t_msh *msh, char *var, char *value);
+int		msh_envp_remove_entry(t_msh *msh, char *var);
+int		msh_envp_copy(char **envp, char ***ret);
 char	*msh_getenv(t_msh *msh, char *var);
 
 // CLEAR FUNCTIONS
-int	msh_clear(t_msh *msh, int exit_code);
-int	job_clear(t_job *job, int exit_code);
+int		msh_clear(t_msh *msh, int exit_code);
+int		job_clear(t_job *job, int exit_code);
 
 // ERROR HANDLING
-int	repport_missing_input(const char *fn);
-int	repport_malloc_err(const char *fn);
-int	repport_fork_err(const char *fn);
-int	repport_jm_mlc_err(const char *fn);
-int	repport_pipe_err(const char *fn);
-int	repport_parsing_error(const char *fn, char *meta_c, int len);
-int	repport_builtin_failure(const char *fn);
+int		repport_missing_input(const char *fn);
+int		repport_malloc_err(const char *fn);
+int		repport_fork_err(const char *fn);
+int		repport_jm_mlc_err(const char *fn);
+int		repport_pipe_err(const char *fn);
+int		repport_parsing_error(const char *fn, char *meta_c, int len);
+int		repport_builtin_failure(const char *fn);
+
+// SIGNALS
+void	handler_handler(void);
+void	sig_handler1(int signum, siginfo_t *info, void *context);
 
 #endif
