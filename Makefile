@@ -6,7 +6,7 @@
 #    By: tbeaudoi <tbeaudoi@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/16 01:26:25 by iamongeo          #+#    #+#              #
-#    Updated: 2023/01/12 20:25:06 by tbeaudoi         ###   ########.fr        #
+#    Updated: 2023/01/12 21:39:17 by tbeaudoi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -50,19 +50,33 @@ LIBFT		= libft/libft.a
 #READLIB		= $(READDIR)libreadline.a
 #READMAKE	= $(READDIR)Makefile
 
+LIBRD_DIR		=	inc/librd
+LIBRD_FILES		=	libreadline.a \
+					libhistory.a
+LIBRD_MAKEFILE	=	$(addprefix $(LIBRD_DIR)/, Makefile)
+LIBRD			=	$(addprefix $(LIBRD_DIR)/, $(LIBRD_FILES))
+
 CC		= gcc
 CFLAGS		= -Wall -Wextra -Werror #-lreadline #-ltermcap
 
-LIBS	= $(LIBFT) -lreadline
+LIBS	= $(LIBFT) -lcurses $(LIBRD)#-lreadline
 
 NAME	= minishell
 
 %.o:		%.c
 		-$(CC) $(CFLAGS) -I$(INCL) -c $< -o $@ #$(READDIR)
 
-$(NAME):	$(LIBFT) $(OBJ_M) #$(READLIB)
+
+$(NAME):	$(LIBFT) $(LIBRD_MAKEFILE) $(LIBRD) $(OBJ_M) #$(READLIB)
 		$(CC) $(CFLAGS) -o $(NAME) $(OBJ_M) $(LIBS) #$(READLIB)
 
+$(LIBRD): 			$(LIBRD_MAKEFILE)
+					@$(MAKE) -s -C $(LIBRD_DIR)
+
+$(LIBRD_MAKEFILE):
+					@cd $(LIBRD_DIR) && ./configure --silent
+
+					
 $(LIBFT):
 		make -C libft/
 
@@ -76,10 +90,11 @@ $(LIBFT):
 #		make -C $(READDIR)
 #		cp $(READDIR)*.h $(INCL)
 
-all:	$(NAME) $(NAME_BONUS)
+all:	$(NAME) $(NAME_BONUS) 
 
 clean:
 		rm -f $(OBJ_M) $(OBJ_B) $(LIBFT)
+		@$(MAKE) -s clean -C $(LIBRD_DIR)
 
 fclean:		clean
 		rm -f $(NAME) $(NAME_BONUS)
