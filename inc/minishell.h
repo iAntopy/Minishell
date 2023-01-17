@@ -6,7 +6,7 @@
 /*   By: tbeaudoi <tbeaudoi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/16 01:39:11 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/01/16 19:33:31 by tbeaudoi         ###   ########.fr       */
+/*   Updated: 2023/01/17 12:37:57 by tbeaudoi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,10 @@
 //# include <curses.h>
 //# include <term.h>
 
-# define READLINE_PROMPT "minishell> "
+# define READLINE_PROMPT "minishell> "
 # define _META_CHARS "<>|&*"
 
+//exec_status = interactive mode/execution mode. Used for signals.
 typedef struct s_minishell_data
 {
 	char	**envp;
@@ -42,10 +43,12 @@ typedef struct s_minishell_data
 //	pid_t	job_pid;
 }	t_msh;
 
+
+// sc = substitution char.
 typedef struct s_job
 {
 	t_msh	*msh;
-	char	sc;		// substitution character
+	char	sc;
 	char	*parsed;
 	char	**pipe_split;
 	int		nb_cmds;
@@ -56,8 +59,8 @@ typedef struct s_job
 
 enum	e_exec_status
 {
-	INTERRACTIVE_MODE = 0,
-	EXECUTION_MODE = 1
+	INTERAC_MODE = 0,
+	EXEC_MODE = 1
 };
 
 enum	e_err_codes
@@ -118,7 +121,7 @@ int		repport_parsing_error(const char *fn, char *meta_c, int len);
 int		repport_builtin_failure(const char *fn);
 
 // SIGNALS
-void	handler_handler(t_msh *msh);
+void	handlers_control(t_msh *msh);
 void	sig_handler(int signum, siginfo_t *info, void *context);
 
 #endif

@@ -6,13 +6,14 @@
 /*   By: tbeaudoi <tbeaudoi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 08:32:40 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/01/16 19:58:06 by tbeaudoi         ###   ########.fr       */
+/*   Updated: 2023/01/17 12:33:30 by tbeaudoi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 // Done, for now
+// need to check var size, 200 is just for test
 
 int	msh_builtin_unset(t_msh *msh, char *cmd)
 {
@@ -25,12 +26,12 @@ int	msh_builtin_unset(t_msh *msh, char *cmd)
 	while (ft_isspace(cmd[i]) > 0)
 		i++;
 	if (cmd[i] == '\0')
-		return (-1); //bad input
+		return (-1);
 	while (cmd[i])
 	{
 		var[j++] = cmd[i++];
 		if (cmd[i] == '=' || i == 199)
-			return (-1);  //bad input
+			return (-1);
 	}
 	var[j] = '\0';
 	if (msh_envp_remove_entry(msh, var) < 0)

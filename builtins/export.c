@@ -6,7 +6,7 @@
 /*   By: tbeaudoi <tbeaudoi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 08:22:03 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/01/16 14:16:17 by tbeaudoi         ###   ########.fr       */
+/*   Updated: 2023/01/17 12:32:26 by tbeaudoi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,6 @@ static int	parse_export_cmd(char *cmd, char **var, char **value)
 {
 	char	**split;
 
-	(void)var;
-	(void)value;
-	// TODO : parse cmd and set var and value. If no value is given 
-	// 	(if var[=value] has no [=value] (if no equal sign maybe ?))
-	//	do nothing.
 	if (!ft_strchr(cmd, '='))
 		return (0);
 	while (*cmd && !ft_isspace(*cmd))

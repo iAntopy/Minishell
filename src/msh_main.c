@@ -6,7 +6,7 @@
 /*   By: tbeaudoi <tbeaudoi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/16 19:16:03 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/01/16 18:50:25 by tbeaudoi         ###   ########.fr       */
+/*   Updated: 2023/01/17 12:40:09 by tbeaudoi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,14 +106,14 @@ int	main(int argc, char **argv, char **envp)
 	ft_memclear(&msh, sizeof(t_msh));
 	if (msh_init(&msh, envp) < 0)
 		return (msh_clear(&msh, E_MSH_INIT));
-	msh.exec_status = INTERRACTIVE_MODE;
+	msh.exec_status = INTERAC_MODE;
 
 //	terminal_infos_tests();
 	while (!msh.request_exit)
 	{
-		msh.exec_status = INTERRACTIVE_MODE;
-		// reset exec_status to interractive affect program exec
-		handler_handler(&msh);
+		msh.exec_status = INTERAC_MODE;
+		// reset exec_status to interractive affect programs execution
+		handlers_control(&msh);
 		if (msh.rawline)
 			msh_clear(&msh, E_RAWLINE_CLR_ERR);
 		msh.rawline = readline(READLINE_PROMPT);

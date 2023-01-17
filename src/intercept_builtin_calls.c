@@ -6,7 +6,7 @@
 /*   By: tbeaudoi <tbeaudoi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 03:01:53 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/01/16 14:16:17 by tbeaudoi         ###   ########.fr       */
+/*   Updated: 2023/01/17 12:31:49 by tbeaudoi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,11 @@
 
 static int	_validate_is_builtin(t_msh *msh, char *cmd)
 {
-	if (ft_strncmp(cmd, "echo", 4) == 0 && (!cmd[4] || ft_isspace(cmd[4])))
+	if (ft_strncmp(cmd, "echo", 4) == 0 && (!cmd[4]
+			|| ft_isspace(cmd[4])))
 		return (msh_builtin_echo(msh, cmd));
-	else if (ft_strncmp(cmd, "cd", 2) == 0 && (!cmd[2] || cmd[2] == ' '))
+	else if (ft_strncmp(cmd, "cd", 2) == 0 && (!cmd[2]
+			|| ft_isspace(cmd[2])))
 		return (msh_builtin_cd(msh, cmd));
 	else if (ft_strncmp(cmd, "export", 6) == 0 && (!cmd[6]
 			|| ft_isspace(cmd[6])))
@@ -25,7 +27,7 @@ static int	_validate_is_builtin(t_msh *msh, char *cmd)
 			|| ft_isspace(cmd[5])))
 		return (msh_builtin_unset(msh, cmd));
 	else if (ft_strncmp(cmd, "pwd", 3) == 0 && (!cmd[3]
-			|| cmd[3] == ' '))
+			|| ft_isspace(cmd[3])))
 		return (msh_builtin_pwd(msh));
 	else if (ft_strncmp(cmd, "env", 3) == 0 && (!cmd[3]
 			|| ft_isspace(cmd[3])))
@@ -36,6 +38,7 @@ static int	_validate_is_builtin(t_msh *msh, char *cmd)
 	else
 		return (BUILTIN_NOT_FOUND);
 }
+
 /*
 static int	_remove_builtin_cmd(char **cmds)
 {
@@ -52,15 +55,8 @@ static int	_remove_builtin_cmd(char **cmds)
 
 int	intercept_builtin_call(t_job *job, char *cmd, int *builtin_status)
 {
-//	char	**cmds;
-//	char	*c;
-
-//	cmds = job->pipe_split;
-//	while (*cmds)
-//	{
 	while (ft_isspace(*cmd))
 		cmd++;
-//	printf("cmd : %s$\n", cmd);
 	*builtin_status = _validate_is_builtin(job->msh, cmd);
 	return (0);
 }
