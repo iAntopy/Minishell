@@ -6,7 +6,7 @@
 /*   By: tbeaudoi <tbeaudoi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/16 19:16:03 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/01/12 21:45:29 by tbeaudoi         ###   ########.fr       */
+/*   Updated: 2023/01/16 18:50:25 by tbeaudoi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,24 +96,29 @@ void	terminal_infos_tests(void)
 	printf("msec for carridge return : %d\n", tnum);
 }
 */
+
 int	main(int argc, char **argv, char **envp)
 {
 	t_msh	msh;
 
-	(void)argc;	
-	(void)argv;	
+	(void)argc;
+	(void)argv;
 	ft_memclear(&msh, sizeof(t_msh));
 	if (msh_init(&msh, envp) < 0)
 		return (msh_clear(&msh, E_MSH_INIT));
+	msh.exec_status = INTERRACTIVE_MODE;
 
 //	terminal_infos_tests();
 	while (!msh.request_exit)
 	{
-		// handler_handler();
+		msh.exec_status = INTERRACTIVE_MODE;
+		// reset exec_status to interractive affect program exec
+		handler_handler(&msh);
 		if (msh.rawline)
 			msh_clear(&msh, E_RAWLINE_CLR_ERR);
-
 		msh.rawline = readline(READLINE_PROMPT);
+		if (msh.rawline == NULL)
+			break ;
 //		printf("main : rawline received %p : %s\n", msh.rawline, msh.rawline);
 		if (!msh.rawline || msh.rawline[0] == '\0' || msh.rawline[0] == '\n')
 			continue ;

@@ -6,14 +6,14 @@
 /*   By: tbeaudoi <tbeaudoi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 04:00:34 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/01/12 16:31:04 by tbeaudoi         ###   ########.fr       */
+/*   Updated: 2023/01/16 19:58:13 by tbeaudoi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-	// TODO :	find second word in cmd that should be a path and put '\0'
-	//		and the end. return ptr to start of second word.
+// Done, for now
+
 static int	swap_pwd(t_msh *msh, char *new_pwd, char *old_pwd)
 {
 	msh_envp_remove_entry(msh, "PWD");
@@ -23,7 +23,6 @@ static int	swap_pwd(t_msh *msh, char *new_pwd, char *old_pwd)
 	return (0);
 }
 
-	// TODO : Change PWD and OLDPWD in envp with msh_envp_[remove/add]_entry()
 int	msh_builtin_cd(t_msh *msh, char *cmd)
 {
 	char	path[PATH_MAX + 1];

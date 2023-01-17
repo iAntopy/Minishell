@@ -6,7 +6,7 @@
 /*   By: tbeaudoi <tbeaudoi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/16 01:39:11 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/01/12 21:24:23 by tbeaudoi         ###   ########.fr       */
+/*   Updated: 2023/01/16 19:33:31 by tbeaudoi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,46 +20,45 @@
 # include <fcntl.h>
 # include <stdio.h>
 # include <errno.h>
-// # include <readline/readline.h>
-// # include <readline/history.h>
 # include "readline.h"
 # include "history.h"
-
 # include "libft.h"
 
 //# include <curses.h>
 //# include <term.h>
 
-//# ifndef rl_clear_history
-//#  define rl_clear_history clear_history
-//# endif
-
 # define READLINE_PROMPT "minishell> "
-#define _META_CHARS "<>|&*"
+# define _META_CHARS "<>|&*"
 
-typedef struct	s_minishell_data
+typedef struct s_minishell_data
 {
-	char 	**envp;
+	char	**envp;
 	char	**paths;
 	char	*rawline;
 	int		exit_status;
 	int		shell_exit_status;
 	int		request_exit;
+	int		exec_status;
 //	pid_t	job_pid;
-
 }	t_msh;
 
-typedef struct	s_job
+typedef struct s_job
 {
 	t_msh	*msh;
 	char	sc;		// substitution character
 	char	*parsed;
 	char	**pipe_split;
-	int	nb_cmds;
+	int		nb_cmds;
 	pid_t	*pids;
-	int	pp[2];
-	int	rd_pipe;
+	int		pp[2];
+	int		rd_pipe;
 }	t_job;
+
+enum	e_exec_status
+{
+	INTERRACTIVE_MODE = 0,
+	EXECUTION_MODE = 1
+};
 
 enum	e_err_codes
 {
@@ -96,7 +95,7 @@ int		msh_builtin_cd(t_msh *msh, char *cmd);
 int		msh_builtin_env(t_msh *msh);
 int		msh_builtin_pwd(t_msh *msh);
 int		msh_builtin_export(t_msh *msh, char *cmd);//, char *var, char *value);
-int		msh_builtin_unset(t_msh *msh, char *cmd);//char *var);
+int		msh_builtin_unset(t_msh *msh, char *cmd);
 int		msh_builtin_exit(t_msh *msh, char *cmd);//char *var);
 
 // ENVIRONMENT VARIABLES UTILS
@@ -119,7 +118,7 @@ int		repport_parsing_error(const char *fn, char *meta_c, int len);
 int		repport_builtin_failure(const char *fn);
 
 // SIGNALS
-void	handler_handler(void);
-void	sig_handler1(int signum, siginfo_t *info, void *context);
+void	handler_handler(t_msh *msh);
+void	sig_handler(int signum, siginfo_t *info, void *context);
 
 #endif
