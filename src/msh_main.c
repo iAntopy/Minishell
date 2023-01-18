@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/16 19:16:03 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/01/11 22:32:04 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/01/18 06:49:10 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,6 +119,7 @@ int	main(int argc, char **argv, char **envp)
 		if (msh.rawline[0])// && msh.rawline[0] != '\n')
 			add_history(msh.rawline);
 		job_manager(&msh);
+		printf("Return to main from job manager()\n");
 		printf("main : post manage job call\n");
 //		msh_start_job_manager(&msh);
 		///
@@ -127,7 +128,7 @@ int	main(int argc, char **argv, char **envp)
 		/// then set msh.job_pid to 0
 		///
 		
-		printf("main : post waitpid exit status : %d\n", WEXITSTATUS(msh.exit_status));
+		printf("main : post execution exit status : %d\n", WEXITSTATUS(msh.exit_status));
 		printf("main : rawline received %p : %s\n", msh.rawline, msh.rawline);
 		ft_free_p((void **)&msh.rawline);
 	}

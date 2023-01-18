@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 06:08:27 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/01/12 00:26:39 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/01/18 05:35:54 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,7 @@ char	*msh_getenv(t_msh *msh, char *var)
 	i = 0;
 	while (envp[i])
 	{
-		if (ft_strncmp(envp[i], var, ft_strlen(var) == 0))
+		if (ft_strncmp(envp[i], var, ft_strlen(var)) == 0)
 		{
 			printf("msh getenv : match found \n");
 			return (ft_strchr(envp[i], '=') + 1);
