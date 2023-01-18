@@ -32,7 +32,7 @@ datadir = ${datarootdir}
 
 top_srcdir = ..
 #BUILD_DIR = .
-BUILD_DIR = /Users/tbeaudoi/Documents/minishel/Minishell/inc/librd
+BUILD_DIR = /home/iamongeo/Cursus42/Minishell/inc/librd
 installdir = $(datadir)/readline
 
 INSTALL = /usr/bin/install -c

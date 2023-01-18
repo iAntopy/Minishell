@@ -6,7 +6,7 @@
 #    By: tbeaudoi <tbeaudoi@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/16 01:26:25 by iamongeo          #+#    #+#              #
-#    Updated: 2023/01/12 21:39:17 by tbeaudoi         ###   ########.fr        #
+#    Updated: 2023/01/18 02:41:51 by iamongeo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -36,59 +36,39 @@ _BLT		=	cd.c		\
 			env.c
 
 SRC_M		= $(addprefix $(SRC_DIR), $(_SRC)) $(addprefix $(BLT_DIR), $(_BLT))
-#SRC_B		= $(addprefix $(SRC_B_DIR), $(_SRC_B))
-#SRC_RAND	= $(addprefix $(SRC_DIR), randint_gen.c)
 
 OBJ_M		= $(SRC_M:.c=.o)
-#OBJ_B		= $(SRC_B:.c=.o)
 
 INCL		= inc/
 
 LIBFT		= libft/libft.a
 
-#READDIR		= readline-8.2/
-#READLIB		= $(READDIR)libreadline.a
-#READMAKE	= $(READDIR)Makefile
-
-LIBRD_DIR		=	inc/librd
-LIBRD_FILES		=	libreadline.a \
-					libhistory.a
-LIBRD_MAKEFILE	=	$(addprefix $(LIBRD_DIR)/, Makefile)
+LIBRD_DIR		=	$(INCL)/librd
+LIBRD_FILES		=	libreadline.a libhistory.a
+LIBRD_MAKEFILE		=	$(LIBRD_DIR)/Makefile
 LIBRD			=	$(addprefix $(LIBRD_DIR)/, $(LIBRD_FILES))
 
 CC		= gcc
-CFLAGS		= -Wall -Wextra -Werror #-lreadline #-ltermcap
+CFLAGS		= -Wall -Wextra -Werror
 
-LIBS	= $(LIBFT) -lcurses $(LIBRD)#-lreadline
+LIBS	= $(LIBFT) -lcurses $(LIBRD)
 
 NAME	= minishell
 
 %.o:		%.c
-		-$(CC) $(CFLAGS) -I$(INCL) -c $< -o $@ #$(READDIR)
+		-$(CC) $(CFLAGS) -I$(INCL) -c $< -o $@
 
 
-$(NAME):	$(LIBFT) $(LIBRD_MAKEFILE) $(LIBRD) $(OBJ_M) #$(READLIB)
-		$(CC) $(CFLAGS) -o $(NAME) $(OBJ_M) $(LIBS) #$(READLIB)
+$(NAME):	$(LIBFT) $(LIBRD_MAKEFILE) $(LIBRD) $(OBJ_M)
+		$(CC) $(CFLAGS) -o $(NAME) $(OBJ_M) $(LIBS)
 
-$(LIBRD): 			$(LIBRD_MAKEFILE)
-					@$(MAKE) -s -C $(LIBRD_DIR)
+$(LIBRD): 	$(LIBRD_MAKEFILE)
+		@$(MAKE) -s -C $(LIBRD_DIR)
 
 $(LIBRD_MAKEFILE):
-					@cd $(LIBRD_DIR) && ./configure --silent
-
-					
+		@cd $(LIBRD_DIR) && ./configure --silent
 $(LIBFT):
 		make -C libft/
-
-#$(READDIR):
-#		tar -xf --keep-newer-files readline-8.2.tar.gz
-
-#$(READMAKE):	$(READDIR)
-#		cd $(READDIR); ./configure
-
-#$(READLIB):	$(READMAKE)
-#		make -C $(READDIR)
-#		cp $(READDIR)*.h $(INCL)
 
 all:	$(NAME) $(NAME_BONUS) 
 

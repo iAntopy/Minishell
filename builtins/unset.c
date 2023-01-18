@@ -6,7 +6,7 @@
 /*   By: tbeaudoi <tbeaudoi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 08:32:40 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/01/17 12:33:30 by tbeaudoi         ###   ########.fr       */
+/*   Updated: 2023/01/18 03:19:40 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 // Done, for now
 // need to check var size, 200 is just for test
+// Maybe fancy variable name validator bling bling.
 
 int	msh_builtin_unset(t_msh *msh, char *cmd)
 {
