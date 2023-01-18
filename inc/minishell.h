@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/16 01:39:11 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/01/11 21:57:58 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/01/18 05:17:51 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,8 @@
 //# endif
 
 # define READLINE_PROMPT "minishell> "
-#define _META_CHARS "<>|&*"
+# define _META_CHARS "<>|&*"
+# define MAX_CMDS 256
 
 typedef struct	s_minishell_data
 {
@@ -54,9 +55,10 @@ typedef struct	s_job
 	char	*parsed;
 	char	**pipe_split;
 	int	nb_cmds;
-	pid_t	*pids;
+	pid_t	pids[MAX_CMDS];
 	int	pp[2];
 	int	rd_pipe;
+
 }	t_job;
 
 enum	e_err_codes
@@ -78,7 +80,7 @@ enum	e_builtin_status
 int	job_manager(t_msh *msh);
 int	job_executor(t_job *job);
 int	intercept_builtin_call(t_job *job, char *cmd, int *builtin_status);
-int	parse_exec_cmd(t_msh *msh, char *cmd);
+int	parse_exec_cmd(t_job *job, int idx);//t_msh *msh, char *cmd);
 int	init_pipe(int pp[2], int *rd_pipe, int i, int nb_cmds);
 int	close_pipe(int *rd_pipe, int *wr_pipe);
 
