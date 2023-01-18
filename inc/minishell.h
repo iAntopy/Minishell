@@ -27,8 +27,10 @@
 //# include <curses.h>
 //# include <term.h>
 
-# define READLINE_PROMPT "minishell> "
+
+# define READLINE_PROMPT "minishell> "
 # define _META_CHARS "<>|&*"
+# define MAX_CMDS 256
 
 //exec_status = interactive mode/execution mode. Used for signals.
 typedef struct s_minishell_data
@@ -51,10 +53,11 @@ typedef struct s_job
 	char	sc;
 	char	*parsed;
 	char	**pipe_split;
-	int		nb_cmds;
-	pid_t	*pids;
-	int		pp[2];
-	int		rd_pipe;
+	int	nb_cmds;
+	pid_t	pids[MAX_CMDS];
+	int	pp[2];
+	int	rd_pipe;
+
 }	t_job;
 
 enum	e_exec_status
@@ -79,12 +82,13 @@ enum	e_builtin_status
 };
 
 // JOB MANAGER
-int		job_manager(t_msh *msh);
-int		job_executor(t_job *job);
-int		intercept_builtin_call(t_job *job, char *cmd, int *builtin_status);
-int		parse_exec_cmd(t_msh *msh, char *cmd);
-int		init_pipe(int pp[2], int *rd_pipe, int i, int nb_cmds);
-int		close_pipe(int *rd_pipe, int *wr_pipe);
+int	job_manager(t_msh *msh);
+int	job_executor(t_job *job);
+int	intercept_builtin_call(t_job *job, char *cmd, int *builtin_status);
+int	parse_exec_cmd(t_job *job, int idx);//t_msh *msh, char *cmd);
+int	init_pipe(int pp[2], int *rd_pipe, int i, int nb_cmds);
+int	close_pipe(int *rd_pipe, int *wr_pipe);
+
 
 // PARSING UTILS
 int		contains_meta_char(char *str);

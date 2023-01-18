@@ -6,7 +6,7 @@
 /*   By: tbeaudoi <tbeaudoi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/05 00:26:12 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/01/16 14:16:17 by tbeaudoi         ###   ########.fr       */
+/*   Updated: 2023/01/18 05:21:41 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,6 @@ int	job_clear(t_job *job, int return_status)
 		return (-1);
 	if (job->parsed)
 		ft_free_p((void **)&job->parsed);
-	if (job->pids)
-		ft_free_p((void **)&job->pids);
 	if (job->pipe_split)
 		strtab_clear(&job->pipe_split);
 	close_pipe(job->pp, job->pp + 1);
@@ -92,6 +90,7 @@ int	job_manager(t_msh *msh)
 
 	if (job_executor(&job) < 0)
 		return (job_clear(&job, -1));
+	printf("Return to job manager \n");
 
 	return (job_clear(&job, EXIT_SUCCESS));
 }

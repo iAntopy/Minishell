@@ -6,7 +6,7 @@
 /*   By: tbeaudoi <tbeaudoi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/05 05:04:41 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/01/16 14:16:17 by tbeaudoi         ###   ########.fr       */
+/*   Updated: 2023/01/18 05:33:32 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,11 +37,11 @@ static size_t	find_substituted_str_size(t_msh *msh, char *line, char **vals)
 			j = i;
 			while (line[++j] && !is_space_or_quote(line[j]))//!ft_isspace(line[j]) && line[j] != '\'' && line[j] != '\"')
 				var[j - i - 1] = line[j];
-//			printf("find subst size : var space found\n");
+			printf("find subst size : var space found\n");
 			var[j - i - 1] = '\0';
-//			printf("find subst size : var null terminated with i %zu, j %zu, j - i - 1 = %zu\n", i, j, j - i - 1);
+			printf("find subst size : var null terminated with i %zu, j %zu, j - i - 1 = %zu\n", i, j, j - i - 1);
 			*vals = msh_getenv(msh, var);
-//			printf("find subst size : var : %s = %s, value strlen : %zu\n", var, *vals, ft_strlen(*vals));
+			printf("find subst size : var : %s = %s, value strlen : %zu\n", var, *vals, ft_strlen(*vals));
 			size += ft_strlen(*vals) - (j - i - 1);
 			vals++;
 		}
