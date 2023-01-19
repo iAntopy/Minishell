@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   substitute_env_vars.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tbeaudoi <tbeaudoi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/05 05:04:41 by iamongeo          #+#    #+#             */
 /*   Updated: 2023/01/18 05:33:32 by iamongeo         ###   ########.fr       */

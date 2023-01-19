@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   job_manager_main.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tbeaudoi <tbeaudoi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/05 00:26:12 by iamongeo          #+#    #+#             */
 /*   Updated: 2023/01/18 05:21:41 by iamongeo         ###   ########.fr       */
@@ -63,11 +63,12 @@ int	job_manager(t_msh *msh)
 	ft_printf("job manager main : line received : %s\n", msh->rawline);
 	job.parsed = ft_strtrim(msh->rawline, " ");
 
-	if (ft_strchr(job.parsed, '$') && msh_substitute_env_vars(msh, job.parsed, &cur_line) < 0)
+	if (ft_strchr(job.parsed, '$')
+		&& msh_substitute_env_vars(msh, job.parsed, &cur_line) < 0)
 		return (job_clear(&job, repport_jm_mlc_err(__FUNCTION__)));
 	printf("jm : cur line after env var substitutions : %s\n", cur_line);
 	free_swap_lines(&job.parsed, &cur_line);
-	
+
 	printf("jm : parsed line after env var substitutions : %s\n", job.parsed);
 
 	if (contains_meta_char(job.parsed)

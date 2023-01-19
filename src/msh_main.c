@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   msh_main.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tbeaudoi <tbeaudoi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/16 19:16:03 by iamongeo          #+#    #+#             */
 /*   Updated: 2023/01/18 06:49:10 by iamongeo         ###   ########.fr       */
@@ -20,7 +20,7 @@ int	msh_clear(t_msh *msh, int exit_code)
 		strtab_clear(&msh->envp);
 	if (msh->rawline)
 		ft_free_p((void **)&msh->rawline);
-	clear_history();
+	rl_clear_history();
 	return (exit_code);
 }
 /*
@@ -96,23 +96,29 @@ void	terminal_infos_tests(void)
 	printf("msec for carridge return : %d\n", tnum);
 }
 */
+
 int	main(int argc, char **argv, char **envp)
 {
 	t_msh	msh;
 
-	(void)argc;	
-	(void)argv;	
+	(void)argc;
+	(void)argv;
 	ft_memclear(&msh, sizeof(t_msh));
 	if (msh_init(&msh, envp) < 0)
 		return (msh_clear(&msh, E_MSH_INIT));
+	msh.exec_status = INTERAC_MODE;
 
 //	terminal_infos_tests();
 	while (!msh.request_exit)
 	{
+		msh.exec_status = INTERAC_MODE;
+		// reset exec_status to interractive affect programs execution
+		handlers_control(&msh);
 		if (msh.rawline)
 			msh_clear(&msh, E_RAWLINE_CLR_ERR);
-
 		msh.rawline = readline(READLINE_PROMPT);
+		if (msh.rawline == NULL)
+			break ;
 //		printf("main : rawline received %p : %s\n", msh.rawline, msh.rawline);
 		if (!msh.rawline || msh.rawline[0] == '\0' || msh.rawline[0] == '\n')
 			continue ;

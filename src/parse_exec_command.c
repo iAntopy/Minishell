@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   parse_exec_command.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tbeaudoi <tbeaudoi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 02:36:44 by iamongeo          #+#    #+#             */
 /*   Updated: 2023/01/18 06:51:37 by iamongeo         ###   ########.fr       */

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tbeaudoi <tbeaudoi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 05:39:33 by iamongeo          #+#    #+#             */
-/*   Updated: 2022/12/08 04:29:40 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/01/16 14:16:17 by tbeaudoi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,15 +19,15 @@ static int	parse_echo_cmd(char *cmd, char ***strs)
 	return (0);
 }
 
-int	msh_builtin_echo(t_msh *msh, char *cmd)//char **strs)
-{
-	int	new_line;
-	char	**strs;
-
 	// TODO : parse cmd to substitute environment variables with 
 	//		substitute_env_vars(t_msh *msh, char *line, char **ret)
 	//		then print without quotes chars.
 	//		ps : first word in cmd is 'echo'.
+int	msh_builtin_echo(t_msh *msh, char *cmd)//char **strs)
+{
+	int		new_line;
+	char	**strs;
+
 	(void)msh;
 	if (parse_echo_cmd(cmd, &strs) < 0)
 		return (-1);
