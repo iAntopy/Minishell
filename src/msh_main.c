@@ -6,7 +6,7 @@
 /*   By: tbeaudoi <tbeaudoi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/16 19:16:03 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/01/18 06:49:10 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/01/18 22:04:07 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,6 +108,8 @@ int	main(int argc, char **argv, char **envp)
 		return (msh_clear(&msh, E_MSH_INIT));
 	msh.exec_status = INTERAC_MODE;
 
+	msh->stdin_fd = dup(STDIN_FILENO);
+	msh->stdout_fd = dup(STDOUT_FILENO);
 //	terminal_infos_tests();
 	while (!msh.request_exit)
 	{
@@ -127,13 +129,7 @@ int	main(int argc, char **argv, char **envp)
 		job_manager(&msh);
 		printf("Return to main from job manager()\n");
 		printf("main : post manage job call\n");
-//		msh_start_job_manager(&msh);
-		///
-		/// set sigactions 
-		/// and waitpid msh.job_pid
-		/// then set msh.job_pid to 0
-		///
-		
+	
 		printf("main : post execution exit status : %d\n", WEXITSTATUS(msh.exit_status));
 		printf("main : rawline received %p : %s\n", msh.rawline, msh.rawline);
 		ft_free_p((void **)&msh.rawline);

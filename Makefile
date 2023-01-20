@@ -6,7 +6,7 @@
 #    By: tbeaudoi <tbeaudoi@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/16 01:26:25 by iamongeo          #+#    #+#              #
-#    Updated: 2023/01/18 02:41:51 by iamongeo         ###   ########.fr        #
+#    Updated: 2023/01/18 19:11:51 by iamongeo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -74,7 +74,7 @@ all:	$(NAME) $(NAME_BONUS)
 
 clean:
 		rm -f $(OBJ_M) $(OBJ_B) $(LIBFT)
-		@$(MAKE) -s clean -C $(LIBRD_DIR)
+#		@$(MAKE) -s clean -C $(LIBRD_DIR)
 
 fclean:		clean
 		rm -f $(NAME) $(NAME_BONUS)

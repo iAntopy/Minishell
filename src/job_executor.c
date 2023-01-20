@@ -6,7 +6,7 @@
 /*   By: tbeaudoi <tbeaudoi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 00:48:45 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/01/18 06:51:51 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/01/18 20:10:46 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ static int	job_executor_force_exit(t_job *job, int *rd_pipe)
 {
 	pid_t	*pids;
 
-	if (!job || !job->pids)
+	if (!job)
 		return (repport_missing_input(__FUNCTION__));
 	close_pipe(job->pp, job->pp + 1);
 	close_pipe(rd_pipe, NULL);
@@ -97,6 +97,7 @@ int	job_executor(t_job *job)
 //	(void)fork_child_processes;
 	if (fork_child_processes(job) < 0)
 		return (-1);
+	msh->exec_status = EXEC_MODE;
 	i = -1;
 	while (++i < job->nb_cmds)
 		waitpid(job->pids[i], &job->msh->exit_status, 0);
