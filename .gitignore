@@ -55,4 +55,4 @@ Mkfile.old
 dkms.conf
 
 # MacOS crap
-.DS_Store
+*.DS_Store

@@ -6,7 +6,7 @@
 /*   By: tbeaudoi <tbeaudoi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/16 01:39:11 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/01/19 20:01:10 by tbeaudoi         ###   ########.fr       */
+/*   Updated: 2023/01/27 08:07:07 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@
 # define READLINE_PROMPT "minishell> "
 # define _META_CHARS "<>|&*"
 # define MAX_CMDS 256
+# define HDOC_SIZE 0xffffff
 
 //exec_status = interactive mode/execution mode. Used for signals.
 typedef struct s_minishell_data
@@ -42,6 +43,8 @@ typedef struct s_minishell_data
 	int		shell_exit_status;
 	int		request_exit;
 	int		exec_status;
+	int		stdin_fd;
+	int		stdout_fd;
 //	pid_t	job_pid;
 }	t_msh;
 

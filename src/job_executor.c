@@ -6,7 +6,7 @@
 /*   By: tbeaudoi <tbeaudoi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 00:48:45 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/01/18 19:21:11 by tbeaudoi         ###   ########.fr       */
+/*   Updated: 2023/01/27 08:08:01 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,7 @@ int	job_executor(t_job *job)
 //	(void)fork_child_processes;
 	if (fork_child_processes(job) < 0)
 		return (-1);
+	msh->exec_status = EXEC_MODE;
 	i = -1;
 	while (++i < job->nb_cmds)
 		waitpid(job->pids[i], &job->msh->exit_status, 0);
