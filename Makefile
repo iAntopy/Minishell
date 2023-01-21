@@ -6,7 +6,11 @@
 #    By: tbeaudoi <tbeaudoi@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/16 01:26:25 by iamongeo          #+#    #+#              #
+<<<<<<< HEAD
 #    Updated: 2023/01/27 08:05:01 by iamongeo         ###   ########.fr        #
+=======
+#    Updated: 2023/01/20 23:36:08 by iamongeo         ###   ########.fr        #
+>>>>>>> Added validate_syntax(), tokenize() and apply_all_redirections() functions. validate_syntax reports error when meta characters are missing the args they need to work. tokenize transforms the char **pipe_split member of the job struct by spliting it on spaces and restoring the quoted substrings substitution characters to spaces. apply_all_redirections scans the list of commands token's to find redirection meta chars and opens the files if valid and closes the previous ones while checking validity and permissions. All parsing and redirections happen before forking now.
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,6 +22,7 @@ _SRC		=	msh_main.c			\
 			job_manager_main.c		\
 			meta_chars_utils.c		\
 			substitute_env_vars.c		\
+			syntax_validator.c		\
 			envp_utils.c			\
 			error_handling.c		\
 			split_cmd_on_pipes.c		\
@@ -25,8 +30,8 @@ _SRC		=	msh_main.c			\
 			parse_exec_command.c		\
 			pipe_utils.c			\
 			sig_handlers.c			\
-			utils.c			\
-			intercept_builtin_calls.c
+			intercept_builtin_calls.c	\
+			tokenizer_redirector.c
 
 _BLT		=	cd.c		\
 			echo.c		\

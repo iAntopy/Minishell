@@ -6,7 +6,7 @@
 /*   By: iamongeo <marvin@42quebec.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/14 16:45:15 by iamongeo          #+#    #+#             */
-/*   Updated: 2022/12/08 00:15:44 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/01/20 18:36:36 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static char	find_suitable_subst_char(char *str)
 {
-	const char	sp_chrs[] = "#?*!@°¤+-=0123456789";
+	const char	sp_chrs[] = "#?*!@°¤¬`+-=0123456789";
 	int			i;
 
 	i = -1;

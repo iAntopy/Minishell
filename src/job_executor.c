@@ -6,7 +6,7 @@
 /*   By: tbeaudoi <tbeaudoi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 00:48:45 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/01/27 08:08:01 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/01/27 08:11:59 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,8 +82,6 @@ int	job_executor(t_job *job)
 		return (repport_missing_input(__FUNCTION__));
 	printf("job exec : pipe split : \n");
 	strtab_print(job->pipe_split);
-
-	job->nb_cmds = strtab_len(job->pipe_split);
 
 	if (job->nb_cmds == 1)
 	{
