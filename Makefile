@@ -6,7 +6,7 @@
 #    By: tbeaudoi <tbeaudoi@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/16 01:26:25 by iamongeo          #+#    #+#              #
-#    Updated: 2023/01/18 19:11:51 by iamongeo         ###   ########.fr        #
+#    Updated: 2023/01/20 23:36:08 by iamongeo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,6 +18,7 @@ _SRC		=	msh_main.c			\
 			job_manager_main.c		\
 			meta_chars_utils.c		\
 			substitute_env_vars.c		\
+			syntax_validator.c		\
 			envp_utils.c			\
 			error_handling.c		\
 			split_cmd_on_pipes.c		\
@@ -25,7 +26,8 @@ _SRC		=	msh_main.c			\
 			parse_exec_command.c		\
 			pipe_utils.c			\
 			sig_handlers.c			\
-			intercept_builtin_calls.c
+			intercept_builtin_calls.c	\
+			tokenizer_redirector.c
 
 _BLT		=	cd.c		\
 			echo.c		\

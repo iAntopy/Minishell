@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_putnbr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iamongeo <marvin@42quebec.com>             +#+  +:+       +#+        */
+/*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/28 15:51:29 by iamongeo          #+#    #+#             */
-/*   Updated: 2022/10/31 02:32:13 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/01/20 21:49:29 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ void	ft_putnbr(int nbr)
 	n *= 1 - (2 * (n < 0));
 	rec_putnbr(n);
 }
-*/
 
 int	main(int argc, char *argv[])
 {
@@ -44,4 +43,4 @@ int	main(int argc, char *argv[])
 	}
 	return (0);
 }
-
+*/

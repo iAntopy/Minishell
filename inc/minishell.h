@@ -6,7 +6,7 @@
 /*   By: tbeaudoi <tbeaudoi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/16 01:39:11 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/01/18 22:12:49 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/01/20 23:34:48 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@
 //exec_status = interactive mode/execution mode. Used for signals.
 typedef struct s_minishell_data
 {
+	t_job	*job;
 	char	**envp;
 	char	**paths;
 	char	*rawline;
@@ -48,7 +49,6 @@ typedef struct s_minishell_data
 //	pid_t	job_pid;
 }	t_msh;
 
-
 // sc = substitution char.
 typedef struct s_job
 {
@@ -56,11 +56,14 @@ typedef struct s_job
 	char	sc;
 	char	*parsed;
 	char	**pipe_split;
-	int	nb_cmds;
+	char	**cmds[MAX_CMDS];
 	pid_t	pids[MAX_CMDS];
-	int	pp[2];
-	int	rd_pipe;
-
+	int		redir_in[MAX_CMDS];
+	int		redir_out[MAX_CMDS];
+	int		heredoc_id;
+	int		nb_cmds;
+	int		pp[2];
+	int		rd_pipe;
 }	t_job;
 
 enum	e_exec_status
@@ -74,7 +77,8 @@ enum	e_err_codes
 	E_MSH_INIT = 1,
 	E_MALLOC,
 	E_RAWLINE_CLR_ERR,
-	E_JOB_MNG_FAILED
+	E_JOB_MNG_FAILED,
+	E_REDIRECT_FAILED = -2
 };
 
 enum	e_builtin_status
@@ -85,13 +89,21 @@ enum	e_builtin_status
 };
 
 // JOB MANAGER
-int	job_manager(t_msh *msh);
-int	job_executor(t_job *job);
-int	intercept_builtin_call(t_job *job, char *cmd, int *builtin_status);
-int	parse_exec_cmd(t_job *job, int idx);//t_msh *msh, char *cmd);
-int	init_pipe(int pp[2], int *rd_pipe, int i, int nb_cmds);
-int	close_pipe(int *rd_pipe, int *wr_pipe);
+int		job_parser(t_msh *msh);
+int		job_executor(t_job *job);
+int		validate_synax(char *line);
+int		intercept_builtin_call(t_job *job, char *cmd, int *builtin_status);
+int		parse_exec_cmd(t_job *job, int idx);//t_msh *msh, char *cmd);
+int		init_pipe(int pp[2], int *rd_pipe, int i, int nb_cmds);
+int		close_pipe(int *rd_pipe, int *wr_pipe);
+int		close_fd(int *fd);
+int		tokenize_all_cmds(t_job *job);
+int		apply_all_redirections(t_job *job);
 
+// REDIRECTION HANDLERS
+int		redirect_infile(char **token_p, int *in_fd);
+int		redirect_outfile(char **token_p, int *out_fd, add_mode);
+int		get_heredoc_input(char **token_p, int *in_fd);
 
 // PARSING UTILS
 int		contains_meta_char(char *str);
@@ -119,13 +131,13 @@ int		msh_clear(t_msh *msh, int exit_code);
 int		job_clear(t_job *job, int exit_code);
 
 // ERROR HANDLING
-int		repport_missing_input(const char *fn);
-int		repport_malloc_err(const char *fn);
-int		repport_fork_err(const char *fn);
-int		repport_jm_mlc_err(const char *fn);
-int		repport_pipe_err(const char *fn);
-int		repport_parsing_error(const char *fn, char *meta_c, int len);
-int		repport_builtin_failure(const char *fn);
+int		report_missing_input(const char *fn);
+int		report_malloc_err(const char *fn);
+int		report_fork_err(const char *fn);
+int		report_jm_mlc_err(const char *fn);
+int		report_pipe_err(const char *fn);
+int		report_parsing_error(const char *fn, char *meta_c, int len);
+int		report_builtin_failure(const char *fn);
 
 // SIGNALS
 void	handlers_control(t_msh *msh);

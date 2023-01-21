@@ -6,12 +6,12 @@
 /*   By: tbeaudoi <tbeaudoi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 02:36:44 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/01/18 22:16:44 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/01/20 21:18:44 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
+/*
 int	manage_redirections(t_job *job, char **tokens)
 {
 	int		i;
@@ -71,4 +71,4 @@ int	parse_exec_cmd(t_job *job, int idx)
 	ft_eprintf("CHILD %d : execve call failed\n", getpid());
 	strtab_clear(&tokens);
 	return (-1);
-}
+}*/

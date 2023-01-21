@@ -6,11 +6,21 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 02:19:04 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/01/18 06:43:10 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/01/20 22:23:29 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	close_fd(int *fd)
+{
+	if (*fd >= 3)
+	{
+		close(*fd);
+		*fd = -1;
+	}
+	return (1);
+}
 
 int	close_pipe(int *rd, int *wr)
 {
