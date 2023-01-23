@@ -6,7 +6,7 @@
 /*   By: tbeaudoi <tbeaudoi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 04:08:20 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/01/16 14:16:17 by tbeaudoi         ###   ########.fr       */
+/*   Updated: 2023/01/19 19:52:50 by tbeaudoi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,16 +68,16 @@ static int	parse_exit_cmd(char *cmd, int *exit_status)
 }
 
 // Yep outputs "exit" to stderr
-int	msh_builtin_exit(t_msh *msh, char *cmd)
+int	msh_builtin_exit(t_job *job, char *cmd)
 {
 	int	exit_status;
 	int	must_exit;	
 
-	if (!msh || !cmd)
+	if (!job || !cmd)
 		return (-1);
 	ft_eprintf("exit\n");
 	must_exit = parse_exit_cmd(cmd, &exit_status);
-	msh->request_exit = must_exit;
-	msh->shell_exit_status = exit_status;
+	job->msh->request_exit = must_exit;
+	job->msh->shell_exit_status = exit_status;
 	return (0);
 }

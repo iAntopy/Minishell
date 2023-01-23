@@ -6,7 +6,7 @@
 /*   By: tbeaudoi <tbeaudoi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/16 01:39:11 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/01/17 12:37:57 by tbeaudoi         ###   ########.fr       */
+/*   Updated: 2023/01/19 20:01:10 by tbeaudoi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,15 +95,16 @@ int		contains_meta_char(char *str);
 int		spaceout_meta_chars(char *str, char **ret);
 int		msh_substitute_env_vars(t_msh *msh, char *line, char **ret);
 int		split_cmd_on_pipes(char *cmd, char ***tab_p);
+char	**tokenize(t_job *job, char *cmd);
 
 // BUILTINS
-int		msh_builtin_echo(t_msh *msh, char *cmd);
-int		msh_builtin_cd(t_msh *msh, char *cmd);
-int		msh_builtin_env(t_msh *msh);
-int		msh_builtin_pwd(t_msh *msh);
-int		msh_builtin_export(t_msh *msh, char *cmd);//, char *var, char *value);
-int		msh_builtin_unset(t_msh *msh, char *cmd);
-int		msh_builtin_exit(t_msh *msh, char *cmd);//char *var);
+int		msh_builtin_echo(t_job *job, char *cmd);
+int		msh_builtin_cd(t_job *job, char *cmd);
+int		msh_builtin_env(t_job *job);
+int		msh_builtin_pwd(void);
+int		msh_builtin_export(t_job *job, char *cmd);//, char *var, char *value);
+int		msh_builtin_unset(t_job *job, char *cmd);
+int		msh_builtin_exit(t_job *job, char *cmd);//char *var);
 
 // ENVIRONMENT VARIABLES UTILS
 int		msh_envp_add_entry(t_msh *msh, char *var, char *value);

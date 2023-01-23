@@ -6,7 +6,7 @@
 /*   By: tbeaudoi <tbeaudoi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/12 20:01:38 by tbeaudoi          #+#    #+#             */
-/*   Updated: 2023/01/17 12:37:34 by tbeaudoi         ###   ########.fr       */
+/*   Updated: 2023/01/19 10:48:41 by tbeaudoi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,4 +37,8 @@ void	handlers_control(t_msh *msh)
 		sa.sa_sigaction = &sig_handler;
 		sigaction(SIGINT, &sa, NULL);
 	}
+	// if (msh->exec_status == EXEC_MODE)
+	// {
+		
+	// }
 }

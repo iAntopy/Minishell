@@ -6,7 +6,7 @@
 #    By: tbeaudoi <tbeaudoi@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/16 01:26:25 by iamongeo          #+#    #+#              #
-#    Updated: 2023/01/18 02:41:51 by iamongeo         ###   ########.fr        #
+#    Updated: 2023/01/19 20:03:26 by tbeaudoi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,6 +25,7 @@ _SRC		=	msh_main.c			\
 			parse_exec_command.c		\
 			pipe_utils.c			\
 			sig_handlers.c			\
+			utils.c			\
 			intercept_builtin_calls.c
 
 _BLT		=	cd.c		\
