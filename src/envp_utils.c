@@ -6,7 +6,7 @@
 /*   By: tbeaudoi <tbeaudoi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 06:08:27 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/01/25 19:42:51 by tbeaudoi         ###   ########.fr       */
+/*   Updated: 2023/01/27 08:17:04 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,6 +104,11 @@ char	*msh_getenv(t_msh *msh, char *var)
 	if (!msh || !msh->envp || !var)
 		return (NULL);
 	printf("msh getenv : entered with var : %s\n", var);
+	if (*var == '?')
+	{
+		t_putnbr_buff(msh->nbr_buff, msh->exit_status);
+		return (msh->nbr_buff);
+	}
 	envp = msh->envp;
 	i = 0;
 	while (envp[i])

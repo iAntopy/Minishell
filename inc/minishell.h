@@ -6,7 +6,7 @@
 /*   By: tbeaudoi <tbeaudoi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/16 01:39:11 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/01/27 08:13:33 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/01/27 08:16:36 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@
 # define _META_CHARS "<>|&*"
 # define MAX_CMDS 256
 # define HDOC_SIZE 0xffffff
+# define E_REDIRECT_FAILED SIZE_MAX
 
 //exec_status = interactive mode/execution mode. Used for signals.
 typedef struct s_minishell_data
@@ -44,8 +45,9 @@ typedef struct s_minishell_data
 	int		shell_exit_status;
 	int		request_exit;
 	int		exec_status;
-	int		stdin_fd;
-	int		stdout_fd;
+	char	nbr_buff[24];
+//	int		stdin_fd;
+//	int		stdout_fd;
 //	pid_t	job_pid;
 }	t_msh;
 
@@ -58,8 +60,8 @@ typedef struct s_job
 	char	**pipe_split;
 	char	**cmds[MAX_CMDS];
 	pid_t	pids[MAX_CMDS];
-	int		redir_in[MAX_CMDS];
-	int		redir_out[MAX_CMDS];
+	char	*redir_in[MAX_CMDS];
+	char	*redir_out[MAX_CMDS];
 	int		heredoc_id;
 	int		nb_cmds;
 	int		pp[2];
