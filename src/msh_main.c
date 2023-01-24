@@ -6,7 +6,7 @@
 /*   By: tbeaudoi <tbeaudoi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/16 19:16:03 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/01/18 22:04:07 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/01/24 02:05:07 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,8 +108,8 @@ int	main(int argc, char **argv, char **envp)
 		return (msh_clear(&msh, E_MSH_INIT));
 	msh.exec_status = INTERAC_MODE;
 
-	msh->stdin_fd = dup(STDIN_FILENO);
-	msh->stdout_fd = dup(STDOUT_FILENO);
+//	msh->stdin_fd = dup(STDIN_FILENO);
+//	msh->stdout_fd = dup(STDOUT_FILENO);
 //	terminal_infos_tests();
 	while (!msh.request_exit)
 	{
