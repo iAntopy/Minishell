@@ -6,7 +6,7 @@
 /*   By: tbeaudoi <tbeaudoi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/12 20:01:38 by tbeaudoi          #+#    #+#             */
-/*   Updated: 2023/01/19 10:48:41 by tbeaudoi         ###   ########.fr       */
+/*   Updated: 2023/01/23 23:40:17 by tbeaudoi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,16 @@ void	sig_handler(int signum, siginfo_t *info, void *context)
 	}
 }
 
+void	sig_handler_child(int signum, siginfo_t *info, void *context)
+{
+	(void)context;
+	(void)info;
+	if (signum == SIGQUIT)
+		(void) SIGQUIT;
+	if (signum == SIGINT)
+		(void) SIGINT;
+}
+
 void	handlers_control(t_msh *msh)
 {
 	struct sigaction	sa;
@@ -37,8 +47,10 @@ void	handlers_control(t_msh *msh)
 		sa.sa_sigaction = &sig_handler;
 		sigaction(SIGINT, &sa, NULL);
 	}
-	// if (msh->exec_status == EXEC_MODE)
-	// {
-		
-	// }
+	if (msh->exec_status == EXEC_MODE)
+	{
+		sa.sa_sigaction = &sig_handler_child;
+		sigaction(SIGINT, &sa, NULL);
+		sigaction(SIGQUIT, &sa, NULL);
+	}
 }
