@@ -6,11 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/05 05:04:41 by iamongeo          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2023/01/25 20:18:44 by tbeaudoi         ###   ########.fr       */
-=======
-/*   Updated: 2023/01/26 22:51:36 by iamongeo         ###   ########.fr       */
->>>>>>> all tokenizing, redirections cmd validation done before forking. working execution. problem with builtins interception.
+/*   Updated: 2023/01/27 08:50:49 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,11 +44,7 @@ static size_t	find_substituted_str_size(t_msh *msh, char *line, char **vals)
 		if (line[i] == '$')
 		{
 			j = i;
-<<<<<<< HEAD
-			while (line[++j] && !is_space_or_quote(line[j]))
-=======
 			while (line[++j] && is_valid_envp_var_char(line[j], line[j] == line [i + 1]))//!is_space_or_quote(line[j]))//!ft_isspace(line[j]) && line[j] != '\'' && line[j] != '\"')
->>>>>>> all tokenizing, redirections cmd validation done before forking. working execution. problem with builtins interception.
 				var[j - i - 1] = line[j];
 			printf("find subst size : var space found\n");
 			var[j - i - 1] = '\0';
