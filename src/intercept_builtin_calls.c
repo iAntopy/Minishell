@@ -6,18 +6,14 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 03:01:53 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/01/27 06:37:29 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/01/27 07:39:23 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int	_validate_is_builtin(t_msh *msh, t_cmd *cmd)
+static int	_validate_is_builtin(char *cmd_str)
 {
-	char	*cmd_str;
-
-	cmd_str = cmd->tokens[0];
-	printf("\n\n INTERCEPTING BUILTINS ! pid : %d\n", getpid());
 	if (ft_strncmp(cmd_str, "echo", 4) == 0)
 		cmd->bltin_func = msh_builtin_echo;
 //		return (msh_builtin_echo(msh, cmd_str));
@@ -44,8 +40,8 @@ static int	_validate_is_builtin(t_msh *msh, t_cmd *cmd)
 	return (BUILTIN_FOUND);
 }
 
-int	intercept_builtin_call(t_job *job, t_cmd *cmd, int *builtin_status)
+int	intercept_builtin_call(t_cmd *cmd, int *builtin_status)
 {
-	*builtin_status = _validate_is_builtin(job->msh, cmd);
+	*builtin_status = _validate_is_builtin(cmd->tokens[0]);
 	return (0);
 }

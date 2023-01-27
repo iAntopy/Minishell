@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/16 01:39:11 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/01/27 07:05:58 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/01/27 07:39:59 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,7 @@ enum	e_builtin_status
 int		job_manager(t_msh *msh);
 int		job_executor(t_job *job);
 int		validate_synax(char *line);
-int		intercept_builtin_call(t_job *job, t_cmd *cmd, int *builtin_status);
+int		intercept_builtin_call(t_cmd *cmd, int *builtin_status);
 int		parse_exec_cmd(t_job *job, int idx);//t_msh *msh, char *cmd);
 int		init_pipe(int pp[2], int *rd_pipe, int i, int nb_cmds);
 int		close_pipe(int *rd_pipe, int *wr_pipe);
