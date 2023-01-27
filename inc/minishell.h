@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/16 01:39:11 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/01/27 08:40:23 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/01/27 08:42:52 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,13 +137,13 @@ char	**tokenize(t_job *job, char *cmd);
 char	*skip_valid_envp_var_chars(char *var);
 
 // BUILTINS
-int		msh_builtin_echo(t_msh *msh, t_cmd *cmd);//char *cmd);
-int		msh_builtin_cd(t_msh *msh, t_cmd *cmd);
-int		msh_builtin_env(t_msh *msh t_cmd *cmd);
-int		msh_builtin_pwd(t_msh *msh, t_cmd *cmd);
-int		msh_builtin_export(t_msh *msh, t_cmd *cmd);//, char *var, char *value);
-int		msh_builtin_unset(t_msh *msh, t_cmd *cmd);
-int		msh_builtin_exit(t_msh *msh, t_cmd *cmd);//char *var);
+int		msh_builtin_echo(t_job *job, t_cmd *cmd);//char *cmd);
+int		msh_builtin_cd(t_job *job, t_cmd *cmd);
+int		msh_builtin_env(t_job *job t_cmd *cmd);
+int		msh_builtin_pwd(t_job *job, t_cmd *cmd);
+int		msh_builtin_export(t_job *job, t_cmd *cmd);//, char *var, char *value);
+int		msh_builtin_unset(t_job *job, t_cmd *cmd);
+int		msh_builtin_exit(t_job *job, t_cmd *cmd);//char *var);
 
 // ENVIRONMENT VARIABLES UTILS
 int		msh_envp_add_entry(t_msh *msh, char *var, char *value);
