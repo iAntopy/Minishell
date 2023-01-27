@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tbeaudoi <tbeaudoi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 08:22:03 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/01/26 21:15:45 by tbeaudoi         ###   ########.fr       */
+/*   Updated: 2023/01/27 08:55:43 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ static int	parse_export_cmd(char *cmd, char **var, char **value)
 		return (-1);
 	split = ft_split(cmd, '=');
 	if (!split || !split[0])
-		return (repport_malloc_err(__FUNCTION__));
+		return (report_malloc_err(__FUNCTION__));
 	*var = split[0];
 	if (!split[1])
 		*value = "\0";

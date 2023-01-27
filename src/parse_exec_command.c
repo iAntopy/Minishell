@@ -6,11 +6,33 @@
 /*   By: tbeaudoi <tbeaudoi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 02:36:44 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/01/18 06:51:37 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/01/20 21:18:44 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+/*
+int	manage_redirections(t_job *job, char **tokens)
+{
+	int		i;
+	char	*tk;
+	int		status;
+
+	i = -1;
+	while (tokens[++i])
+	{
+		tk = tokens[i];
+		if (ft_strncmp(tk, "<<", 2) == 0)	// run heredoc file input
+			status = get_here_doc_input(tokens + i);
+		else if (ft_strncmp(tk, ">>", 2) == 0)	// redirect output in append mode
+			status = redirect_outfile(job, tokens + i, O_APPEND);
+		else if (ft_strncmp(tk, "<", 1) == 0)	// redirect input file
+			status = redirect_infile(job, tokens + 1);
+		else if (ft_strncmp(tk, ">", 1) == 0)	// redirect output in truncate mode
+			status = redirect_outfile(job, tokens + 1, O_TRUNC);
+
+	}
+}
 
 int	parse_exec_cmd(t_job *job, int idx)
 {
@@ -31,7 +53,7 @@ int	parse_exec_cmd(t_job *job, int idx)
 	restore_substrings_in_tab(tokens, job->sc);
 	strtab_print(tokens);
 	if (find_file_in_paths(tokens[0], job->msh->paths, &cmd_file_path,
-			F_OK | R_OK | X_OK) < 0
+			F_OK | X_OK) < 0
 		|| !cmd_file_path)
 	{
 		strtab_clear(&tokens);
@@ -49,4 +71,4 @@ int	parse_exec_cmd(t_job *job, int idx)
 	ft_eprintf("CHILD %d : execve call failed\n", getpid());
 	strtab_clear(&tokens);
 	return (-1);
-}
+}*/

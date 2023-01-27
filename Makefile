@@ -6,7 +6,7 @@
 #    By: tbeaudoi <tbeaudoi@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/16 01:26:25 by iamongeo          #+#    #+#              #
-#    Updated: 2023/01/19 20:03:26 by tbeaudoi         ###   ########.fr        #
+#    Updated: 2023/01/27 08:59:43 by iamongeo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,6 +18,7 @@ _SRC		=	msh_main.c			\
 			job_manager_main.c		\
 			meta_chars_utils.c		\
 			substitute_env_vars.c		\
+			syntax_validator.c		\
 			envp_utils.c			\
 			error_handling.c		\
 			split_cmd_on_pipes.c		\
@@ -25,8 +26,9 @@ _SRC		=	msh_main.c			\
 			parse_exec_command.c		\
 			pipe_utils.c			\
 			sig_handlers.c			\
-			utils.c			\
-			intercept_builtin_calls.c
+			intercept_builtin_calls.c	\
+			tokenizer_redirector.c	\
+			redirection_handlers.c
 
 _BLT		=	cd.c		\
 			echo.c		\
@@ -75,7 +77,7 @@ all:	$(NAME) $(NAME_BONUS)
 
 clean:
 		rm -f $(OBJ_M) $(OBJ_B) $(LIBFT)
-		@$(MAKE) -s clean -C $(LIBRD_DIR)
+#		@$(MAKE) -s clean -C $(LIBRD_DIR)
 
 fclean:		clean
 		rm -f $(NAME) $(NAME_BONUS)

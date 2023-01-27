@@ -3,37 +3,37 @@
 /*                                                        :::      ::::::::   */
 /*   error_handling.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tbeaudoi <tbeaudoi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 07:27:37 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/01/12 12:55:09 by tbeaudoi         ###   ########.fr       */
+/*   Updated: 2023/01/27 00:04:25 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	repport_missing_input(const char *fn)
+int	report_missing_input(const char *fn)
 {
 	if (fn)
 		ft_eprintf("%s : missing input\n", fn);
 	return (-1);
 }
 
-int	repport_malloc_err(const char *fn)
+int	report_malloc_err(const char *fn)
 {
 	if (fn)
 		ft_eprintf("%s : malloc error\n", fn);
 	return (-1);
 }
 
-int	repport_fork_err(const char *fn)
+int	report_fork_err(const char *fn)
 {
 	if (fn)
 		ft_eprintf("%s : fork failed\n", fn);
 	return (-1);
 }
 
-int	repport_jm_mlc_err(const char *fn)
+int	report_jm_mlc_err(const char *fn)
 {
 	if (fn)
 		ft_eprintf("%s : malloc error\n", fn);
@@ -42,7 +42,7 @@ int	repport_jm_mlc_err(const char *fn)
 	return (-1);
 }
 
-int	repport_pipe_err(const char *fn)
+int	report_pipe_err(const char *fn)
 {
 	if (fn)
 		ft_eprintf("%s : pipe init failed\n", fn);
@@ -50,7 +50,7 @@ int	repport_pipe_err(const char *fn)
 //	return (errno);
 }
 
-int	repport_parsing_error(const char *fn, char *meta_c, int len)
+int	report_parsing_error(const char *fn, char *meta_c, int len)
 {
 	char	meta_buff[8];
 
@@ -59,15 +59,28 @@ int	repport_parsing_error(const char *fn, char *meta_c, int len)
 	ft_memcpy(meta_buff, meta_c, len);
 	meta_buff[len] = '\0';
 	if (fn)
-		ft_eprintf("%s : parsing error near \'%s\'\n", fn, meta_buff);
+		ft_eprintf("Minishell %s: parsing error near \'%s\'\n", fn, meta_buff);
 	return (-1);
 }
 
-int	repport_builtin_failure(const char *fn)
+int	report_builtin_failure(const char *fn)
 {
 	if (fn)
-		ft_eprintf("%s : a builtin failed to execute\n", fn);
+		ft_eprintf("Minishell: %s: a builtin failed to execute\n", fn);
 	return (-1);
 //	return (errno);
 }
 
+int	report_max_nb_cmds_exceeded(t_job *job)
+{
+	ft_eprintf("Minishell: Max number of cmds in pipeline exceeded : %d / %d\n",
+		job->nb_cmds, MAX_CMDS);
+	return (-1);
+}
+
+int	report_cmd_not_found(char *cmd, int *doa_p)
+{
+	ft_eprintf("Minishell: %s: command not found\n", cmd);
+	*doa_p = 1;
+	return (-1);
+}

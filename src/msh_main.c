@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   msh_main.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tbeaudoi <tbeaudoi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/16 19:16:03 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/01/25 19:42:32 by tbeaudoi         ###   ########.fr       */
+/*   Updated: 2023/01/27 08:51:49 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,10 @@ int	msh_clear(t_msh *msh, int exit_code)
 int	msh_init(t_msh *msh, char **envp)
 {
 	if (!msh || !envp)
-		return (repport_missing_input(__FUNCTION__));
+		return (report_missing_input(__FUNCTION__));
 	msh->paths = get_env_paths(envp);
 	if (!msh->paths || msh_envp_copy(envp, &msh->envp) < 0)
-		return (repport_malloc_err(__FUNCTION__));
+		return (report_malloc_err(__FUNCTION__));
 	printf("msh_init : envp cpy ptr : %p\n", msh->envp);
 	return (0);
 }
@@ -58,6 +58,7 @@ int	main(int argc, char **argv, char **envp)
 			continue ;
 		if (msh.rawline[0])
 			add_history(msh.rawline);
+		printf("msh : entering job manager\n");
 		job_manager(&msh);
 		ft_free_p((void **)&msh.rawline);
 	}
