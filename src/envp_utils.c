@@ -6,7 +6,7 @@
 /*   By: tbeaudoi <tbeaudoi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 06:08:27 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/01/18 05:35:54 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/01/25 19:42:51 by tbeaudoi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,20 +118,3 @@ char	*msh_getenv(t_msh *msh, char *var)
 	printf("msh getenv : no match for var %s\n", var);
 	return (NULL);
 }
-/*
-int	main(int argc, char **argv, char **envp)
-{
-	t_msh	msh;
-
-	if (msh_envp_copy(envp, &msh.envp) < 0)
-		return (1);
-	strtab_print(msh.envp);
-	msh_envp_add_entry(&msh, "JINGLE", "JANGLES");
-	msh_envp_add_entry(&msh, "HOHOHO", "les cocos");
-	strtab_print(msh.envp);
-	msh_envp_remove_entry(&msh, "JINGLE");
-	strtab_print(msh.envp);
-	strtab_clear(&msh.envp);
-	return (0);
-}
-*/

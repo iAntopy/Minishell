@@ -6,7 +6,7 @@
 /*   By: tbeaudoi <tbeaudoi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 03:01:53 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/01/19 19:54:58 by tbeaudoi         ###   ########.fr       */
+/*   Updated: 2023/01/25 19:44:17 by tbeaudoi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,20 +38,6 @@ static int	_validate_is_builtin(t_job *job, char *cmd)
 	else
 		return (BUILTIN_NOT_FOUND);
 }
-
-/*
-static int	_remove_builtin_cmd(char **cmds)
-{
-	ft_free_p((void **)cmds);
-	while (*(cmds + 1))
-	{
-		*cmds = *(cmds + 1);
-		cmds++;
-	}
-	*cmds = NULL;
-	return (0);
-}
-*/
 
 int	intercept_builtin_call(t_job *job, char *cmd, int *builtin_status)
 {
