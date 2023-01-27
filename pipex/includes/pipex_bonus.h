@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/28 23:19:58 by iamongeo          #+#    #+#             */
-/*   Updated: 2022/10/12 23:08:08 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/01/26 21:19:54 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,10 +59,10 @@ int		validate_pipex_input_args(int argc, char **argv, int *here_doc);
 int		get_here_doc_input(char *limiter, int n_cmds);
 
 ///// ERROR_HANDLING /////
-int		repport_bad_inputs(int argc);
-int		repport_error(char *err);
-int		repport_file_error(char *filename);
-int		repport_bad_cmd(char ***argv, char **filename);
-int		repport_execve_failed(char *cmd);
+int		report_bad_inputs(int argc);
+int		report_error(char *err);
+int		report_file_error(char *filename);
+int		report_bad_cmd(char ***argv, char **filename);
+int		report_execve_failed(char *cmd);
 
 #endif

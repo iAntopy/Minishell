@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   envp_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tbeaudoi <tbeaudoi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 06:08:27 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/01/27 08:17:04 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/01/27 08:22:46 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,15 +41,15 @@ int	msh_envp_add_entry(t_msh *msh, char *var, char *value)
 	int		i;
 
 	if (!msh || !msh->envp || !var || !value)
-		return (repport_missing_input(__FUNCTION__));
+		return (report_missing_input(__FUNCTION__));
 	envp = msh->envp;
 	len = strtab_len(envp);
 	new_envp = NULL;
 	if (build_new_envp_entry(var, value, &entry) < 0)
-		return (repport_malloc_err(__FUNCTION__));
+		return (report_malloc_err(__FUNCTION__));
 	if (!ft_malloc_p(sizeof(char *) * (len + 2), (void **)&new_envp))
 		return (ft_free_p((void **)&entry)
-			+ repport_malloc_err(__FUNCTION__));
+			+ report_malloc_err(__FUNCTION__));
 	i = -1;
 	while (envp[++i])
 		new_envp[i] = envp[i];
@@ -67,7 +67,7 @@ int	msh_envp_remove_entry(t_msh *msh, char *var)
 	int		i;
 
 	if (!msh || !msh->envp || !var)
-		return (repport_missing_input(__FUNCTION__));
+		return (report_missing_input(__FUNCTION__));
 	len = ft_strlen(var);
 	i = 0;
 	envp = msh->envp;
@@ -87,11 +87,11 @@ int	msh_envp_copy(char **envp, char ***ret)
 	char	**envp_cpy;
 
 	if (!envp || !ret)
-		return (repport_missing_input(__FUNCTION__));
+		return (report_missing_input(__FUNCTION__));
 	envp_cpy = NULL;
 	envp_cpy = strtab_copy(envp);
 	if (!envp_cpy)
-		return (repport_malloc_err(__FUNCTION__));
+		return (report_malloc_err(__FUNCTION__));
 	*ret = envp_cpy;
 	return (0);
 }
@@ -106,7 +106,7 @@ char	*msh_getenv(t_msh *msh, char *var)
 	printf("msh getenv : entered with var : %s\n", var);
 	if (*var == '?')
 	{
-		t_putnbr_buff(msh->nbr_buff, msh->exit_status);
+		ft_putnbr_buff(msh->nbr_buff, msh->exit_status);
 		return (msh->nbr_buff);
 	}
 	envp = msh->envp;

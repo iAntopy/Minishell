@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/28 23:14:24 by iamongeo          #+#    #+#             */
-/*   Updated: 2022/09/21 21:53:19 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/01/26 21:19:54 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ static int	exec_single_cmd(t_ppx *ppx, int i, char *cmd, char **env)
 	ppx->pids[i] = fork();
 	if (ppx->pids[i] < 0)
 		return (close_pipe(ppx->pp, ppx->pp + 1)
-			& repport_error("fork failed"));
+			& report_error("fork failed"));
 	else if (ppx->pids[i] == 0)
 	{
 		close_pipe(ppx->pp, NULL);
@@ -50,7 +50,7 @@ static int	exec_single_cmd(t_ppx *ppx, int i, char *cmd, char **env)
 			dup2(*ppx->in, 0);
 			dup2(*ppx->out, 1);
 			if (execve(ppx->argv[0], ppx->argv, env) < 0)
-				return (repport_execve_failed(ppx->argv[0]));
+				return (report_execve_failed(ppx->argv[0]));
 		}
 		exit(clear_ppx(ppx, 0, errno));
 	}

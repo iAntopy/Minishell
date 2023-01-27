@@ -3,22 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tbeaudoi <tbeaudoi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 04:08:20 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/01/19 19:52:50 by tbeaudoi         ###   ########.fr       */
+/*   Updated: 2023/01/27 08:24:09 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int	repport_exit_too_many_args(void)
+static int	report_exit_too_many_args(void)
 {
 	ft_eprintf("minishell: exit: too many arguments\n");
 	return (-1);
 }
 
-static int	repport_exit_alpha_arg(void)
+static int	report_exit_alpha_arg(void)
 {
 	ft_eprintf("minishell: exit: numeric argument required\n");
 	return (-1);
@@ -37,10 +37,10 @@ static int	validate_is_all_num(char *arg)
 
 // exit will close shell with the given exit_code. If none are
 // provided exits with 0 (EXIT_SUCCESS).
-// 1. If more then 1 argument is provided, repports the error but 
+// 1. If more then 1 argument is provided, reports the error but 
 // DOES NOT exit the shell.
 // 2. If the single argument from exit contains anything other 
-// the numeric characters, repport error and exit shell with 
+// the numeric characters, report error and exit shell with 
 // exit_code -1 (255).
 // 3. If more then 1 arg provided and first contains non-numeric
 // characters, same as case 2.
@@ -55,10 +55,10 @@ static int	parse_exit_cmd(char *cmd, int *exit_status)
 	if (split[1])
 	{
 		if (!exit_status)
-			repport_malloc_err(__FUNCTION__);
-		else if (!validate_is_all_num(split[1]) && repport_exit_alpha_arg())
+			report_malloc_err(__FUNCTION__);
+		else if (!validate_is_all_num(split[1]) && report_exit_alpha_arg())
 			*exit_status = -1;
-		else if (strtab_len(split) > 2 && repport_exit_too_many_args())
+		else if (strtab_len(split) > 2 && report_exit_too_many_args())
 			must_exit = 0;
 		else
 			*exit_status = ft_atoi(split[1]);

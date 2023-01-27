@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   error_handling_bonus.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iamongeo <marvin@42quebec.com>             +#+  +:+       +#+        */
+/*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/21 19:52:25 by iamongeo          #+#    #+#             */
-/*   Updated: 2022/09/21 22:27:21 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/01/26 21:19:54 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex_bonus.h"
 
-int	repport_bad_inputs(int argc)
+int	report_bad_inputs(int argc)
 {
 	errno = EINVAL;
 	ft_eprintf(RED_BC"<[ PIPEX ERROR :: wrong nb of args received (%d) ]>\n",
@@ -23,20 +23,20 @@ int	repport_bad_inputs(int argc)
 	return (errno);
 }
 
-int	repport_file_error(char *filename)
+int	report_file_error(char *filename)
 {
 	ft_eprintf(RED_BC"<[ PIPEX ERROR :: %s : %s ]>\n"WHITE_C,
 		strerror(errno), filename);
 	return (errno);
 }
 
-int	repport_error(char *err)
+int	report_error(char *err)
 {
 	ft_eprintf(RED_BC"<[ PIPEX ERROR :: %s ]>\n"WHITE_C, err);
 	return (errno);
 }
 
-int	repport_bad_cmd(char ***argv, char **filename)
+int	report_bad_cmd(char ***argv, char **filename)
 {
 	int	status;
 
@@ -58,7 +58,7 @@ int	repport_bad_cmd(char ***argv, char **filename)
 	return (status);
 }
 
-int	repport_execve_failed(char *cmd)
+int	report_execve_failed(char *cmd)
 {
 	ft_eprintf(RED_BC"<[ PIPEX ERROR :: %s cmd execution failed ]>\n"WHITE_C,
 		cmd);
