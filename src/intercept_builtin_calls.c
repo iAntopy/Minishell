@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 03:01:53 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/01/27 08:26:35 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/01/27 08:34:06 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,29 +18,30 @@ static int	_validate_is_builtin(t_msh *msh, t_cmd *cmd)
 
 	cmd_str = cmd->tokens[0];
 	printf("\n\n INTERCEPTING BUILTINS ! pid : %d\n", getpid());
-	if (ft_strncmp(cmd_str, "echo", 4) == 0 && (!cmd_str[4]
-			|| ft_isspace(cmd_str[4])))
-		return (msh_builtin_echo(msh, cmd_str));
-	else if (ft_strncmp(cmd_str, "cd", 2) == 0 && (!cmd_str[2]
-			|| ft_isspace(cmd_str[2])))
-		return (msh_builtin_cd(msh, cmd_str));
-	else if (ft_strncmp(cmd_str, "export", 6) == 0 && (!cmd_str[6]
-			|| ft_isspace(cmd_str[6])))
-		return (msh_builtin_export(msh, cmd_str));
-	else if (ft_strncmp(cmd_str, "unset", 5) == 0 && (!cmd_str[5]
-			|| ft_isspace(cmd_str[5])))
-		return (msh_builtin_unset(msh, cmd_str));
-	else if (ft_strncmp(cmd_str, "pwd", 3) == 0 && (!cmd_str[3]
-			|| ft_isspace(cmd_str[3])))
-		return (msh_builtin_pwd(msh));
-	else if (ft_strncmp(cmd_str, "env", 3) == 0 && (!cmd_str[3]
-			|| ft_isspace(cmd_str[3])))
-		return (msh_builtin_env(msh));
-	else if (ft_strncmp(cmd_str, "exit", 4) == 0 && (!cmd_str[4]
-			|| ft_isspace(cmd_str[4])))
-		return (msh_builtin_exit(msh, cmd_str));
+	if (ft_strncmp(cmd_str, "echo", 4) == 0)
+		cmd->bltin_func = msh_builtin_echo;
+//		return (msh_builtin_echo(msh, cmd_str));
+	else if (ft_strncmp(cmd_str, "cd", 2) == 0)
+		cmd->bltin_func = msh_builtin_cd;
+//		return (msh_builtin_cd(msh, cmd_str));
+	else if (ft_strncmp(cmd_str, "export", 6) == 0)
+		cmd->bltin_func = msh_builtin_export;
+//		return (msh_builtin_export(msh, cmd_str));
+	else if (ft_strncmp(cmd_str, "unset", 5) == 0)
+		cmd->bltin_func = msh_builtin_unset;
+//		return (msh_builtin_unset(msh, cmd_str));
+	else if (ft_strncmp(cmd_str, "pwd", 3) == 0)
+		cmd->bltin_func = msh_builtin_pwd;
+//		return (msh_builtin_pwd(msh));
+	else if (ft_strncmp(cmd_str, "env", 3) == 0)
+		cmd->bltin_func = msh_builtin_env;
+//		return (msh_builtin_env(msh));
+	else if (ft_strncmp(cmd_str, "exit", 4) == 0)
+		cmd->bltin_func = msh_builtin_exit;
+//		return (msh_builtin_exit(msh, cmd_str));
 	else
 		return (BUILTIN_NOT_FOUND);
+	return (BUILTIN_FOUND);
 }
 
 int	intercept_builtin_call(t_job *job, t_cmd *cmd, int *builtin_status)
