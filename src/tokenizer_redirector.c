@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/20 20:54:13 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/01/27 05:50:31 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/01/27 07:53:02 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,6 @@ static int	apply_redirections_for_single_cmd(t_cmd *cmd)
 	int		i;
 	char	**tks;
 	int		status;
-
-//	printf("DUMMY : apply_redirections_for_single_cmd call\n");
-//	(void)cmd;
 	
 	tks = cmd->tokens;
 	i = -1;
@@ -61,15 +58,12 @@ int	find_and_validate_cmd_file(t_cmd *cmd)
 	int		builtin_status;
 	
 
-	intercept_builtin_call(cmd->job->msh, cmd, &builtin_status);
-//	if (builtin_status == BUILTIN_FAILED)
-//		return (report_builtin_failure(__FUNCTION__));
+	intercept_builtin_call(cmd, &builtin_status);
 	if (builtin_status == BUILTIN_FOUND)
 	{
 		printf("BUILTIN INTERCEPTED\n");
 		return (0);
 	}
-	
 	if (find_file_in_paths(cmd->tokens[0], cmd->job->msh->paths, &cmd_path,
 		F_OK | X_OK) < 0
 		|| !cmd_path)
@@ -96,7 +90,7 @@ int	setup_all_cmds(t_job *job)
 	{
 		cmd = job->cmds + i;
 		cmd->job = job;
-		cmd->tokens = ft_split_space(job->pipe_split[i]);//tokenize_single_cmd(cmd, job->pipe_split[i]);
+		cmd->tokens = ft_split_space(job->pipe_split[i]);
 		if (!cmd->tokens)
 			return (-1);
 		restore_substrings_in_tab(cmd->tokens, cmd->job->sc);
@@ -107,14 +101,3 @@ int	setup_all_cmds(t_job *job)
 	strtab_clear(&job->pipe_split);
 	return (0);
 }
-/*
-int	apply_all_redirections(t_job *job)
-{
-	int		i;
-
-	i = -1;
-	while (i < job->nb_cmds)
-		apply_redirections_for_single_cmd(job, i);
-	return (0);
-}
-*/

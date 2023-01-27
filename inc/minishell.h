@@ -6,11 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/16 01:39:11 by iamongeo          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2023/01/27 08:22:20 by iamongeo         ###   ########.fr       */
-=======
-/*   Updated: 2023/01/27 07:05:58 by iamongeo         ###   ########.fr       */
->>>>>>> now intercepting builtins by checking the equality of the first token in cmd->tokens with every builtin names, then if match found set cmd->bltin_func = to the correct function ptr msh_builtin_*. All commands are validated before executions and there name swaped with the full path to their location in environment. Else command not found err msg is printed before exec.
+/*   Updated: 2023/01/27 08:40:23 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +112,7 @@ enum	e_builtin_status
 int		job_manager(t_msh *msh);
 int		job_executor(t_job *job);
 int		validate_synax(char *line);
-int		intercept_builtin_call(t_job *job, t_cmd *cmd, int *builtin_status);
+int		intercept_builtin_call(t_cmd *cmd, int *builtin_status);
 int		parse_exec_cmd(t_job *job, int idx);//t_msh *msh, char *cmd);
 int		init_pipe(int pp[2], int *rd_pipe, int i, int nb_cmds);
 int		close_pipe(int *rd_pipe, int *wr_pipe);
