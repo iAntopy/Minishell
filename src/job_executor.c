@@ -6,7 +6,7 @@
 /*   By: tbeaudoi <tbeaudoi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 00:48:45 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/01/18 06:51:51 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/01/18 19:21:11 by tbeaudoi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ static int	job_executor_force_exit(t_job *job, int *rd_pipe)
 {
 	pid_t	*pids;
 
-	if (!job || !job->pids)
+	if (!job)
 		return (repport_missing_input(__FUNCTION__));
 	close_pipe(job->pp, job->pp + 1);
 	close_pipe(rd_pipe, NULL);

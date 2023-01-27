@@ -6,7 +6,7 @@
 /*   By: tbeaudoi <tbeaudoi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/06 23:20:16 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/01/12 12:58:34 by tbeaudoi         ###   ########.fr       */
+/*   Updated: 2023/01/25 19:48:38 by tbeaudoi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,11 +33,12 @@ static int	node_counter(char *s)
 	while (*s)
 	{
 		if (is_quote(*s, &quote_switch))
+		{
 			while (*(++s) && *s != is_quote(*s, &quote_switch))
 				continue ;
+		}
 		else
 			wcount += (ft_strncmp(s, " | ", 3) == 0) && *(s + 3);
-			//wcount += (*s == c) && *(s + 1) && (*(s + 1) != c);
 		s++;
 	}
 	return (wcount);
@@ -75,11 +76,9 @@ static int	pipe_splitter(char **tab, char *str)
 int	split_cmd_on_pipes(char *s, char ***ret)
 {
 	int		wcount;
-//	char	**tab;
 
 	if (!s)
 		return (-1);
-//	tab = NULL;
 	*ret = NULL;
 	wcount = node_counter(s);
 	printf("split cmd : wcount %d\n", wcount);
@@ -94,23 +93,3 @@ int	split_cmd_on_pipes(char *s, char ***ret)
 	strtab_print(*ret);
 	return (0);
 }
-/*
-int	main(int argc, char **argv)
-{
-	char	*str = "";
-	char	del = 'a';
-	char	**tab;
-
-	if (argc < 2)
-		return (1);
-	tab = split_cmd_on_pipes(argv[1]);
-	if (!tab)
-	{
-		ft_printf("tab is NULL \n");
-		return (0);
-	}
-	strtab_print(tab);
-	strtab_clear(&tab);
-	return (0);
-}
-*/
