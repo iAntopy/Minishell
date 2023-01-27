@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/16 01:39:11 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/01/27 00:30:28 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/01/27 07:05:58 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,12 +36,14 @@
 
 typedef struct s_job			t_job;
 typedef struct s_minishell_data	t_msh;
+typedef int (* t_bltin)(t_msh *msh, t_cmd *cmd);
 
 typedef struct s_command
 {
 	t_job	*job;	// reference to the job struct the cmd spawns from. Init in setup_all_cmds()
 	pid_t	pid;
 	char	**tokens;
+	t_bltin	bltin_func;
 	int		redir_in;
 	int		redir_out;
 	int		doa;
@@ -134,13 +136,13 @@ int		split_cmd_on_pipes(char *cmd, char ***tab_p);
 char	*skip_valid_envp_var_chars(char *var);
 
 // BUILTINS
-int		msh_builtin_echo(t_msh *msh, char *cmd);
-int		msh_builtin_cd(t_msh *msh, char *cmd);
-int		msh_builtin_env(t_msh *msh);
-int		msh_builtin_pwd(t_msh *msh);
-int		msh_builtin_export(t_msh *msh, char *cmd);//, char *var, char *value);
-int		msh_builtin_unset(t_msh *msh, char *cmd);
-int		msh_builtin_exit(t_msh *msh, char *cmd);//char *var);
+int		msh_builtin_echo(t_msh *msh, t_cmd *cmd);//char *cmd);
+int		msh_builtin_cd(t_msh *msh, t_cmd *cmd);
+int		msh_builtin_env(t_msh *m, t_cmd *cmd);
+int		msh_builtin_pwd(t_msh *msh, t_cmd *cmd);
+int		msh_builtin_export(t_msh *msh, t_cmd *cmd);//, char *var, char *value);
+int		msh_builtin_unset(t_msh *msh, t_cmd *cmd);
+int		msh_builtin_exit(t_msh *msh, t_cmd *cmd);//char *var);
 
 // ENVIRONMENT VARIABLES UTILS
 int		msh_envp_add_entry(t_msh *msh, char *var, char *value);

@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/20 20:54:13 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/01/27 01:03:09 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/01/27 05:50:31 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,31 +57,31 @@ static int	apply_redirections_for_single_cmd(t_cmd *cmd)
 
 int	find_and_validate_cmd_file(t_cmd *cmd)
 {
-	char	*cmd_file_path;
+	char	*cmd_path;
 	int		builtin_status;
 	
-/*
+
 	intercept_builtin_call(cmd->job->msh, cmd, &builtin_status);
-	if (builtin_status == BUILTIN_FAILED)
-		return (report_builtin_failure(__FUNCTION__));
-	else if (builtin_status == BUILTIN_FOUND)
+//	if (builtin_status == BUILTIN_FAILED)
+//		return (report_builtin_failure(__FUNCTION__));
+	if (builtin_status == BUILTIN_FOUND)
 	{
 		printf("BUILTIN INTERCEPTED\n");
-		cmd->doa = 1;
 		return (0);
 	}
-*/	
-	if (find_file_in_paths(cmd->tokens[0], cmd->job->msh->paths, &cmd_file_path,
-			F_OK | X_OK) < 0
-		|| !cmd_file_path)
+	
+	if (find_file_in_paths(cmd->tokens[0], cmd->job->msh->paths, &cmd_path,
+		F_OK | X_OK) < 0
+		|| !cmd_path)
 	{
 		ft_free_p((void **)cmd_file_path);
 		cmd->job->msh->exit_status = 127;
-		return (report_cmd_not_found(cmd->tokens[0], &cmd->doa));
+		cmd->doa = 1;
+		return (report_cmd_not_found(cmd->tokens[0]));
 	}
 	ft_free_p((void **)cmd->tokens);
 	cmd->tokens[0] = cmd_file_path;
-	return (0);	
+	return (0);
 }
 
 int	setup_all_cmds(t_job *job)

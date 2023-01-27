@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 00:48:45 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/01/27 00:52:22 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/01/27 06:29:59 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,25 @@ static int	job_executor_force_exit(t_job *job, int *rd_pipe)
 		if (job->cmds[i].pid)
 			kill(job->cmds[i].pid, SIGKILL);
 	return (-1);
+}
+
+static void	setup_child_redirections(t_cmd *cmd)
+{
+	close_fd(&cmd->job->pp[0]);
+	if (cmd->redir_in)
+	{
+		close_fd(&cmd->job->rd_pipe);
+		dup2(cmd->redir_in, STDIN_FILENO);
+	}
+	else if (cmd->job->rd_pipe != STDIN_FILENO)
+		dup2(cmd->job->rd_pipe, STDIN_FILENO);
+	if (cmd->redir_out)
+	{
+		close_fd(&cmd->job->pp[1]);
+		dup2(cmd->redir_out, STDOUT_FILENO);
+	}
+	else if (cmd->job->pp[1] != STDOUT_FILENO)
+		dup2(cmd->job->pp[1], STDOUT_FILENO);
 }
 
 static int	fork_child_processes(t_job *job)
@@ -49,30 +68,13 @@ static int	fork_child_processes(t_job *job)
 		else if (job->cmds[i].pid == 0)
 		{
 //			ft_eprintf("CHILD %d : enter the BEAST\n", getpid());
-			close_pipe(job->pp, NULL);
-//			ft_eprintf("CHILD %d : closed pipe read side\n", getpid());
-			if (job->rd_pipe != 0 && dup2(job->rd_pipe, 0)  < 0)
-			{
-				ft_eprintf("CHILD %d : first dup2 failed trying to plug rd_pipe (%d) to stdin\n", getpid(), job->rd_pipe);
-				perror("CHILD perror");
-			}
-//			ft_eprintf("CHILD %d : dup prev pipe (%d) to stdin\n", getpid(), job->rd_pipe);
-			if (job->pp[1] != 1 && dup2(job->pp[1], 1) < 0)
-			{
-				ft_eprintf("CHILD %d : second dup2 failed trying to plug write pipe (%d) to stdout\n", getpid(), job->pp[1]);
-				perror("CHILD perror");
-			}
-//			ft_eprintf("CHILD %d : dup write pipe job->pp[1] (%d) to stdout \n", getpid(), job->pp[1]);
-			//if (parse_exec_cmd(job, i) < 0)
-			if (job->cmds[i].doa
-				|| intercept_builtin_call(job, &job->cmds[i], &bltin_status) < 0
-				|| bltin_status == BUILTIN_FOUND
-				|| execve(job->cmds[i].tokens[0],
-					job->cmds[i].tokens, job->msh->envp) < 0)
-			{
-				ft_eprintf("CHILD %d : exiting with ERROR\n", getpid());
-				exit(job_clear(job, 0) | msh_clear(job->msh, errno));
-			}
+			setup_child_redirections(job->cmd + i);
+			if (job->bltin_func)
+				job->cmd[i].bltin_func(job->msh, job->cmds[i]);
+			else if (!job->cmds[i].doa)
+				execve(job->cmds[i].tokens[0],
+					job->cmds[i].tokens, job->msh->envp);
+			exit(job_clear(job, 0) | msh_clear(job->msh, errno));
 		}
 		close_pipe(&job->rd_pipe, job->pp + 1);
 		job->rd_pipe = job->pp[0];
@@ -88,16 +90,11 @@ int	job_executor(t_job *job)
 	if (!job)
 		return (report_missing_input(__FUNCTION__));
 
-	if (job->nb_cmds == 1)
+	if (job->nb_cmds == 1 && job->bltin_func)
 	{
-		intercept_builtin_call(job, &job->cmds[0], &builtin_status);
-		if (builtin_status == BUILTIN_FAILED)
+		if (job->bltin_func(job->msh, job->cmd) == BUILTIN_FAILED)
 			return (report_builtin_failure(__FUNCTION__));
-		else if (builtin_status == BUILTIN_FOUND)
-		{
-			printf("BUILTIN INTERCEPTED\n");
-			return (0);
-		}
+		return (0);
 	}
 
 	printf("job exec : forking\n");
