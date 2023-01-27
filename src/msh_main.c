@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   msh_main.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tbeaudoi <tbeaudoi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/16 19:16:03 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/01/24 02:05:07 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/01/26 22:38:28 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,10 +40,10 @@ int	msh_parse_rawline(t_msh *msh)
 int	msh_init(t_msh *msh, char **envp)
 {
 	if (!msh || !envp)
-		return (repport_missing_input(__FUNCTION__));
+		return (report_missing_input(__FUNCTION__));
 	msh->paths = get_env_paths(envp);
 	if (!msh->paths || msh_envp_copy(envp, &msh->envp) < 0)
-		return (repport_malloc_err(__FUNCTION__));
+		return (report_malloc_err(__FUNCTION__));
 	printf("msh_init : envp cpy ptr : %p\n", msh->envp);
 	return (0);
 }
@@ -54,10 +54,10 @@ int	msh_start_job_manager(t_msh *msh)
 	int	pid;
 
 	if (!msh)
-		return (repport_missing_input(__FUNCTION__));
+		return (report_missing_input(__FUNCTION__));
 	pid = fork();
 	if (pid < 0)
-		return (repport_fork_err(__FUNCTION__));
+		return (report_fork_err(__FUNCTION__));
 	else if (pid == 0)
 	{
 		if (jm_manage_job(msh) < 0)
@@ -126,6 +126,7 @@ int	main(int argc, char **argv, char **envp)
 			continue ;
 		if (msh.rawline[0])// && msh.rawline[0] != '\n')
 			add_history(msh.rawline);
+		printf("msh : entering job manager\n");
 		job_manager(&msh);
 		printf("Return to main from job manager()\n");
 		printf("main : post manage job call\n");

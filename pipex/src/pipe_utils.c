@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipe_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iamongeo <marvin@42quebec.com>             +#+  +:+       +#+        */
+/*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/21 21:46:17 by iamongeo          #+#    #+#             */
-/*   Updated: 2022/09/21 21:47:44 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/01/26 21:19:54 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int	init_pipe(t_ppx *ppx, int i)
 	ppx->in = &ppx->rd_pipe;
 	ppx->out = ppx->pp + 1;
 	if (!is_last && (pipe(ppx->pp) < 0))
-		return (repport_error("pipe call failed"));
+		return (report_error("pipe call failed"));
 	if (is_first)
 		ppx->in = ppx->io;
 	else if (is_last)
