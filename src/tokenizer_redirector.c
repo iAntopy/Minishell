@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/20 20:54:13 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/01/27 07:53:02 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/01/27 09:25:48 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,13 +68,13 @@ int	find_and_validate_cmd_file(t_cmd *cmd)
 		F_OK | X_OK) < 0
 		|| !cmd_path)
 	{
-		ft_free_p((void **)cmd_file_path);
+		ft_free_p((void **)cmd_path);
 		cmd->job->msh->exit_status = 127;
 		cmd->doa = 1;
 		return (report_cmd_not_found(cmd->tokens[0]));
 	}
 	ft_free_p((void **)cmd->tokens);
-	cmd->tokens[0] = cmd_file_path;
+	cmd->tokens[0] = cmd_path;
 	return (0);
 }
 

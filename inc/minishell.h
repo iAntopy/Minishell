@@ -6,11 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/16 01:39:11 by iamongeo          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2023/01/27 08:42:52 by iamongeo         ###   ########.fr       */
-=======
-/*   Updated: 2023/01/27 07:39:59 by iamongeo         ###   ########.fr       */
->>>>>>> b55f36792423fd03fc15493479f478bc49aea179
+/*   Updated: 2023/01/27 09:23:48 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +36,8 @@
 
 typedef struct s_job			t_job;
 typedef struct s_minishell_data	t_msh;
-typedef int (* t_bltin)(t_msh *msh, t_cmd *cmd);
+typedef struct s_command	t_cmd;
+typedef int (* t_bltin)(t_job *job, t_cmd *cmd);
 
 typedef struct s_command
 {
@@ -143,7 +140,7 @@ char	*skip_valid_envp_var_chars(char *var);
 // BUILTINS
 int		msh_builtin_echo(t_job *job, t_cmd *cmd);//char *cmd);
 int		msh_builtin_cd(t_job *job, t_cmd *cmd);
-int		msh_builtin_env(t_job *job t_cmd *cmd);
+int		msh_builtin_env(t_job *job, t_cmd *cmd);
 int		msh_builtin_pwd(t_job *job, t_cmd *cmd);
 int		msh_builtin_export(t_job *job, t_cmd *cmd);//, char *var, char *value);
 int		msh_builtin_unset(t_job *job, t_cmd *cmd);
@@ -168,7 +165,7 @@ int		report_pipe_err(const char *fn);
 int		report_parsing_error(const char *fn, char *meta_c, int len);
 int		report_builtin_failure(const char *fn);
 int		report_max_nb_cmds_exceeded(t_job *job);
-int		report_cmd_not_found(char *cmd, int *doa_p);
+int		report_cmd_not_found(char *cmd);
 
 // SIGNALS
 void	handlers_control(t_msh *msh);

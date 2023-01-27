@@ -6,14 +6,17 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 03:01:53 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/01/27 08:53:25 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/01/27 09:29:41 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int	_validate_is_builtin(char *cmd_str)
+static int	_validate_is_builtin(t_cmd *cmd)
 {
+	char	*cmd_str;
+
+	cmd_str = cmd->tokens[0];
 	if (ft_strncmp(cmd_str, "echo", 4) == 0)
 		cmd->bltin_func = msh_builtin_echo;
 //		return (msh_builtin_echo(msh, cmd_str));
@@ -42,6 +45,6 @@ static int	_validate_is_builtin(char *cmd_str)
 
 int	intercept_builtin_call(t_cmd *cmd, int *builtin_status)
 {
-	*builtin_status = _validate_is_builtin(cmd->tokens[0]);
+	*builtin_status = _validate_is_builtin(cmd);
 	return (0);
 }

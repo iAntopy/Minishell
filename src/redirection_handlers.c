@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 20:33:23 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/01/26 23:21:33 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/01/27 09:26:46 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,6 @@ int	find_heredoc_env_subst_size(t_job *job, char *rl, char *var_buff, char **val
 	int		i;
 	int		j;
 	int		extra_size;
-	char	*env_val;
 
 	extra_size = 0;
 	i = -1;
@@ -90,8 +89,9 @@ int	find_heredoc_env_subst_size(t_job *job, char *rl, char *var_buff, char **val
 			while (rl[++j] && (ft_isalnum(rl[j]) || rl[j] == '_'))
 				var_buff[j - i - 1] = rl[j];
 			var_buff[j - i - 1] = '\0';
-			*(vals++) = msh_getenv(job->msh, var_buff);
-			extra_size += ft_strlen(env_val);
+			*vals = msh_getenv(job->msh, var_buff);
+			extra_size += ft_strlen(*vals);
+			vals++;
 			i = j;
 		}
 	}

@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 00:48:45 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/01/27 08:53:05 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/01/27 09:32:15 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,9 +49,7 @@ static void	setup_child_redirections(t_cmd *cmd)
 
 static int	fork_child_processes(t_job *job)
 {
-//	pid_t	pid;
 	int	i;
-	int	bltin_status;
 
 	printf("fork child procs : entered : job %p, nb cmds : %d\n", job, job->nb_cmds);
 	i = -1;
@@ -68,9 +66,9 @@ static int	fork_child_processes(t_job *job)
 		else if (job->cmds[i].pid == 0)
 		{
 //			ft_eprintf("CHILD %d : enter the BEAST\n", getpid());
-			setup_child_redirections(job->cmd + i);
-			if (job->bltin_func)
-				job->cmd[i].bltin_func(job, job->cmds[i]);
+			setup_child_redirections(job->cmds + i);
+			if (job->cmds[i].bltin_func)
+				job->cmds[i].bltin_func(job, &job->cmds[i]);
 			else if (!job->cmds[i].doa)
 				execve(job->cmds[i].tokens[0],
 					job->cmds[i].tokens, job->msh->envp);
@@ -84,15 +82,14 @@ static int	fork_child_processes(t_job *job)
 
 int	job_executor(t_job *job)
 {
-	int	builtin_status;
 	int	i;
 	
 	if (!job)
 		return (report_missing_input(__FUNCTION__));
 
-	if (job->nb_cmds == 1 && job->bltin_func)
+	if (job->nb_cmds == 1 && job->cmds[0].bltin_func)
 	{
-		if (job->bltin_func(job, job->cmds[i]) == BUILTIN_FAILED)
+		if (job->cmds[0].bltin_func(job, &job->cmds[0]) == BUILTIN_FAILED)
 			return (report_builtin_failure(__FUNCTION__));
 		return (0);
 	}
