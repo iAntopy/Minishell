@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tbeaudoi <tbeaudoi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 04:08:20 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/01/27 08:55:57 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/01/27 16:59:33 by tbeaudoi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,39 +44,39 @@ static int	validate_is_all_num(char *arg)
 // exit_code -1 (255).
 // 3. If more then 1 arg provided and first contains non-numeric
 // characters, same as case 2.
-static int	parse_exit_cmd(char *cmd, int *exit_status)
+static int	parse_exit_cmd(char **cmd, int *exit_status)
 {
-	char	**split;
+	// char	**split;
 	int		must_exit;
 
 	*exit_status = 0;
 	must_exit = 1;
-	split = ft_split(cmd, ' ');
-	if (split[1])
+	// split = ft_split(cmd, ' ');
+	if (cmd[1])
 	{
 		if (!exit_status)
 			report_malloc_err(__FUNCTION__);
-		else if (!validate_is_all_num(split[1]) && report_exit_alpha_arg())
+		else if (!validate_is_all_num(cmd[1]) && report_exit_alpha_arg())
 			*exit_status = -1;
-		else if (strtab_len(split) > 2 && report_exit_too_many_args())
+		else if (strtab_len(cmd) > 2 && report_exit_too_many_args())
 			must_exit = 0;
 		else
-			*exit_status = ft_atoi(split[1]);
+			*exit_status = ft_atoi(cmd[1]);
 	}		
-	strtab_clear(&split);
+	// strtab_clear(&split);
 	return (must_exit);
 }
 
 // Yep outputs "exit" to stderr
-int	msh_builtin_exit(t_job *job, char *cmd)
+int	msh_builtin_exit(t_job *job, t_cmd *cmd)
 {
 	int	exit_status;
 	int	must_exit;	
 
-	if (!job || !cmd)
+	if (!job || !cmd->tokens)
 		return (-1);
 	ft_eprintf("exit\n");
-	must_exit = parse_exit_cmd(cmd, &exit_status);
+	must_exit = parse_exit_cmd(cmd->tokens, &exit_status);
 	job->msh->request_exit = must_exit;
 	job->msh->shell_exit_status = exit_status;
 	return (0);
