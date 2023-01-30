@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/20 20:54:13 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/01/30 00:51:20 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/01/30 07:29:55 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,10 @@ static int	apply_redirections_for_single_cmd(t_cmd *cmd)
 		if (ft_strncmp(tks[i], "<<", 2) == 0)	// run heredoc file input
 			status = get_heredoc_input(cmd, tks + i, &cmd->job->heredoc_id);//&cmd->redir_in, &cmd->job->heredoc_id);
 		else if (ft_strncmp(tks[i], ">>", 2) == 0)	// redirect output in append mode
+		{
+			printf("Redirection output in APPEND MODE \n");
 			status = redirect_outfile(cmd, tks + i, O_APPEND);//&cmd->redir_out, O_APPEND);
+		}
 		else if (ft_strncmp(tks[i], "<", 1) == 0)	// redirect input file
 			status = redirect_infile(cmd, tks + i);//&cmd->redir_in);
 		else if (ft_strncmp(tks[i], ">", 1) == 0)	// redirect output in truncate mode
