@@ -6,7 +6,7 @@
 /*   By: tbeaudoi <tbeaudoi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 04:08:20 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/01/27 16:59:33 by tbeaudoi         ###   ########.fr       */
+/*   Updated: 2023/01/30 15:32:22 by tbeaudoi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,23 +35,12 @@ static int	validate_is_all_num(char *arg)
 	return (1);
 }
 
-// exit will close shell with the given exit_code. If none are
-// provided exits with 0 (EXIT_SUCCESS).
-// 1. If more then 1 argument is provided, reports the error but 
-// DOES NOT exit the shell.
-// 2. If the single argument from exit contains anything other 
-// the numeric characters, report error and exit shell with 
-// exit_code -1 (255).
-// 3. If more then 1 arg provided and first contains non-numeric
-// characters, same as case 2.
 static int	parse_exit_cmd(char **cmd, int *exit_status)
 {
-	// char	**split;
 	int		must_exit;
 
 	*exit_status = 0;
 	must_exit = 1;
-	// split = ft_split(cmd, ' ');
 	if (cmd[1])
 	{
 		if (!exit_status)
@@ -63,11 +52,9 @@ static int	parse_exit_cmd(char **cmd, int *exit_status)
 		else
 			*exit_status = ft_atoi(cmd[1]);
 	}		
-	// strtab_clear(&split);
 	return (must_exit);
 }
 
-// Yep outputs "exit" to stderr
 int	msh_builtin_exit(t_job *job, t_cmd *cmd)
 {
 	int	exit_status;

@@ -6,7 +6,7 @@
 /*   By: tbeaudoi <tbeaudoi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 08:22:03 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/01/27 16:49:19 by tbeaudoi         ###   ########.fr       */
+/*   Updated: 2023/01/30 15:35:54 by tbeaudoi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,16 +104,11 @@ static void	no_arg_export_cmd(t_job *job)
 
 int	msh_builtin_export(t_job *job, t_cmd *cmd)
 {
-	// char	**token_tab;
-
-	// token_tab = tokenize(job, cmd);
-	// strtab_print(token_tab);
 	if (cmd->tokens == NULL)
 		return (-1);
 	if (cmd->tokens[1] == NULL)
 		no_arg_export_cmd(job);
 	if (pre_parse(job, cmd->tokens) < 0)
 		return (-1);
-	// strtab_clear(&token_tab);
 	return (0);
 }
