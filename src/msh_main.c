@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/16 19:16:03 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/01/27 08:51:49 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/01/30 00:19:41 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@ int	msh_init(t_msh *msh, char **envp)
 	if (!msh->paths || msh_envp_copy(envp, &msh->envp) < 0)
 		return (report_malloc_err(__FUNCTION__));
 	printf("msh_init : envp cpy ptr : %p\n", msh->envp);
+	msh->stdin_fd = dup(STDIN_FILENO);
+	msh->stdout_fd = dup(STDOUT_FILENO);
 	return (0);
 }
 
@@ -44,7 +46,6 @@ int	main(int argc, char **argv, char **envp)
 	ft_memclear(&msh, sizeof(t_msh));
 	if (msh_init(&msh, envp) < 0)
 		return (msh_clear(&msh, E_MSH_INIT));
-	msh.exec_status = INTERAC_MODE;
 	while (!msh.request_exit)
 	{
 		msh.exec_status = INTERAC_MODE;
@@ -61,6 +62,8 @@ int	main(int argc, char **argv, char **envp)
 		printf("msh : entering job manager\n");
 		job_manager(&msh);
 		ft_free_p((void **)&msh.rawline);
+
+		printf("\n\n\n\n");
 	}
 	return (msh_clear(&msh, msh.shell_exit_status));
 }

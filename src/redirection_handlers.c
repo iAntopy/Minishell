@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 20:33:23 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/01/27 09:26:46 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/01/29 23:11:13 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ int	redirect_infile(t_cmd *cmd, char **tks_p)
 	cmd->redir_in = fd;
 	ft_free_p((void **)tks_p);
 	ft_memmove(tks_p, tks_p + 1, strtab_len(tks_p + 1) * sizeof(char *));
+	tks_p[strtab_len(tks_p) - 1] = NULL;
 	return (1);
 }
 
@@ -46,16 +47,22 @@ int	redirect_outfile(t_cmd *cmd, char **tks_p, int add_mode)
 
 	if (!tks_p)
 		return (-1);
+
+	printf("Redirecting to outfile\n");
+	printf("redirect outfile cmds list: \n");
+	print_all_cmds(cmd->job);
 	filename = *tks_p + 1;
 	close_fd(&cmd->redir_in);
-	if (access(filename, F_OK | W_OK) < 0)
+	if (access(filename, F_OK) < 0 && !access(filename, W_OK))
 		return (report_file_error(filename, &cmd->doa));
 	fd = open(filename, O_CREAT | O_WRONLY | add_mode, 0644);
+	printf("fd after open : %d\n", fd);
 	if (fd < 0)
 		return (report_file_error(filename, &cmd->doa));
 	cmd->redir_out = fd;
 	ft_free_p((void **)tks_p);
 	ft_memmove(tks_p, tks_p + 1, strtab_len(tks_p + 1) * sizeof(char *));
+	tks_p[strtab_len(tks_p) - 1] = NULL;
 	return (1);
 }
 
