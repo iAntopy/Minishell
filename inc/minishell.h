@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tbeaudoi <tbeaudoi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/16 01:39:11 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/01/27 09:23:48 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/01/27 16:57:50 by tbeaudoi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,7 +165,7 @@ int		report_pipe_err(const char *fn);
 int		report_parsing_error(const char *fn, char *meta_c, int len);
 int		report_builtin_failure(const char *fn);
 int		report_max_nb_cmds_exceeded(t_job *job);
-int		report_cmd_not_found(char *cmd);
+int		report_cmd_not_found(char *cmd, int *doa_p);
 
 // SIGNALS
 void	handlers_control(t_msh *msh);
