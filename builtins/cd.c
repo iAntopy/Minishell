@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 04:00:34 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/01/27 08:57:12 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/01/29 20:02:49 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,23 +23,25 @@ static int	swap_pwd(t_msh *msh, char *new_pwd, char *old_pwd)
 	return (0);
 }
 
-int	msh_builtin_cd(t_job *job, char *cmd)
+int	msh_builtin_cd(t_job *job, t_cmd *cmd)
 {
-	char	path[PATH_MAX + 1];
+	//char	path[PATH_MAX + 1];
+	char	*path;
 	char	old_pwd[PATH_MAX + 2];
 	char	new_pwd[PATH_MAX + 2];
-	int		i;
-	int		j;
+//	int		i;
+//	int		j;
 
-	i = 2;
-	j = 0;
+//	i = 2;
+//	j = 0;
 	if (!job || !cmd || getcwd(old_pwd, PATH_MAX + 1) == NULL)
 		return (-1);
-	while (ft_isspace(cmd[i]) > 0)
-		i++;
-	while (cmd[i])
-		path[j++] = cmd[i++];
-	path[j] = '\0';
+//	while (ft_isspace(cmd[i]) > 0)
+//		i++;
+//	while (cmd[i])
+//		path[j++] = cmd[i++];
+//	path[j] = '\0';
+	path = cmd->tokens[1];
 	if (chdir(path) == 0)
 	{
 		if (getcwd(new_pwd, PATH_MAX + 1) == NULL)

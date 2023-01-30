@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 08:22:03 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/01/27 08:55:43 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/01/29 20:53:03 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,11 +102,12 @@ static void	no_arg_export_cmd(t_job *job)
 	}
 }
 
-int	msh_builtin_export(t_job *job, char *cmd)
+int	msh_builtin_export(t_job *job, t_cmd *cmd)
 {
 	char	**token_tab;
 
-	token_tab = tokenize(job, cmd);
+//	token_tab = tokenize(job, cmd);
+	token_tab = cmd->tokens;
 	strtab_print(token_tab);
 	if (token_tab == NULL)
 		return (-1);
@@ -114,6 +115,6 @@ int	msh_builtin_export(t_job *job, char *cmd)
 		no_arg_export_cmd(job);
 	if (pre_parse(job, token_tab) < 0)
 		return (-1);
-	strtab_clear(&token_tab);
+//	strtab_clear(&token_tab);
 	return (0);
 }

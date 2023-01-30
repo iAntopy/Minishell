@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tbeaudoi <tbeaudoi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 08:32:40 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/01/26 17:20:18 by tbeaudoi         ###   ########.fr       */
+/*   Updated: 2023/01/29 20:53:39 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,16 +54,17 @@ static int	pre_parse(t_job *job, char **token_tab)
 	return (0);
 }
 
-int	msh_builtin_unset(t_job *job, char *cmd)
+int	msh_builtin_unset(t_job *job, t_cmd *cmd)
 {
 	char	**token_tab;
 
-	token_tab = tokenize(job, cmd);
+	//token_tab = tokenize(job, cmd);
+	token_tab = cmd->tokens;
 	strtab_print(token_tab);
 	if (token_tab == NULL)
 		return (-1);
 	if (pre_parse(job, token_tab) < 0)
 		return (-1);
-	strtab_clear(&token_tab);
+//	strtab_clear(&token_tab);
 	return (0);
 }

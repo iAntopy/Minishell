@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/16 01:39:11 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/01/27 09:23:48 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/01/30 00:25:27 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,8 +81,8 @@ typedef struct s_minishell_data
 	int		request_exit;
 	int		exec_status;
 	char	nbr_buff[24];
-//	int		stdin_fd;
-//	int		stdout_fd;
+	int		stdin_fd;
+	int		stdout_fd;
 //	pid_t	job_pid;
 }	t_msh;
 
@@ -108,6 +108,10 @@ enum	e_builtin_status
 	BUILTIN_FAILED = -1,
 	BUILTIN_NOT_FOUND = -2
 };
+
+// DEBUG FUNCTIONS (DELETE)
+void	print_all_cmds(t_job *job);// in tokenizer_redirector.c
+
 
 // JOB MANAGER
 int		job_manager(t_msh *msh);

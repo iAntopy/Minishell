@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tbeaudoi <tbeaudoi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 05:39:33 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/01/23 23:25:42 by tbeaudoi         ###   ########.fr       */
+/*   Updated: 2023/01/29 20:49:37 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,24 +47,31 @@
 // 	return (0);
 // }
 
-int	msh_builtin_echo(t_job *job, char *cmd)
+int	msh_builtin_echo(t_job *job, t_cmd *cmd)
 {
 	int		j;
+	int		n_flag;
 
 	(void)job;
-	j = 1;
-	if (!cmd[1])
-		printf("\n");
-	if (!ft_strncmp(&cmd[1], "-n", 3))
-		j++;
-	while (cmd[j])
+	if (!cmd->tokens)
+		return (-1);
+	if (!cmd->tokens[1])
 	{
-		printf("%c", cmd[j]);
-		if (cmd[j + 1])
+		printf("\n");
+		return (0);
+	}
+	j = 1;
+	n_flag = (cmd->tokens[1] && (ft_strncmp(cmd->tokens[1], "-n", 3) == 0));
+	if (n_flag)
+		j++;
+	while (cmd->tokens[j])
+	{
+		printf("%s", cmd->tokens[j]);
+		if (cmd->tokens[j + 1])
 			printf(" ");
 		j++;
 	}
-	if (ft_strncmp(&cmd[1], "-n", 3))
+	if (!n_flag)
 		printf("\n");
 	return (1);
 }
