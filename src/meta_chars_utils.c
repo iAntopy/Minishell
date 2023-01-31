@@ -6,7 +6,7 @@
 /*   By: tbeaudoi <tbeaudoi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/02 16:47:43 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/01/27 08:52:37 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/01/30 07:09:23 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,8 +82,8 @@ static int	parse_single_meta_char(char **r_p, char **str_p, int *meta_len)
 	str += *meta_len;
 	while (*str && ft_isspace(*str))
 		str++;
-	if (is_meta_char(str, meta_len))
-		return (report_parsing_error(__FUNCTION__, str, *meta_len));
+//	if (is_meta_char(str, meta_len))
+//		return (report_parsing_error(__FUNCTION__, str, *meta_len));
 	*r_p = r;
 	*str_p = str;
 	return (0);
@@ -105,7 +105,7 @@ int	spaceout_meta_chars(char *str, char **ret)
 	while (*str)
 	{
 		if (*str == '\"' || *str == '\'')
-			quote_switch = (*str) * (quote_switch == 0);
+			quote_switch = (*str) * (quote_switch == '\0');
 		if (!quote_switch && is_meta_char(str, &meta_len)
 			&& parse_single_meta_char(&r, &str, &meta_len) < 0)
 			return (ft_free_p((void **)ret) - 2);

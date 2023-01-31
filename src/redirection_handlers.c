@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 20:33:23 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/01/27 09:26:46 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/01/30 07:33:29 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ int	redirect_infile(t_cmd *cmd, char **tks_p)
 {
 	char	*filename;
 	int		fd;
+	int		cur_len;
 
 	if (!tks_p)
 		return (-1);
@@ -34,8 +35,10 @@ int	redirect_infile(t_cmd *cmd, char **tks_p)
 	if (fd < 0)
 		return (report_file_error(filename, &cmd->doa));
 	cmd->redir_in = fd;
+	cur_len = strtab_len(tks_p);
 	ft_free_p((void **)tks_p);
-	ft_memmove(tks_p, tks_p + 1, strtab_len(tks_p + 1) * sizeof(char *));
+	ft_memmove(tks_p, tks_p + 1, (cur_len - 1) * sizeof(char *));
+	tks_p[cur_len - 1] = NULL;
 	return (1);
 }
 
@@ -43,19 +46,29 @@ int	redirect_outfile(t_cmd *cmd, char **tks_p, int add_mode)
 {
 	char	*filename;
 	int		fd;
+	int		cur_len;
 
 	if (!tks_p)
 		return (-1);
+
+//	(void)add_mode;
+	printf("Redirecting to outfile\n");
+	printf("redirect outfile cmds list: \n");
+	print_all_cmds(cmd->job);
 	filename = *tks_p + 1;
 	close_fd(&cmd->redir_in);
-	if (access(filename, F_OK | W_OK) < 0)
+	if (access(filename, F_OK) < 0 && !access(filename, W_OK))
 		return (report_file_error(filename, &cmd->doa));
 	fd = open(filename, O_CREAT | O_WRONLY | add_mode, 0644);
+	printf("fd after open : %d\n", fd);
 	if (fd < 0)
 		return (report_file_error(filename, &cmd->doa));
 	cmd->redir_out = fd;
+	cur_len = strtab_len(tks_p);
 	ft_free_p((void **)tks_p);
-	ft_memmove(tks_p, tks_p + 1, strtab_len(tks_p + 1) * sizeof(char *));
+	printf("redir out : cur len : %d\n", cur_len);
+	ft_memmove(tks_p, tks_p + 1, (cur_len - 1) * sizeof(char *));
+	tks_p[cur_len - 1] = NULL;
 	return (1);
 }
 
@@ -67,9 +80,13 @@ static int	read_exception(void)
 
 char	*gen_tempname(char *tempfile, int id)
 {
+	char	*base_end;
+	char	*num_end;
+	
+	base_end = tempfile + 12;
 	ft_strlcpy(tempfile, "tmp/.heredoc", PATH_MAX);
-	ft_putnbr_buff(tempfile + 12, id);
-	ft_strlcat(tempfile, ".tmp", PATH_MAX);
+	num_end = base_end + ft_putnbr_buff(base_end, id);
+	ft_strlcpy(num_end, ".tmp", PATH_MAX);
 	return (tempfile);
 }
 
@@ -172,9 +189,8 @@ int	get_heredoc_input(t_cmd *cmd, char **tks_p, int *id_p)
 //	char	buff[HDOC_SIZE];
 	char	*rl;
 	char	tempname[PATH_MAX];
-//	ssize_t	nchrs;
+	int	cur_len;
 
-	close_fd(&cmd->redir_in);
 	fd = open(gen_tempname(tempname, (*id_p)++), O_CREAT | O_TRUNC | O_RDWR, 0644);
 	if (fd < 0)
 		return (report_file_error(tempname, &cmd->doa));
@@ -201,9 +217,11 @@ int	get_heredoc_input(t_cmd *cmd, char **tks_p, int *id_p)
 //	int i = -1;
 //	while (cmd->tokens[i])
 //		printf("heredoc debug : cmd %i ptr : %p\n", i, cmd->tokens[i]);
-	
+	close_fd(&cmd->redir_in);
+	cmd->redir_in = fd;
+	cur_len = strtab_len(tks_p);
 	ft_free_p((void **)tks_p);
-	ft_memmove(tks_p, tks_p + 1, strtab_len(tks_p + 1) * sizeof(char *));
-	tks_p[strtab_len(tks_p) - 1] = NULL;
+	ft_memmove(tks_p, tks_p + 1, (cur_len - 1) * sizeof(char *));
+	tks_p[cur_len - 1] = NULL;
 	return (1);
 }

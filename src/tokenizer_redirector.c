@@ -6,14 +6,14 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/20 20:54:13 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/01/27 09:25:48 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/01/30 07:29:55 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 /// DELETE ME
-static void	print_all_cmds(t_job *job)
+void	print_all_cmds(t_job *job)
 {
 	int	i;
 
@@ -31,16 +31,21 @@ static int	apply_redirections_for_single_cmd(t_cmd *cmd)
 	char	**tks;
 	int		status;
 	
+	printf("\n\nAllying redirections :\n");
 	tks = cmd->tokens;
 	i = -1;
 	status = 0;
 	while (tks[++i] && status != -1)
 	{
 		status = 0;
+		printf("\nApplying redirections to token : %s\n", tks[i]);
 		if (ft_strncmp(tks[i], "<<", 2) == 0)	// run heredoc file input
 			status = get_heredoc_input(cmd, tks + i, &cmd->job->heredoc_id);//&cmd->redir_in, &cmd->job->heredoc_id);
 		else if (ft_strncmp(tks[i], ">>", 2) == 0)	// redirect output in append mode
+		{
+			printf("Redirection output in APPEND MODE \n");
 			status = redirect_outfile(cmd, tks + i, O_APPEND);//&cmd->redir_out, O_APPEND);
+		}
 		else if (ft_strncmp(tks[i], "<", 1) == 0)	// redirect input file
 			status = redirect_infile(cmd, tks + i);//&cmd->redir_in);
 		else if (ft_strncmp(tks[i], ">", 1) == 0)	// redirect output in truncate mode
@@ -57,7 +62,7 @@ int	find_and_validate_cmd_file(t_cmd *cmd)
 	char	*cmd_path;
 	int		builtin_status;
 	
-
+	printf("\nValidating executable cmd :\n");
 	intercept_builtin_call(cmd, &builtin_status);
 	if (builtin_status == BUILTIN_FOUND)
 	{
@@ -83,6 +88,7 @@ int	setup_all_cmds(t_job *job)
 	int		i;
 	t_cmd	*cmd;
 
+	printf("Setting up cmds : \n");
 	if (!job->pipe_split)
 		return (-1);
 	i = -1;
@@ -94,8 +100,9 @@ int	setup_all_cmds(t_job *job)
 		if (!cmd->tokens)
 			return (-1);
 		restore_substrings_in_tab(cmd->tokens, cmd->job->sc);
-		find_and_validate_cmd_file(cmd);
 		apply_redirections_for_single_cmd(cmd);
+		if (cmd->tokens[0])
+			find_and_validate_cmd_file(cmd);
 	}
 	print_all_cmds(job);
 	strtab_clear(&job->pipe_split);

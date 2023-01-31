@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 07:27:37 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/01/27 00:04:25 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/01/29 20:24:51 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,9 +78,8 @@ int	report_max_nb_cmds_exceeded(t_job *job)
 	return (-1);
 }
 
-int	report_cmd_not_found(char *cmd, int *doa_p)
+int	report_cmd_not_found(char *cmd)
 {
 	ft_eprintf("Minishell: %s: command not found\n", cmd);
-	*doa_p = 1;
 	return (-1);
 }
