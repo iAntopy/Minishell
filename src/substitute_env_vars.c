@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/05 05:04:41 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/01/27 08:50:49 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/01/30 23:42:44 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,6 @@ int	msh_substitute_env_vars(t_msh *msh, char *l, char **ret)
 	*r = '\0';
 	return (0);
 }
-
 	// if (*ret)
 	// 	ft_free_p((void **)ret);
 	// *ret = out;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   substring_substitution.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iamongeo <marvin@42quebec.com>             +#+  +:+       +#+        */
+/*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/14 16:45:15 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/01/30 19:12:01 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/01/31 00:31:51 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,27 +65,47 @@ char	substring_substitution(char *str, char	**subst)
 	{
 		dlim = *sub;
 		while (*(++sub) != dlim)
-			*(sub - 1) = *sub + ((*sub == ' ') * (sc - *sub));
-		ft_memmove(sub - 1, sub + 1, ft_strlen(sub + 1) + 1);
-		sub = find_substring(sub - 1);
+			//*(sub - 1) = *sub + ((*sub == ' ') * (sc - *sub));
+			*sub = *sub + ((*sub == ' ') * (sc - *sub));
+//		ft_memmove(sub - 1, sub + 1, ft_strlen(sub + 1) + 1);
+		sub = find_substring(sub + 1);
 	}
 	return (sc);
 }
 
-void	restore_substring(char *str, char sc)
+void	restore_substring(char *str, char sc, int strip_quotes)
 {
+	char	*sub;
+	char	dlim;
+
+	printf("restore_substring : ENTERED !\n");
 	if (!str)
 		return ;
+	if (strip_quotes)
+	{
+		sub = find_substring(str);
+		while (sub)
+		{
+			dlim = *sub;
+			printf("restore_substring : entering while\n");
+			while (*(++sub) && *sub != dlim)
+				*(sub - 1) = *sub + ((*sub == sc) * (' ' - *sub));
+			printf("restore_substring : exiting while\n");
+			ft_memmove(sub - 1, sub + 1, ft_strlen(sub + 1) + 1);
+			sub = find_substring(sub - 1);
+		}
+		return ;
+	}
 	str--;
 	while (*(++str))
 		if (*str == sc)
 			*str = ' ';
 }
 
-void	restore_substrings_in_tab(char **tab, char sc)
+void	restore_substrings_in_tab(char **tab, char sc, int strip_quotes)
 {
 	if (!tab || !(*tab))
 		return ;
 	while (*tab)
-		restore_substring(*(tab++), sc);
+		restore_substring(*(tab++), sc, strip_quotes);
 }

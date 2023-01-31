@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 20:33:23 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/01/30 07:33:29 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/01/31 01:15:29 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,19 +54,28 @@ int	redirect_outfile(t_cmd *cmd, char **tks_p, int add_mode)
 //	(void)add_mode;
 	printf("Redirecting to outfile\n");
 	printf("redirect outfile cmds list: \n");
+	printf("redir out in append mode ? %d\n", (add_mode & O_APPEND) != 0);
 	print_all_cmds(cmd->job);
 	filename = *tks_p + 1;
 	close_fd(&cmd->redir_in);
-	if (access(filename, F_OK) < 0 && !access(filename, W_OK))
+	if (access(filename, F_OK) == 0 && access(filename, W_OK) < 0)
 		return (report_file_error(filename, &cmd->doa));
-	fd = open(filename, O_CREAT | O_WRONLY | add_mode, 0644);
+	if (add_mode & O_APPEND)
+	{
+		fd = open(filename, O_CREAT | O_WRONLY | O_APPEND, 0644);
+		perror("what up G");
+	}
+	else
+	{
+		fd = open(filename, O_CREAT | O_WRONLY | O_TRUNC, 0644);
+		perror("what up F");
+	}
 	printf("fd after open : %d\n", fd);
 	if (fd < 0)
 		return (report_file_error(filename, &cmd->doa));
 	cmd->redir_out = fd;
 	cur_len = strtab_len(tks_p);
 	ft_free_p((void **)tks_p);
-	printf("redir out : cur len : %d\n", cur_len);
 	ft_memmove(tks_p, tks_p + 1, (cur_len - 1) * sizeof(char *));
 	tks_p[cur_len - 1] = NULL;
 	return (1);

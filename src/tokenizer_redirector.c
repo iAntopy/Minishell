@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/20 20:54:13 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/01/30 07:29:55 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/01/31 00:58:39 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,24 +59,28 @@ static int	apply_redirections_for_single_cmd(t_cmd *cmd)
 
 int	find_and_validate_cmd_file(t_cmd *cmd)
 {
+	char	*cmdname;
 	char	*cmd_path;
 	int		builtin_status;
 	
 	printf("\nValidating executable cmd :\n");
 	intercept_builtin_call(cmd, &builtin_status);
+	cmdname = cmd->tokens[0];
 	if (builtin_status == BUILTIN_FOUND)
 	{
 		printf("BUILTIN INTERCEPTED\n");
 		return (0);
 	}
-	if (find_file_in_paths(cmd->tokens[0], cmd->job->msh->paths, &cmd_path,
+	if (ft_strncmp(cmdname, "./", 2) == 0 && access(cmdname, F_OK | X_OK) == 0)
+		return (0);
+	else if (find_file_in_paths(cmdname, cmd->job->msh->paths, &cmd_path,
 		F_OK | X_OK) < 0
 		|| !cmd_path)
 	{
 		ft_free_p((void **)cmd_path);
 		cmd->job->msh->exit_status = 127;
 		cmd->doa = 1;
-		return (report_cmd_not_found(cmd->tokens[0]));
+		return (report_cmd_not_found(cmdname));
 	}
 	ft_free_p((void **)cmd->tokens);
 	cmd->tokens[0] = cmd_path;
@@ -88,7 +92,7 @@ int	setup_all_cmds(t_job *job)
 	int		i;
 	t_cmd	*cmd;
 
-	printf("Setting up cmds : \n");
+	printf("Setting up cmds. %d cmds to setup\n", job->nb_cmds);
 	if (!job->pipe_split)
 		return (-1);
 	i = -1;
@@ -99,10 +103,13 @@ int	setup_all_cmds(t_job *job)
 		cmd->tokens = ft_split_space(job->pipe_split[i]);
 		if (!cmd->tokens)
 			return (-1);
-		restore_substrings_in_tab(cmd->tokens, cmd->job->sc);
 		apply_redirections_for_single_cmd(cmd);
+		restore_substrings_in_tab(cmd->tokens, cmd->job->sc, 1);
 		if (cmd->tokens[0])
+		{
+			printf("Validating cmd file of cmd %d\n", i);
 			find_and_validate_cmd_file(cmd);
+		}
 	}
 	print_all_cmds(job);
 	strtab_clear(&job->pipe_split);
