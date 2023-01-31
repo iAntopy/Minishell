@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/05 00:26:12 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/01/30 07:22:09 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/01/30 23:53:46 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,9 @@ int	job_manager(t_msh *msh)
 
 	/// TRIMING RAWLINE ////
 	job->parsed = ft_strtrim(msh->rawline, " ");
-
+	if (validate_syntax_beggining_or_ending_pipes(job->parsed) < 0
+		|| validate_meta_char_syntax(job->parsed) < 0)
+		return (job_clear(job, 258));
 	printf("jm : substituting env vars\n");
 
 	/// SUBSTITUTE $ ENV VARS RESPECTING QUOTES ///
@@ -80,8 +82,8 @@ int	job_manager(t_msh *msh)
 
 	/// SPACING META CHARACTERS TO MAKE SPLITTING EASIER AND VALIDATE SYNTAX ///
 	if (contains_meta_char(job->parsed)
-		&& (spaceout_meta_chars(job->parsed, &cur_line) < 0
-		|| validate_syntax(cur_line) < 0))
+		&& spaceout_meta_chars(job->parsed, &cur_line) < 0)
+//		|| validate_syntax(cur_line) < 0))
 		return (job_clear(job, -1));
 	free_swap_lines(&job->parsed, &cur_line);
 	ft_printf("jm : post meta char spacing : %s\n", job->parsed);
@@ -93,6 +95,7 @@ int	job_manager(t_msh *msh)
 	if (job->sc < 0)
 		return (job_clear(job, report_jm_mlc_err(__FUNCTION__)));
 	free_swap_lines(&job->parsed, &cur_line);
+	printf("jm : parsed line after substring space substitution :\n	- %s\n", job->parsed);
 
 	/// SPLITING RAWLINE ON PIPES ///
 	if (split_cmd_on_pipes(job->parsed, &job->pipe_split) < 0)//ft_split(cur_line, '|');

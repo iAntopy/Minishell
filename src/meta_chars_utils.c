@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   meta_chars_utils.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tbeaudoi <tbeaudoi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/02 16:47:43 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/01/30 07:09:23 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/01/30 22:06:17 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,16 +92,19 @@ static int	parse_single_meta_char(char **r_p, char **str_p, int *meta_len)
 // Assumes that str contains meta chars as validated by contains_meta_char(str).
 int	spaceout_meta_chars(char *str, char **ret)
 {
-	char	*out;
+	size_t	size;
 	char	*r;
 	char	quote_switch;
 	int		meta_len;
 
-	out = NULL;
-	if (!str || !ret || !ft_malloc_p(spaced_size(str), (void **)&out))
+	*ret = NULL;
+	size = spaced_size(str);
+	if (!size)
+		return (report_unclosed_quotes());
+	if (!str || !ret || !ft_malloc_p(size, (void **)ret))
 		return (report_jm_mlc_err(__FUNCTION__));
 	quote_switch = 0;
-	r = out;
+	r = *ret;
 	while (*str)
 	{
 		if (*str == '\"' || *str == '\'')
@@ -113,8 +116,5 @@ int	spaceout_meta_chars(char *str, char **ret)
 			*(r++) = *(str++);
 	}
 	*r = '\0';
-	if (*ret)
-		ft_free_p((void **)ret);
-	*ret = out;
 	return (0);
 }
