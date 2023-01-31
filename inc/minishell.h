@@ -6,7 +6,7 @@
 /*   By: tbeaudoi <tbeaudoi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/16 01:39:11 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/01/30 18:48:58 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/01/30 19:04:53 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,7 @@ int		job_manager(t_msh *msh);
 int		job_executor(t_job *job);
 int		validate_synax(char *line);
 int		intercept_builtin_call(t_cmd *cmd, int *builtin_status);
-int		parse_exec_cmd(t_job *job, int idx);//t_msh *msh, char *cmd);
+//int		parse_exec_cmd(t_job *job, int idx);//t_msh *msh, char *cmd);
 int		init_pipe(int pp[2], int *rd_pipe, int i, int nb_cmds);
 int		close_pipe(int *rd_pipe, int *wr_pipe);
 int		close_fd(int *fd);
@@ -142,13 +142,13 @@ char	**tokenize(t_job *job, char *cmd);
 char	*skip_valid_envp_var_chars(char *var);
 
 // BUILTINS
-int		msh_builtin_echo(t_job *job, t_cmd *cmd);//char *cmd);
+int		msh_builtin_echo(t_job *job, t_cmd *cmd);
 int		msh_builtin_cd(t_job *job, t_cmd *cmd);
 int		msh_builtin_env(t_job *job, t_cmd *cmd);
 int		msh_builtin_pwd(t_job *job, t_cmd *cmd);
-int		msh_builtin_export(t_job *job, t_cmd *cmd);//, char *var, char *value);
+int		msh_builtin_export(t_job *job, t_cmd *cmd);
 int		msh_builtin_unset(t_job *job, t_cmd *cmd);
-int		msh_builtin_exit(t_job *job, t_cmd *cmd);//char *var);
+int		msh_builtin_exit(t_job *job, t_cmd *cmd);
 
 // ENVIRONMENT VARIABLES UTILS
 int		msh_envp_add_entry(t_msh *msh, char *var, char *value);
@@ -169,7 +169,7 @@ int		report_pipe_err(const char *fn);
 int		report_parsing_error(const char *fn, char *meta_c, int len);
 int		report_builtin_failure(const char *fn);
 int		report_max_nb_cmds_exceeded(t_job *job);
-int		report_cmd_not_found(char *cmd, int *doa_p);
+int		report_cmd_not_found(char *cmd);
 
 // SIGNALS
 void	handlers_control(t_msh *msh);
