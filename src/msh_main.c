@@ -6,7 +6,7 @@
 /*   By: tbeaudoi <tbeaudoi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/16 19:16:03 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/01/30 22:13:20 by tbeaudoi         ###   ########.fr       */
+/*   Updated: 2023/01/31 18:18:19 by tbeaudoi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@ int	msh_clear(t_msh *msh, int exit_code)
 	if (msh->rawline)
 		ft_free_p((void **)&msh->rawline);
 	rl_clear_history();
+	close_fd(&msh->stdin_fd);
+	close_fd(&msh->stdout_fd);
 	return (exit_code);
 }
 
