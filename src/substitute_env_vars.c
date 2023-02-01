@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/05 05:04:41 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/01/30 23:42:44 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/01/31 22:58:47 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ static size_t	find_substituted_str_size(t_msh *msh, char *line, char **vals)
 	size_t	i;
 	size_t	j;
 
-	printf("find subst size : entered\n");
+//	printf("find subst size : entered\n");
 	size = 0;
 	i = -1;
 	while (line[++i])
@@ -46,7 +46,7 @@ static size_t	find_substituted_str_size(t_msh *msh, char *line, char **vals)
 			j = i;
 			while (line[++j] && is_valid_envp_var_char(line[j], line[j] == line [i + 1]))//!is_space_or_quote(line[j]))//!ft_isspace(line[j]) && line[j] != '\'' && line[j] != '\"')
 				var[j - i - 1] = line[j];
-			printf("find subst size : var space found\n");
+//			printf("find subst size : var space found\n");
 			var[j - i - 1] = '\0';
 			*vals = msh_getenv(msh, var);
 			size += ft_strlen(*vals) - (j - i - 1);
@@ -54,7 +54,7 @@ static size_t	find_substituted_str_size(t_msh *msh, char *line, char **vals)
 		}
 		size++;
 	}
-	printf("find subst size : exits with size : %zu\n", size);
+//	printf("find subst size : exits with size : %zu\n", size);
 	return (size);
 }
 
@@ -70,22 +70,24 @@ char	*skip_valid_envp_var_chars(char *var)
 }
 
 // Assumes line has been checked for at least one $ (dollar char).
-int	msh_substitute_env_vars(t_msh *msh, char *l, char **ret)
+int	substitute_env_vars(t_msh *msh, t_job *job)//char *l, char **ret)
 {
 	char	*vals[256];
 	size_t	size;
 	char	*r;
 	int		v;
+	char	*l;
 	char	quote_switch;
 
-	if (!msh || !msh->envp || !l || !ret)
+	if (!msh || !msh->envp || !job->parsed)
 		return (report_missing_input(__FUNCTION__));
-	size = find_substituted_str_size(msh, l, (char **)vals);
-	if (!ft_malloc_p(sizeof(char) * size, (void **)ret))
+	size = find_substituted_str_size(msh, job->parsed, (char **)vals);
+	if (!ft_malloc_p(sizeof(char) * size, (void **)&job->parsed2))
 		return (report_malloc_err(__FUNCTION__));
 	quote_switch = 0;
 	v = 0;
-	r = *ret;
+	r = job->parsed2;
+	l = job->parsed;
 	while (l && *l)
 	{
 		if (*l == '\'' || *l == '\"')

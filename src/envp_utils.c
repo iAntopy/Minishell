@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 06:08:27 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/01/27 08:53:55 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/02/01 01:09:29 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,8 @@ int	msh_envp_remove_entry(t_msh *msh, char *var)
 
 	if (!msh || !msh->envp || !var)
 		return (report_missing_input(__FUNCTION__));
+	if (!(*var))
+		return (0);
 	len = ft_strlen(var);
 	i = 0;
 	envp = msh->envp;
@@ -103,7 +105,9 @@ char	*msh_getenv(t_msh *msh, char *var)
 
 	if (!msh || !msh->envp || !var)
 		return (NULL);
-	printf("msh getenv : entered with var : %s\n", var);
+	if (!var[0])
+		return (NULL);
+	printf("msh getenv : entered with var : %s$\n", var);
 	if (*var == '?')
 	{
 		ft_putnbr_buff(msh->nbr_buff, msh->exit_status);
@@ -121,5 +125,6 @@ char	*msh_getenv(t_msh *msh, char *var)
 		i++;
 	}
 	printf("msh getenv : no match for var %s\n", var);
-	return (NULL);
+	return ("");
+	//return (NULL);
 }

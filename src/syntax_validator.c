@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/20 18:45:09 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/01/30 23:31:42 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/01/31 23:37:16 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,16 +56,7 @@ static int	skip_open_quotes(char **line)
 	return (1);
 }
 
-int	validate_syntax_beggining_or_ending_pipes(char *line)
-{
-	if (!line)
-		return (report_missing_input(__FUNCTION__));
-	if (line[0] == '|' || line[ft_strlen(line) - 1] == '|')
-		return (report_syntax_error("|", 1));
-	return (0);
-}
-
-int	validate_meta_char_syntax(char *line)
+int	validate_syntax(char *line)
 {
 	int		mlen;
 	int		mlen2;
@@ -74,6 +65,8 @@ int	validate_meta_char_syntax(char *line)
 
 	if (!line || !(*line))
 		return (-1);
+	if (line[0] == '|' || line[ft_strlen(line) - 1] == '|')
+		return (report_syntax_error("|", 1));
 	l = line;
 	while (skip_open_quotes(&l) && *l)
 	{
