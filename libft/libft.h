@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iamongeo <marvin@42quebec.com>             +#+  +:+       +#+        */
+/*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/28 16:20:53 by iamongeo          #+#    #+#             */
-/*   Updated: 2022/12/04 07:18:01 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/01/31 00:13:47 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,8 +110,8 @@ char	*ft_strlower(char *str);
 char	*ft_strupper(char *str);
 
 char	substring_substitution(char *str, char **subst);
-void	restore_substring(char *str, char sc);
-void	restore_substrings_in_tab(char **tab, char sc);
+void	restore_substring(char *str, char sc, int strip_quotes);
+void	restore_substrings_in_tab(char **tab, char sc, int strip_quotes);
 
 void	ft_putchar(int c);
 void	ft_putstr(char const *s);

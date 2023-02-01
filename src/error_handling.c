@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 07:27:37 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/01/29 20:24:51 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/02/01 00:22:51 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,8 +78,24 @@ int	report_max_nb_cmds_exceeded(t_job *job)
 	return (-1);
 }
 
-int	report_cmd_not_found(char *cmd)
+int	report_file_error(char *filename, t_cmd *cmd)//int *doa_flag)
 {
-	ft_eprintf("Minishell: %s: command not found\n", cmd);
+	ft_eprintf("minishell error :: %s : %s\n", strerror(errno), filename);
+	cmd->doa = 1;
+	cmd->job->msh->exit_status = errno;
+	return (-1);
+}
+
+int	report_cmd_not_found(char *cmdname, t_cmd *cmd, int exit_code)
+{
+	ft_eprintf("Minishell: %s: command not found\n", cmdname);
+	cmd->doa = 1;
+	cmd->job->msh->exit_status = exit_code;
+	return (-1);
+}
+
+int	report_unclosed_quotes(void)
+{
+	ft_eprintf("Minishell: syntax error : unclosed quotes\n");
 	return (-1);
 }

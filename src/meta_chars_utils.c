@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   meta_chars_utils.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tbeaudoi <tbeaudoi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/02 16:47:43 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/01/30 20:49:09 by tbeaudoi         ###   ########.fr       */
+/*   Updated: 2023/02/01 07:29:56 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,10 @@
 
 int	is_meta_char(char *c, int *len)
 {
-	static const int	meta_lens[8] = {2, 2, 1, 1, 2, 1, 2, 1};
-	static const char	*meta_chars[9] = {
+	const int	meta_lens[8] = {2, 2, 1, 1, 2, 1, 2, 1};
+	const char	*meta_chars[9] = {
 		"<<", ">>", "<", ">", "||", "|", "&&", "*", NULL};
-	int					i;
+	int			i;
 
 	if (len)
 		*len = 0;
@@ -47,7 +47,6 @@ static size_t	spaced_size(char *str)
 	char	quote_switch;
 	size_t	i;
 	size_t	extra_spaces;
-
 
 	quote_switch = '\0';
 	extra_spaces = 0;
@@ -83,39 +82,38 @@ static int	parse_single_meta_char(char **r_p, char **str_p, int *meta_len)
 	str += *meta_len;
 	while (*str && ft_isspace(*str))
 		str++;
-//	if (is_meta_char(str, meta_len))
-//		return (report_parsing_error(__FUNCTION__, str, *meta_len));
 	*r_p = r;
 	*str_p = str;
 	return (0);
 }
 
 // Assumes that str contains meta chars as validated by contains_meta_char(str).
-int	spaceout_meta_chars(char *str, char **ret)
+int	spaceout_meta_chars(t_job *job)
 {
-	char	*out;
+	size_t	size;
 	char	*r;
+	char	*p;
 	char	quote_switch;
 	int		meta_len;
 
-	out = NULL;
-	if (!str || !ret || !ft_malloc_p(spaced_size(str), (void **)&out))
+	job->parsed2 = NULL;
+	size = spaced_size(job->parsed);
+	if (!size)
+		return (report_unclosed_quotes());
+	if (!job->parsed || !ft_malloc_p(size, (void **)&job->parsed2))
 		return (report_jm_mlc_err(__FUNCTION__));
 	quote_switch = 0;
-	r = out;
-	while (*str)
+	p = job->parsed;
+	r = job->parsed2;
+	while (*p)
 	{
-		if (*str == '\"' || *str == '\'')
-			quote_switch = (*str) * (quote_switch == '\0');
-		if (!quote_switch && is_meta_char(str, &meta_len)
-			&& parse_single_meta_char(&r, &str, &meta_len) < 0)
-			return (ft_free_p((void **)ret) - 2);
+		if (*p == '\"' || *p == '\'')
+			quote_switch = (*p) * (quote_switch == '\0');
+		if (!quote_switch && is_meta_char(p, &meta_len))
+			parse_single_meta_char(&r, &p, &meta_len);
 		else
-			*(r++) = *(str++);
+			*(r++) = *(p++);
 	}
 	*r = '\0';
-	if (*ret)
-		ft_free_p((void **)ret);
-	*ret = out;
 	return (0);
 }

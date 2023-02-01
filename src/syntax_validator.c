@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/20 18:45:09 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/01/26 22:17:06 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/01/31 23:37:16 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,53 @@ static char	*skip_spaces(char **line, int init_offset)
 	return (l);
 }
 
+static int	skip_open_quotes(char **line)
+{
+	char	*l;
+
+	l = *line;
+	if (!l[0])
+		return (0);
+	if (!(*l == '\'' || *l == '\"'))
+		return (1);
+	else
+		l++;
+	while (*l && *l != '\'' && *l != '\"')
+		l++;
+	if (*l == '\0')
+		return (0);
+	*line = l + 1;
+	return (1);
+}
+
+int	validate_syntax(char *line)
+{
+	int		mlen;
+	int		mlen2;
+	char	*l;
+	char	*k;
+
+	if (!line || !(*line))
+		return (-1);
+	if (line[0] == '|' || line[ft_strlen(line) - 1] == '|')
+		return (report_syntax_error("|", 1));
+	l = line;
+	while (skip_open_quotes(&l) && *l)
+	{
+		if (is_meta_char(l, &mlen))
+		{
+			k = l + mlen;
+			skip_spaces(&k, 0);
+			if ((*l == '<' || *l == '>') && is_meta_char(k, &mlen2))
+				return (report_syntax_error(k, mlen2));
+			l += mlen;
+		}
+		else
+			l++;
+	}
+	return (0);
+}
+/*
 int	validate_syntax(char *line)
 {
 //	int	i;
@@ -46,8 +93,6 @@ int	validate_syntax(char *line)
 	if (!line)
 		return (-1);
 	l = line;
-	if (line[0] == '|' || line[ft_strlen(line) - 1] == '|')
-		return (report_syntax_error("|", 1));
 	while (*l)
 	{
 		if (is_meta_char(l, &mlen) && skip_spaces(&l, mlen)
@@ -57,7 +102,7 @@ int	validate_syntax(char *line)
 	}
 	return (0);
 }
-/*
+
 int	main()
 {
 	int		is_valid;

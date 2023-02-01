@@ -6,7 +6,7 @@
 /*   By: tbeaudoi <tbeaudoi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/16 19:16:03 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/01/31 18:18:19 by tbeaudoi         ###   ########.fr       */
+/*   Updated: 2023/02/01 07:30:33 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ int	msh_init(t_msh *msh, char **envp)
 	msh->paths = get_env_paths(envp);
 	if (!msh->paths || msh_envp_copy(envp, &msh->envp) < 0)
 		return (report_malloc_err(__FUNCTION__));
-	printf("msh_init : envp cpy ptr : %p\n", msh->envp);
 	msh->stdin_fd = dup(STDIN_FILENO);
 	msh->stdout_fd = dup(STDOUT_FILENO);
 	return (0);
@@ -61,18 +60,8 @@ int	main(int argc, char **argv, char **envp)
 			continue ;
 		if (msh.rawline[0])
 			add_history(msh.rawline);
-		printf("msh : entering job manager\n");
 		job_manager(&msh);
 		ft_free_p((void **)&msh.rawline);
-
-		printf("\n\n\n\n");
 	}
 	return (msh_clear(&msh, msh.shell_exit_status));
 }
-
-// valgrind --leak-check=full  --show-reachable=yes --track-fds=yes --suppressions=./minishell.sup ./minishell
-
-		// printf("Return to main from job manager()\n");
-		// printf("main : post manage job call\n");
-		// printf("main : post execution exit status : %d\n", WEXITSTATUS(msh.exit_status));
-		// printf("main : rawline received %p : %s\n", msh.rawline, msh.rawline);
