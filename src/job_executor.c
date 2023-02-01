@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   job_executor.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tbeaudoi <tbeaudoi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 00:48:45 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/01/30 07:21:45 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/01/31 19:14:33 by tbeaudoi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,8 @@ static int	fork_child_processes(t_job *job)
 		close_pipe(&job->rd_pipe, job->pp + 1);
 		job->rd_pipe = job->pp[0];
 	}
+	close_pipe(job->pp, job->pp + 1);
+	close_fd(&job->rd_pipe);
 	return (0);
 }
 

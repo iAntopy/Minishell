@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   strtab_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tbeaudoi <tbeaudoi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/28 04:23:34 by iamongeo          #+#    #+#             */
-/*   Updated: 2022/12/06 22:02:24 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/01/30 19:58:09 by tbeaudoi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,8 +76,9 @@ char	**strtab_copy(char **tab)
 	char	**ntab;
 	char	**n;
 
+	ntab = NULL;
 	if (!tab || !(*tab)
-		|| !ft_malloc_p(sizeof(char *) * (strtab_len(tab) + 1),	(void **)&ntab))
+		|| !ft_malloc_p(sizeof(char *) * (strtab_len(tab) + 1), (void **)&ntab))
 		return (NULL);
 	n = ntab;
 	while (*tab)

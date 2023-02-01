@@ -6,7 +6,7 @@
 /*   By: tbeaudoi <tbeaudoi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/12 20:01:38 by tbeaudoi          #+#    #+#             */
-/*   Updated: 2023/01/23 23:40:17 by tbeaudoi         ###   ########.fr       */
+/*   Updated: 2023/01/30 20:10:38 by tbeaudoi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,8 @@ void	handlers_control(t_msh *msh)
 {
 	struct sigaction	sa;
 
-	sa.sa_flags = SA_SIGINFO;
+	sa.sa_mask = SA_SIGINFO;
+	sa.sa_flags = SA_RESTART;
 	if (msh->exec_status == INTERAC_MODE)
 	{
 		sa.sa_sigaction = &sig_handler;

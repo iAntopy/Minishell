@@ -6,7 +6,7 @@
 /*   By: tbeaudoi <tbeaudoi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/02 16:47:43 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/01/30 07:09:23 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/01/30 20:49:09 by tbeaudoi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ static size_t	spaced_size(char *str)
 		if (str[i] == '\"' || str[i] == '\'')
 		{
 			quote_switch = str[i++];
+			extra_spaces++;
 			while (str[i] && str[i] != quote_switch)
 				i++;
 			if (!str[i])

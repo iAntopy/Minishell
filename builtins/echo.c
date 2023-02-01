@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tbeaudoi <tbeaudoi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 05:39:33 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/01/30 18:51:09 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/01/31 18:26:04 by tbeaudoi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,5 +37,5 @@ int	msh_builtin_echo(t_job *job, t_cmd *cmd)
 	}
 	if (ft_strncmp(cmd->tokens[1], "-n", 3))
 		printf("\n");
-	return (1);
+	return (0);
 }

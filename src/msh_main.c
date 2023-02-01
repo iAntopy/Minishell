@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   msh_main.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tbeaudoi <tbeaudoi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/16 19:16:03 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/01/30 00:19:41 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/01/31 18:18:19 by tbeaudoi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@ int	msh_clear(t_msh *msh, int exit_code)
 	if (msh->rawline)
 		ft_free_p((void **)&msh->rawline);
 	rl_clear_history();
+	close_fd(&msh->stdin_fd);
+	close_fd(&msh->stdout_fd);
 	return (exit_code);
 }
 
@@ -67,6 +69,8 @@ int	main(int argc, char **argv, char **envp)
 	}
 	return (msh_clear(&msh, msh.shell_exit_status));
 }
+
+// valgrind --leak-check=full  --show-reachable=yes --track-fds=yes --suppressions=./minishell.sup ./minishell
 
 		// printf("Return to main from job manager()\n");
 		// printf("main : post manage job call\n");
