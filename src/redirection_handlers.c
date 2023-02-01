@@ -6,18 +6,11 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 20:33:23 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/01/31 01:15:29 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/02/01 00:23:18 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-static int	report_file_error(char *filename, int *doa_flag)
-{
-	ft_eprintf("minishell error :: %s : %s\n", strerror(errno), filename);
-	*doa_flag = 1;
-	return (errno);
-}
 
 int	redirect_infile(t_cmd *cmd, char **tks_p)
 {
@@ -30,10 +23,10 @@ int	redirect_infile(t_cmd *cmd, char **tks_p)
 	close_fd(&cmd->redir_in);
 	filename = *tks_p + 1;
 	if (access(filename, F_OK | R_OK) < 0)
-		return (report_file_error(filename, &cmd->doa));
+		return (report_file_error(filename, cmd));
 	fd = open(filename, O_RDONLY);
 	if (fd < 0)
-		return (report_file_error(filename, &cmd->doa));
+		return (report_file_error(filename, cmd));
 	cmd->redir_in = fd;
 	cur_len = strtab_len(tks_p);
 	ft_free_p((void **)tks_p);
@@ -52,39 +45,24 @@ int	redirect_outfile(t_cmd *cmd, char **tks_p, int add_mode)
 		return (-1);
 
 //	(void)add_mode;
-	printf("Redirecting to outfile\n");
-	printf("redirect outfile cmds list: \n");
-	printf("redir out in append mode ? %d\n", (add_mode & O_APPEND) != 0);
-	print_all_cmds(cmd->job);
-	filename = *tks_p + 1;
+//	printf("Redirecting to outfile\n");
+//	printf("redirect outfile cmds list: \n");
+//	printf("redir out in append mode ? %d\n", (add_mode & O_APPEND) != 0);
+//	print_all_cmds(cmd->job);
+	is_meta_char(*tks_p, &cur_len);
+	filename = *tks_p + cur_len;
 	close_fd(&cmd->redir_in);
 	if (access(filename, F_OK) == 0 && access(filename, W_OK) < 0)
-		return (report_file_error(filename, &cmd->doa));
-	if (add_mode & O_APPEND)
-	{
-		fd = open(filename, O_CREAT | O_WRONLY | O_APPEND, 0644);
-		perror("what up G");
-	}
-	else
-	{
-		fd = open(filename, O_CREAT | O_WRONLY | O_TRUNC, 0644);
-		perror("what up F");
-	}
-	printf("fd after open : %d\n", fd);
+		return (report_file_error(filename, cmd));
+	fd = open(filename, O_CREAT | O_WRONLY | add_mode, 0644);
 	if (fd < 0)
-		return (report_file_error(filename, &cmd->doa));
+		return (report_file_error(filename, cmd));
 	cmd->redir_out = fd;
 	cur_len = strtab_len(tks_p);
 	ft_free_p((void **)tks_p);
 	ft_memmove(tks_p, tks_p + 1, (cur_len - 1) * sizeof(char *));
 	tks_p[cur_len - 1] = NULL;
 	return (1);
-}
-
-static int	read_exception(void)
-{
-	ft_eprintf("minishell :: heredoc tmp file open failed.");
-	return (-1);
 }
 
 char	*gen_tempname(char *tempfile, int id)
@@ -106,22 +84,23 @@ int	find_heredoc_env_subst_size(t_job *job, char *rl, char *var_buff, char **val
 	int		extra_size;
 
 	extra_size = 0;
-	i = -1;
-	while (rl[++i])
+	i = 0;
+	while (rl[i])
 	{
 		if (rl[i] == '$' && !ft_isspace(rl[i + 1]))
 		{
 			j = i;
-			while (rl[++j] && (ft_isalnum(rl[j]) || rl[j] == '_'))
+			while (rl[j] && rl[++j] && (ft_isalnum(rl[j]) || rl[j] == '_'))
 				var_buff[j - i - 1] = rl[j];
 			var_buff[j - i - 1] = '\0';
 			*vals = msh_getenv(job->msh, var_buff);
 			extra_size += ft_strlen(*vals);
 			vals++;
-			i = j;
 		}
+		else
+			i++;
 	}
-	return (i + extra_size);
+	return (i + extra_size + 2);
 }
 
 char	*ft_strchr_p(char *str, char c, char **ptr)
@@ -165,15 +144,14 @@ int	substitute_heredoc_env_vars(t_job *job, char *rl, char **ret, char *var_buff
 				i = 0;
 				while (*(++rp) && (ft_isalnum(*rp) || *rp == '_'))
 					var_buff[i++] = *rp;
-//				var_buff[i] = '\0';
-				//vals = msh_getenv(job->msh, var_buff);
 				np += ft_strlcpy(np, vals[v++], SIZE_MAX);
 			}
 		}
 		else
 			rp++;
 	}
-	ft_strlcpy(np, rp, SIZE_MAX);
+	i = ft_strlcpy(np, rp, SIZE_MAX);
+	ft_strlcpy(np + i, "\n\0", 2);
 	return (0);
 }
 
@@ -185,7 +163,7 @@ int	heredoc_readline_env_var_convert(t_job *job, char **ret_line)
 
 	rl = readline("> ");
 	if (!rl)
-		return (read_exception());
+		return (-1);
 	ret_status = substitute_heredoc_env_vars(job, rl, ret_line, var_buff);
 	ft_free_p((void **)&rl);
 	return (ret_status);
@@ -195,39 +173,26 @@ int	get_heredoc_input(t_cmd *cmd, char **tks_p, int *id_p)
 {
 	char	*limiter;
 	int		fd;
-//	char	buff[HDOC_SIZE];
 	char	*rl;
 	char	tempname[PATH_MAX];
-	int	cur_len;
+	int		cur_len;
 
-	fd = open(gen_tempname(tempname, (*id_p)++), O_CREAT | O_TRUNC | O_RDWR, 0644);
+	fd = open(gen_tempname(tempname, (*id_p)++), O_CREAT | O_TRUNC | O_WRONLY, 0644);
 	if (fd < 0)
-		return (report_file_error(tempname, &cmd->doa));
+		return (report_file_error(tempname, cmd));//&cmd->doa));
 	limiter = *tks_p + 2;
 	rl = NULL;
-	while (heredoc_readline_env_var_convert(cmd->job, &rl) >= 0 &&
-			rl && rl[0] && ft_strcmp(rl, limiter) != 0)
-	{
-		printf("heredoc DEGUG : readline received : '%s'. Writing to fd %d\n", rl, fd);
-		write(fd, rl, ft_strlen(rl));
-	}
+	while (ft_free_p((void **)&rl) && heredoc_readline_env_var_convert(cmd->job, &rl) >= 0 &&
+			rl && rl[0] && ft_strncmp(rl, limiter, ft_strlen(limiter)) != 0)
 //	{
-//		rl = readline("> ");
-//		if (nchrs < 0)
-//			return (read_exception());
-//		else if (nchrs == 0
-//			|| (nchrs > 0 && ft_strncmp(buff, limiter, nchrs - 1) == 0))
-//			break ;
-			
-//		write(fd, buff, nchrs);
+		if (rl)
+			write(fd, rl, ft_strlen(rl));
+//		write(fd, "\n", 1);
 //	}
 	ft_free_p((void **)&rl);
-	
-//	int i = -1;
-//	while (cmd->tokens[i])
-//		printf("heredoc debug : cmd %i ptr : %p\n", i, cmd->tokens[i]);
-	close_fd(&cmd->redir_in);
-	cmd->redir_in = fd;
+	close_pipe(&fd, &cmd->redir_in);
+//	close_fd(&cmd->redir_in);
+	cmd->redir_in = open(tempname, O_RDONLY);
 	cur_len = strtab_len(tks_p);
 	ft_free_p((void **)tks_p);
 	ft_memmove(tks_p, tks_p + 1, (cur_len - 1) * sizeof(char *));

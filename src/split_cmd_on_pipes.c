@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   split_cmd_on_pipes.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tbeaudoi <tbeaudoi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/06 23:20:16 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/01/25 19:48:38 by tbeaudoi         ###   ########.fr       */
+/*   Updated: 2023/01/31 23:27:32 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "minishell.h"
 
 /// Splits on pipes respecting quote blocks
 
@@ -73,23 +73,22 @@ static int	pipe_splitter(char **tab, char *str)
 	return (wcount);
 }
 
-int	split_cmd_on_pipes(char *s, char ***ret)
+int	split_on_pipes(t_job *job)//char *s, char ***ret)
 {
 	int		wcount;
+	char	*p;
 
-	if (!s)
+	if (!job)
 		return (-1);
-	*ret = NULL;
-	wcount = node_counter(s);
-	printf("split cmd : wcount %d\n", wcount);
-	if (!ft_calloc_p(sizeof(char *) * (wcount + 1), (void **)ret))
+	job->pipe_split = NULL;
+	p = job->parsed;
+	wcount = node_counter(p);
+	if (!ft_calloc_p(sizeof(char *) * (wcount + 1), (void **)&job->pipe_split))
 		return (-1);
-	if (wcount && pipe_splitter(*ret, s) <= 0)
+	if (wcount && pipe_splitter(job->pipe_split, p) <= 0)
 	{
-		strtab_clear(ret);
-		return (-1);
+		strtab_clear(&job->pipe_split);
+		return (report_jm_mlc_err(__FUNCTION__));
 	}
-	printf("strtab after pipe split : \n");
-	strtab_print(*ret);
 	return (0);
 }

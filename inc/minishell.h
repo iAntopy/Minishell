@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/16 01:39:11 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/01/30 23:03:47 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/02/01 00:17:37 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ typedef struct s_job
 	t_msh	*msh;
 	char	sc;
 	char	*parsed;
+	char	*parsed2;
 	char	**pipe_split;
 	t_cmd	cmds[MAX_CMDS];
 //	char	**cmds[MAX_CMDS];
@@ -116,16 +117,13 @@ void	print_all_cmds(t_job *job);// in tokenizer_redirector.c
 // JOB MANAGER
 int		job_manager(t_msh *msh);
 int		job_executor(t_job *job);
-//int		validate_synax(char *line);
 int		validate_meta_char_syntax(char *line);
 int		validate_syntax_beggining_or_ending_pipes(char *line);
 int		intercept_builtin_call(t_cmd *cmd, int *builtin_status);
-//int		parse_exec_cmd(t_job *job, int idx);//t_msh *msh, char *cmd);
 int		init_pipe(int pp[2], int *rd_pipe, int i, int nb_cmds);
 int		close_pipe(int *rd_pipe, int *wr_pipe);
 int		close_fd(int *fd);
-int		setup_all_cmds(t_job *job);
-//int		apply_all_redirections(t_job *job);
+int		setup_cmds(t_job *job);
 
 // REDIRECTION HANDLERS
 int		redirect_infile(t_cmd *cmd, char **tks_p);
@@ -137,9 +135,9 @@ char	*gen_tempname(char *tempfile, int heredoc_id);
 int		validate_syntax(char *line);
 int		is_meta_char(char *c, int *mlen);
 int		contains_meta_char(char *str);
-int		spaceout_meta_chars(char *str, char **ret);
-int		msh_substitute_env_vars(t_msh *msh, char *line, char **ret);
-int		split_cmd_on_pipes(char *cmd, char ***tab_p);
+int		spaceout_meta_chars(t_job *job);//char *str, char **ret);
+int		substitute_env_vars(t_msh *msh, t_job *job);//char *line, char **ret);
+int		split_on_pipes(t_job *job);//char *cmd, char ***tab_p);
 char	**tokenize(t_job *job, char *cmd);
 char	*skip_valid_envp_var_chars(char *var);
 
@@ -164,6 +162,7 @@ int		job_clear(t_job *job, int exit_code);
 
 // ERROR HANDLING
 int		report_missing_input(const char *fn);
+int		report_file_error(char *filename, t_cmd *cmd);
 int		report_malloc_err(const char *fn);
 int		report_fork_err(const char *fn);
 int		report_jm_mlc_err(const char *fn);
@@ -171,7 +170,7 @@ int		report_pipe_err(const char *fn);
 int		report_parsing_error(const char *fn, char *meta_c, int len);
 int		report_builtin_failure(const char *fn);
 int		report_max_nb_cmds_exceeded(t_job *job);
-int		report_cmd_not_found(char *cmd);
+int		report_cmd_not_found(char *cmdname, t_cmd *cmd, int exit_code);
 int		report_unclosed_quotes(void);
 
 // SIGNALS

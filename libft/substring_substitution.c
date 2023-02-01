@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/14 16:45:15 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/01/31 00:31:51 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/01/31 20:00:16 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,9 +65,7 @@ char	substring_substitution(char *str, char	**subst)
 	{
 		dlim = *sub;
 		while (*(++sub) != dlim)
-			//*(sub - 1) = *sub + ((*sub == ' ') * (sc - *sub));
 			*sub = *sub + ((*sub == ' ') * (sc - *sub));
-//		ft_memmove(sub - 1, sub + 1, ft_strlen(sub + 1) + 1);
 		sub = find_substring(sub + 1);
 	}
 	return (sc);
@@ -78,7 +76,6 @@ void	restore_substring(char *str, char sc, int strip_quotes)
 	char	*sub;
 	char	dlim;
 
-	printf("restore_substring : ENTERED !\n");
 	if (!str)
 		return ;
 	if (strip_quotes)
@@ -87,10 +84,8 @@ void	restore_substring(char *str, char sc, int strip_quotes)
 		while (sub)
 		{
 			dlim = *sub;
-			printf("restore_substring : entering while\n");
 			while (*(++sub) && *sub != dlim)
 				*(sub - 1) = *sub + ((*sub == sc) * (' ' - *sub));
-			printf("restore_substring : exiting while\n");
 			ft_memmove(sub - 1, sub + 1, ft_strlen(sub + 1) + 1);
 			sub = find_substring(sub - 1);
 		}

@@ -6,7 +6,7 @@
 #    By: tbeaudoi <tbeaudoi@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/16 01:26:25 by iamongeo          #+#    #+#              #
-#    Updated: 2023/01/27 08:59:43 by iamongeo         ###   ########.fr        #
+#    Updated: 2023/01/31 22:41:52 by iamongeo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,7 +23,6 @@ _SRC		=	msh_main.c			\
 			error_handling.c		\
 			split_cmd_on_pipes.c		\
 			job_executor.c			\
-			parse_exec_command.c		\
 			pipe_utils.c			\
 			sig_handlers.c			\
 			intercept_builtin_calls.c	\
