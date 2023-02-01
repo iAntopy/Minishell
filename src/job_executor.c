@@ -6,11 +6,7 @@
 /*   By: tbeaudoi <tbeaudoi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 00:48:45 by iamongeo          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2023/02/01 07:06:54 by iamongeo         ###   ########.fr       */
-=======
-/*   Updated: 2023/01/31 20:10:20 by iamongeo         ###   ########.fr       */
->>>>>>> heredoc/append fully working. Many invalid reads/writes fixed for heredoc mostly for heredoc. many leaks fixed. TODO : fix 0 env var substitution not working giving wack output.
+/*   Updated: 2023/02/01 07:12:19 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
