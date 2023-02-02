@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/05 00:26:12 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/01/31 23:51:39 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/02/01 19:02:11 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ static int	job_init(t_msh *msh)
 	if (!msh->paths)
 		return (report_jm_mlc_err(__FUNCTION__));
 	job = &msh->job;
+	msh->nbr_buff_len = ft_putnbr_buff(msh->nbr_buff, msh->exit_status);
 	ft_memclear(job, sizeof(t_job));
 	job->msh = msh;
 	job->parsed = ft_strtrim(msh->rawline, " ");

@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/16 01:39:11 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/02/01 00:17:37 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/02/02 00:48:49 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,20 +28,20 @@
 //# include <curses.h>
 //# include <term.h>
 
-# define READLINE_PROMPT "minishell> "
+# define READLINE_PROMPT "minishell> "
 # define _META_CHARS "<>|&*"
-# define MAX_CMDS 256
+# define MAX_CMDS 1024
 # define HDOC_SIZE 0xffffff
 //# define E_REDIRECT_FAILED SIZE_MAX
 
 typedef struct s_job			t_job;
 typedef struct s_minishell_data	t_msh;
-typedef struct s_command	t_cmd;
-typedef int (* t_bltin)(t_job *job, t_cmd *cmd);
+typedef struct s_command		t_cmd;
+typedef int						(*t_bltin)(t_job *job, t_cmd *cmd);
 
 typedef struct s_command
 {
-	t_job	*job;	// reference to the job struct the cmd spawns from. Init in setup_all_cmds()
+	t_job	*job;
 	pid_t	pid;
 	char	**tokens;
 	t_bltin	bltin_func;
@@ -59,11 +59,6 @@ typedef struct s_job
 	char	*parsed2;
 	char	**pipe_split;
 	t_cmd	cmds[MAX_CMDS];
-//	char	**cmds[MAX_CMDS];
-//	pid_t	pids[MAX_CMDS];
-//	int		redir_in[MAX_CMDS];
-//	int		redir_out[MAX_CMDS];
-//	int		doa;
 	int		heredoc_id;
 	int		nb_cmds;
 	int		pp[2];
@@ -82,11 +77,10 @@ typedef struct s_minishell_data
 	int		request_exit;
 	int		exec_status;
 	char	nbr_buff[24];
+	int		nbr_buff_len;
 	int		stdin_fd;
 	int		stdout_fd;
-//	pid_t	job_pid;
 }	t_msh;
-
 
 enum	e_exec_status
 {
@@ -99,7 +93,6 @@ enum	e_err_codes
 	E_MSH_INIT = 1,
 	E_MALLOC,
 	E_RAWLINE_CLR_ERR,
-//	E_JOB_MNG_FAILED,
 	E_REDIRECT_FAILED = -2
 };
 
@@ -113,13 +106,12 @@ enum	e_builtin_status
 // DEBUG FUNCTIONS (DELETE)
 void	print_all_cmds(t_job *job);// in tokenizer_redirector.c
 
-
 // JOB MANAGER
 int		job_manager(t_msh *msh);
 int		job_executor(t_job *job);
 int		validate_meta_char_syntax(char *line);
 int		validate_syntax_beggining_or_ending_pipes(char *line);
-int		intercept_builtin_call(t_cmd *cmd, int *builtin_status);
+int		intercept_builtin_call(t_cmd *cmd);
 int		init_pipe(int pp[2], int *rd_pipe, int i, int nb_cmds);
 int		close_pipe(int *rd_pipe, int *wr_pipe);
 int		close_fd(int *fd);
@@ -135,9 +127,9 @@ char	*gen_tempname(char *tempfile, int heredoc_id);
 int		validate_syntax(char *line);
 int		is_meta_char(char *c, int *mlen);
 int		contains_meta_char(char *str);
-int		spaceout_meta_chars(t_job *job);//char *str, char **ret);
-int		substitute_env_vars(t_msh *msh, t_job *job);//char *line, char **ret);
-int		split_on_pipes(t_job *job);//char *cmd, char ***tab_p);
+int		spaceout_meta_chars(t_job *job);
+int		substitute_env_vars(t_msh *msh, t_job *job);
+int		split_on_pipes(t_job *job);
 char	**tokenize(t_job *job, char *cmd);
 char	*skip_valid_envp_var_chars(char *var);
 

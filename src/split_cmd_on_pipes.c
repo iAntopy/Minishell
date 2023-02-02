@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/06 23:20:16 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/01/31 23:27:32 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/02/02 00:22:12 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,11 +34,11 @@ static int	node_counter(char *s)
 	{
 		if (is_quote(*s, &quote_switch))
 		{
-			while (*(++s) && *s != is_quote(*s, &quote_switch))
+			while (*(++s + 1) && *(s + 1) != is_quote(*(s + 1), &quote_switch))
 				continue ;
 		}
 		else
-			wcount += (ft_strncmp(s, " | ", 3) == 0) && *(s + 3);
+			wcount += (ft_strncmp(s, " | ", 3) == 0) && *(s) && *(s + 1) && *(s + 2) && *(s + 3);
 		s++;
 	}
 	return (wcount);
@@ -53,12 +53,15 @@ static int	pipe_splitter(char **tab, char *str)
 	if (!str)
 		return (-1);
 	wcount = 0;
-	s = (char *)str;
+	s = str;
 	while (*s)
 	{
 		if (is_quote(*s, &quote_switch))
-			while (*(++s) && *s != is_quote(*s, &quote_switch))
+		{
+			while (*(++s + 1) && *(s + 1) != is_quote(*(s + 1), &quote_switch))
 				continue ;
+			printf("");
+		}
 		if (ft_strncmp(s, " | ", 3) == 0)
 		{
 			if (s != str)
@@ -66,7 +69,7 @@ static int	pipe_splitter(char **tab, char *str)
 			str = s + 3;
 			s = str - 1;
 		}
-		else if (!(*(s + 1)))
+		else if (!(*s) || !(*(s + 1)))
 			tab[wcount++] = ft_strndup(str, SIZE_MAX);
 		s++;
 	}

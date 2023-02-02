@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   job_executor.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tbeaudoi <tbeaudoi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 00:48:45 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/02/01 07:30:17 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/02/02 00:45:21 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,7 @@ static int	fork_child_processes(t_job *job)
 int	job_executor(t_job *job)
 {
 	int	i;
+	int	status;
 
 	if (!job)
 		return (report_missing_input(__FUNCTION__));
@@ -116,7 +117,9 @@ int	job_executor(t_job *job)
 	i = -1;
 //	printf("Waitpid child processes\n");
 	while (++i < job->nb_cmds)
-		waitpid(job->cmds[i].pid, &job->msh->exit_status, 0);
+		waitpid(job->cmds[i].pid, &status, 0);
+	job->msh->exec_status = WEXITSTATUS(status);
+	printf("WEXITSTATUS :d %d\n", WEXITSTATUS(status));
 //	printf("---------------------\nJob output over.\n");
 //	printf("\n\njob exec : forking DONE\n");
 	return (0);

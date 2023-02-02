@@ -1,5 +1,5 @@
 FUNC_NAMES_M =	issign isspace isalpha isdigit isalnum isascii			\
-		isprint strlen memset bzero memcpy memmove strlcpy		\
+		isprint strlen memset bzero memcpy memmove strlcpy strncpy		\
 		strlcat isupper islower toupper tolower				\
 		strchr strrchr strchr_set strrchr_set strchr_space		\
 		strcmp strncmp memchr memcmp memclear strnstr			\
