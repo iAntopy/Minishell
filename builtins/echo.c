@@ -6,7 +6,7 @@
 /*   By: tbeaudoi <tbeaudoi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 05:39:33 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/01/31 18:26:04 by tbeaudoi         ###   ########.fr       */
+/*   Updated: 2023/02/02 19:46:56 by tbeaudoi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,8 @@ int	msh_builtin_echo(t_job *job, t_cmd *cmd)
 	(void)job;
 	i = 1;
 	if (!cmd->tokens[1])
-		printf("\n");
-	if (!ft_strncmp(cmd->tokens[1], "-n", 3))
+		return (printf("\n") & 0);
+	while (!ft_strncmp(cmd->tokens[i], "-n", 3))
 		i++;
 	while (cmd->tokens[i])
 	{
@@ -37,5 +37,6 @@ int	msh_builtin_echo(t_job *job, t_cmd *cmd)
 	}
 	if (ft_strncmp(cmd->tokens[1], "-n", 3))
 		printf("\n");
-	return (0);
+	job->msh->exit_status = 0;
+	return (job->msh->exit_status);
 }
