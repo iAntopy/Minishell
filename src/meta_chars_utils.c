@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   meta_chars_utils.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tbeaudoi <tbeaudoi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/02 16:47:43 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/02/01 07:29:56 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/02/02 17:19:22 by tbeaudoi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ static size_t	spaced_size(char *str)
 	char	quote_switch;
 	size_t	i;
 	size_t	extra_spaces;
+	int		mlen;
 
 	quote_switch = '\0';
 	extra_spaces = 0;
@@ -56,14 +57,14 @@ static size_t	spaced_size(char *str)
 		if (str[i] == '\"' || str[i] == '\'')
 		{
 			quote_switch = str[i++];
-			extra_spaces++;
+			extra_spaces += 2;
 			while (str[i] && str[i] != quote_switch)
 				i++;
 			if (!str[i])
 				return (0);
 		}
-		else if (!quote_switch && is_meta_char(str + i, NULL))
-			extra_spaces += 2;
+		else if (!quote_switch && is_meta_char(str + i, &mlen))
+			extra_spaces += 2 + mlen;
 	}
 	return (sizeof(char) * (i + extra_spaces + 1));
 }

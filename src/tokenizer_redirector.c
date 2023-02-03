@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer_redirector.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tbeaudoi <tbeaudoi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/20 20:54:13 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/02/01 00:19:26 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/02/02 16:34:04 by tbeaudoi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,12 +57,11 @@ int	find_and_validate_cmd_file(t_cmd *cmd)
 {
 	char	*cmdname;
 	char	*cmd_path;
-	int		builtin_status;
 
-	intercept_builtin_call(cmd, &builtin_status);
-	cmdname = cmd->tokens[0];
-	if (builtin_status == BUILTIN_FOUND)
+	intercept_builtin_call(cmd);
+	if (cmd->bltin_func)
 		return (0);
+	cmdname = cmd->tokens[0];
 	if (ft_strncmp(cmdname, "./", 2) == 0)
 	{
 		if (access(cmdname, F_OK | X_OK) == 0)

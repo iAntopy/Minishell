@@ -1,25 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   tokenizer.c                                        :+:      :+:    :+:   */
+/*   ft_strncpy.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tbeaudoi <tbeaudoi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/19 19:42:59 by tbeaudoi          #+#    #+#             */
-/*   Updated: 2023/01/19 20:01:02 by tbeaudoi         ###   ########.fr       */
+/*   Created: 2023/02/01 20:41:48 by iamongeo          #+#    #+#             */
+/*   Updated: 2023/02/02 16:31:00 by tbeaudoi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-char	**tokenize(t_job *job, char *cmd)
+char	*ft_strncpy(char *dst, const char *src, size_t n)
 {
-	char	**tokens;
+	char	*d;
 
-	tokens = NULL;
-	tokens = ft_split(cmd, ' ');
-	if (!tokens)
+	if (!dst || !src)
 		return (NULL);
-	restore_substrings_in_tab(tokens, job->sc);
-	return (tokens);
+	d = dst;
+	while (*src && n--)
+		*(d++) = *(src++);
+	*d = '\0';
+	return (dst);
 }
