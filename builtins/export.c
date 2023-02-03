@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tbeaudoi <tbeaudoi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 08:22:03 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/01/30 18:49:39 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/02/02 21:02:04 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,29 +34,24 @@ static int	check_synthax_export_cmd(char *cmd, char *cmd_name)
 	return (0);
 }
 
-static int	parse_export_cmd(char *cmd, char **var, char **value)
+static int	parse_export_cmd(char *cmd, char *var, char **value)
 {
-	char	**split;
+	char	*eql;
 
-	if (!ft_strchr(cmd, '='))
+	eql = ft_strchr(cmd, '=');
+	if (!eql)
 		return (-1);
+	ft_strncpy(var, cmd, eql - cmd);
+	var[eql - cmd] = '\0';
+	*value = eql + 1;
 	if (check_synthax_export_cmd(cmd, "export") == -1)
 		return (-1);
-	split = ft_split(cmd, '=');
-	if (!split || !split[0])
-		return (report_malloc_err(__FUNCTION__));
-	*var = split[0];
-	if (!split[1])
-		*value = "\0";
-	else
-		*value = split[1];
-	free(split);
 	return (0);
 }
 
 static int	pre_parse(t_job *job, char **token_tab)
 {
-	char	*var;
+	char	var[1024];
 	char	*value;
 	char	*existing_value;
 	int		i;
@@ -64,16 +59,13 @@ static int	pre_parse(t_job *job, char **token_tab)
 	i = 0;
 	while (token_tab[++i])
 	{
-		if (parse_export_cmd(token_tab[i], &var, &value) == 0)
+		if (parse_export_cmd(token_tab[i], var, &value) == 0)
 		{
 			existing_value = msh_getenv(job->msh, var);
 			if (existing_value)
 				msh_envp_remove_entry(job->msh, var);
 			if (msh_envp_add_entry(job->msh, var, value) < 0)
 				return (-1);
-			ft_free_p((void **)&var);
-			if (value[0] != '\0')
-				ft_free_p((void **)&value);
 		}
 	}
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 20:33:23 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/02/01 00:23:18 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/02/02 20:33:42 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,11 +44,6 @@ int	redirect_outfile(t_cmd *cmd, char **tks_p, int add_mode)
 	if (!tks_p)
 		return (-1);
 
-//	(void)add_mode;
-//	printf("Redirecting to outfile\n");
-//	printf("redirect outfile cmds list: \n");
-//	printf("redir out in append mode ? %d\n", (add_mode & O_APPEND) != 0);
-//	print_all_cmds(cmd->job);
 	is_meta_char(*tks_p, &cur_len);
 	filename = *tks_p + cur_len;
 	close_fd(&cmd->redir_in);
@@ -69,7 +64,7 @@ char	*gen_tempname(char *tempfile, int id)
 {
 	char	*base_end;
 	char	*num_end;
-	
+
 	base_end = tempfile + 12;
 	ft_strlcpy(tempfile, "tmp/.heredoc", PATH_MAX);
 	num_end = base_end + ft_putnbr_buff(base_end, id);
@@ -77,7 +72,7 @@ char	*gen_tempname(char *tempfile, int id)
 	return (tempfile);
 }
 
-int	find_heredoc_env_subst_size(t_job *job, char *rl, char *var_buff, char **vals)
+int	find_heredoc_env_subst_size(t_job *job, char *rl, char *vbuff, char **vals)
 {
 	int		i;
 	int		j;
@@ -91,9 +86,9 @@ int	find_heredoc_env_subst_size(t_job *job, char *rl, char *var_buff, char **val
 		{
 			j = i;
 			while (rl[j] && rl[++j] && (ft_isalnum(rl[j]) || rl[j] == '_'))
-				var_buff[j - i - 1] = rl[j];
-			var_buff[j - i - 1] = '\0';
-			*vals = msh_getenv(job->msh, var_buff);
+				vbuff[j - i - 1] = rl[j];
+			vbuff[j - i - 1] = '\0';
+			*vals = msh_getenv(job->msh, vbuff);
 			extra_size += ft_strlen(*vals);
 			vals++;
 		}
@@ -179,19 +174,15 @@ int	get_heredoc_input(t_cmd *cmd, char **tks_p, int *id_p)
 
 	fd = open(gen_tempname(tempname, (*id_p)++), O_CREAT | O_TRUNC | O_WRONLY, 0644);
 	if (fd < 0)
-		return (report_file_error(tempname, cmd));//&cmd->doa));
+		return (report_file_error(tempname, cmd));
 	limiter = *tks_p + 2;
 	rl = NULL;
 	while (ft_free_p((void **)&rl) && heredoc_readline_env_var_convert(cmd->job, &rl) >= 0 &&
 			rl && rl[0] && ft_strncmp(rl, limiter, ft_strlen(limiter)) != 0)
-//	{
 		if (rl)
 			write(fd, rl, ft_strlen(rl));
-//		write(fd, "\n", 1);
-//	}
 	ft_free_p((void **)&rl);
 	close_pipe(&fd, &cmd->redir_in);
-//	close_fd(&cmd->redir_in);
 	cmd->redir_in = open(tempname, O_RDONLY);
 	cur_len = strtab_len(tks_p);
 	ft_free_p((void **)tks_p);

@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/02 16:47:43 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/02/01 07:29:56 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/02/02 21:06:54 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ static size_t	spaced_size(char *str)
 	char	quote_switch;
 	size_t	i;
 	size_t	extra_spaces;
+	int		mlen;
 
 	quote_switch = '\0';
 	extra_spaces = 0;
@@ -56,14 +57,14 @@ static size_t	spaced_size(char *str)
 		if (str[i] == '\"' || str[i] == '\'')
 		{
 			quote_switch = str[i++];
-			extra_spaces++;
+			extra_spaces += 2;
 			while (str[i] && str[i] != quote_switch)
 				i++;
 			if (!str[i])
 				return (0);
 		}
-		else if (!quote_switch && is_meta_char(str + i, NULL))
-			extra_spaces += 2;
+		else if (!quote_switch && is_meta_char(str + i, &mlen))
+			extra_spaces += 2 + mlen;
 	}
 	return (sizeof(char) * (i + extra_spaces + 1));
 }
@@ -94,7 +95,7 @@ int	spaceout_meta_chars(t_job *job)
 	char	*r;
 	char	*p;
 	char	quote_switch;
-	int		meta_len;
+	int		mlen;
 
 	job->parsed2 = NULL;
 	size = spaced_size(job->parsed);
@@ -109,8 +110,8 @@ int	spaceout_meta_chars(t_job *job)
 	{
 		if (*p == '\"' || *p == '\'')
 			quote_switch = (*p) * (quote_switch == '\0');
-		if (!quote_switch && is_meta_char(p, &meta_len))
-			parse_single_meta_char(&r, &p, &meta_len);
+		if (!quote_switch && is_meta_char(p, &mlen))
+			parse_single_meta_char(&r, &p, &mlen);
 		else
 			*(r++) = *(p++);
 	}

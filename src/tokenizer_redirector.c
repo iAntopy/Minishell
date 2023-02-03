@@ -6,14 +6,14 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/20 20:54:13 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/02/01 00:19:26 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/02/02 20:31:33 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-/// DELETE ME
 /*
+/// DELETE ME
 void	print_all_cmds(t_job *job)
 {
 	int	i;
@@ -50,19 +50,18 @@ static int	apply_redirections_for_single_cmd(t_cmd *cmd)
 		if (status == 1)
 			i--;
 	}
-	return (0);
+	return (status);
 }
 
 int	find_and_validate_cmd_file(t_cmd *cmd)
 {
 	char	*cmdname;
 	char	*cmd_path;
-	int		builtin_status;
 
-	intercept_builtin_call(cmd, &builtin_status);
-	cmdname = cmd->tokens[0];
-	if (builtin_status == BUILTIN_FOUND)
+	intercept_builtin_call(cmd);
+	if (cmd->builtin)
 		return (0);
+	cmdname = cmd->tokens[0];
 	if (ft_strncmp(cmdname, "./", 2) == 0)
 	{
 		if (access(cmdname, F_OK | X_OK) == 0)
@@ -96,7 +95,8 @@ int	setup_cmds(t_job *job)
 		cmd->tokens = ft_split_space(job->pipe_split[i]);
 		if (!cmd->tokens)
 			return (report_jm_mlc_err(__FUNCTION__));
-		apply_redirections_for_single_cmd(cmd);
+		if (apply_redirections_for_single_cmd(cmd) == -1)
+			return (-1);
 		restore_substrings_in_tab(cmd->tokens, cmd->job->sc, 1);
 		if (cmd->tokens[0] && find_and_validate_cmd_file(cmd) < 0)
 			return (-1);

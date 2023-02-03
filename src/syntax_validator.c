@@ -6,22 +6,29 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/20 18:45:09 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/02/01 23:45:29 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/02/02 21:17:06 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	report_syntax_error(char *near, int mlen)
+int	report_syntax_error(char *near, int mlen, int *exit_status, char quote)
 {
 	if (*near == '\0')
-		ft_eprintf("minishell: syntax error near unexpected token 'newline'\n");
+	{
+		if (quote)
+			report_unclosed_quotes();
+		else
+			ft_eprintf("minishell: syntax error near \
+				unexpected token 'newline'\n");
+	}
 	else
 	{
 		ft_eprintf("minishell: syntax error near unexpected token '");
 		write(STDERR_FILENO, near, mlen);
 		write(STDERR_FILENO, "'\n", 2);
 	}
+	*exit_status = 258;
 	return (-1);
 }
 
@@ -37,7 +44,7 @@ static char	*skip_spaces(char **line, int init_offset)
 	return (l);
 }
 
-static int	skip_open_quotes(char **line, int *error)
+static int	skip_open_quotes(char **line, int *error, int *exit_status)
 {
 	char	quote;
 	char	*l;
@@ -53,14 +60,14 @@ static int	skip_open_quotes(char **line, int *error)
 	if (*l == '\0')
 	{
 		*error = -1;
-		report_syntax_error(l, 1);
+		report_syntax_error(l, 1, exit_status, quote);
 		return (0);
 	}
 	*line = l;
 	return (1);
 }
 
-int	validate_syntax(char *line)
+int	validate_syntax(char *line, int *exit_status)
 {
 	int		mlen;
 	int		mlen2;
@@ -71,56 +78,21 @@ int	validate_syntax(char *line)
 	if (!line || !(*line))
 		return (-1);
 	if (line[0] == '|' || line[ft_strlen(line) - 1] == '|')
-		return (report_syntax_error("|", 1));
+		return (report_syntax_error("|", 1, exit_status, 0));
 	l = line;
 	error = 0;
-	while (skip_open_quotes(&l, &error) && *l)
+	while (skip_open_quotes(&l, &error, exit_status) && *l)
 	{
-		//printf("validate syntax : %s\n", l);
 		if (is_meta_char(l, &mlen))
 		{
 			k = l + mlen;
 			skip_spaces(&k, 0);
 			if ((*l == '<' || *l == '>') && (!*k || is_meta_char(k, &mlen2)))
-				return (report_syntax_error(k, mlen2));
+				return (report_syntax_error(k, mlen2, exit_status, 0));
 			l += mlen;
 		}
 		else
 			l++;
-//		printf("validate syntax : end\n");
 	}
 	return (error);
 }
-/*
-int	validate_syntax(char *line)
-{
-//	int	i;
-	int	mlen;
-	char	*l;
-
-	if (!line)
-		return (-1);
-	l = line;
-	while (*l)
-	{
-		if (is_meta_char(l, &mlen) && skip_spaces(&l, mlen)
-			&& (*l == '\0' || is_meta_char(l, &mlen)))
-			return (report_syntax_error(l, mlen));
-		l++;
-	}
-	return (0);
-}
-
-int	main()
-{
-	int		is_valid;
-	char	line[] = "<< grep allo";
-	
-	if (validate_syntax(line) < 0)
-		printf("the line '%s' is not valid syntax.\n", line);
-	else	
-		printf("the line '%s' is valid syntax.\n", line);
-
-	return (0);
-}
-*/

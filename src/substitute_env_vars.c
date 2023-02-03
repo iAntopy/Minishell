@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/05 05:04:41 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/02/01 23:04:57 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/02/02 21:28:25 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,9 @@ char	*skip_valid_envp_var_chars(char *var)
 	start = var;
 	while (is_valid_env_char(*var, start == var))
 		var++;
-	return (var + (start == var));
+	if (start == var && (*var != '\'' || *var != '\"'))
+		return (var + 1);
+	return (var);
 }
 
 static size_t	find_subst_str_size(t_msh *msh, char *l, char **vals)

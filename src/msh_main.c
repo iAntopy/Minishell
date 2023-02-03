@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   msh_main.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tbeaudoi <tbeaudoi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/16 19:16:03 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/02/01 07:30:33 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/02/02 19:31:26 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ int	msh_init(t_msh *msh, char **envp)
 	msh->paths = get_env_paths(envp);
 	if (!msh->paths || msh_envp_copy(envp, &msh->envp) < 0)
 		return (report_malloc_err(__FUNCTION__));
+	msh->exit_status = 0;
 	msh->stdin_fd = dup(STDIN_FILENO);
 	msh->stdout_fd = dup(STDOUT_FILENO);
 	return (0);
@@ -56,11 +57,11 @@ int	main(int argc, char **argv, char **envp)
 		msh.rawline = readline(READLINE_PROMPT);
 		if (msh.rawline == NULL)
 			break ;
-		if (!msh.rawline || msh.rawline[0] == '\0' || msh.rawline[0] == '\n')
-			continue ;
-		if (msh.rawline[0])
+		if (msh.rawline[0] != '\0')
+		{
 			add_history(msh.rawline);
-		job_manager(&msh);
+			job_manager(&msh);
+		}
 		ft_free_p((void **)&msh.rawline);
 	}
 	return (msh_clear(&msh, msh.shell_exit_status));

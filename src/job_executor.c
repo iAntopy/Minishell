@@ -6,12 +6,11 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 00:48:45 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/02/02 00:45:21 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/02/02 20:30:35 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
 
 static int	job_executor_force_exit(t_job *job, int *rd_pipe)
 {
@@ -48,19 +47,25 @@ static void	setup_child_redirections(t_cmd *cmd)
 		dup2(cmd->job->pp[1], STDOUT_FILENO);
 }
 
-static void	reset_standard_io(t_cmd *cmd)
+static void	execute_child_task(t_job *job, t_cmd *cmd)
 {
-	if (cmd->redir_in >= 3)
-		dup2(cmd->job->msh->stdin_fd, STDIN_FILENO);
-	if (cmd->redir_out >= 3)
-		dup2(cmd->job->msh->stdout_fd, STDOUT_FILENO);
+	int	sts;
+
+	if (cmd->doa)
+		exit(job_clear(job, 0) | msh_clear(job->msh, job->msh->exit_status));
+	setup_child_redirections(cmd);
+	sts = EXIT_SUCCESS;
+	if (cmd->builtin)
+		sts = cmd->builtin(job, cmd);
+	else
+		execve(cmd->tokens[0], cmd->tokens, job->msh->envp);
+	exit(sts | WEXITSTATUS(errno) | job_clear(job, 0) | msh_clear(job->msh, 0));
 }
 
 static int	fork_child_processes(t_job *job)
 {
 	int	i;
 
-//	printf("fork child procs : entered : job %p, nb cmds : %d\n", job, job->nb_cmds);
 	i = -1;
 	while (++i < job->nb_cmds)
 	{
@@ -70,21 +75,10 @@ static int	fork_child_processes(t_job *job)
 		if (job->cmds[i].pid < 0)
 			return (job_executor_force_exit(job, &job->rd_pipe));
 		else if (job->cmds[i].pid == 0)
-		{
-			if (job->cmds[i].doa)
-				exit(job_clear(job, 0) | msh_clear(job->msh, errno));
-			setup_child_redirections(job->cmds + i);
-			if (job->cmds[i].bltin_func)
-				job->cmds[i].bltin_func(job, &job->cmds[i]);
-			else
-				execve(job->cmds[i].tokens[0],
-					job->cmds[i].tokens, job->msh->envp);
-			exit(job_clear(job, 0) | msh_clear(job->msh, errno));
-		}
+			execute_child_task(job, job->cmds + i);
 		close_pipe(&job->rd_pipe, job->pp + 1);
 		job->rd_pipe = job->pp[0];
 	}
-	close_pipe(job->pp, job->pp + 1);
 	close_fd(&job->rd_pipe);
 	return (0);
 }
@@ -92,35 +86,28 @@ static int	fork_child_processes(t_job *job)
 int	job_executor(t_job *job)
 {
 	int	i;
-	int	status;
 
 	if (!job)
 		return (report_missing_input(__FUNCTION__));
-	if (job->nb_cmds == 1 && job->cmds[0].bltin_func)
+	if (job->nb_cmds == 1 && job->cmds[0].builtin)
 	{
-		if (job->cmds[0].doa)
-			return (0);
-//		printf("Setting up builtin redirection \n");
-//		printf("\nJob output : \n---------------------\n");
-		setup_child_redirections(&job->cmds[0]);
-		if (job->cmds[0].bltin_func(job, &job->cmds[0]) == BUILTIN_FAILED)
+		if (!job->cmds[0].doa)
+			setup_child_redirections(&job->cmds[0]);
+		if (!job->cmds[0].doa && job->cmds[0].builtin(job, &job->cmds[0]) != 0)
 			return (report_builtin_failure(__FUNCTION__));
-		reset_standard_io(&job->cmds[0]);
-//		printf("---------------------\nCommand output over.\n");
+		if (!job->cmds[0].doa && job->cmds[0].redir_in >= 3)
+			dup2(job->msh->stdin_fd, STDIN_FILENO);
+		if (!job->cmds[0].doa && job->cmds[0].redir_out >= 3)
+			dup2(job->msh->stdout_fd, STDOUT_FILENO);
 		return (0);
 	}
-//	printf("job exec : forking\n");
-//	printf("\nJob output : \n---------------------\n");
 	if (fork_child_processes(job) < 0)
 		return (-1);
 	job->msh->exec_status = EXEC_MODE;
 	i = -1;
-//	printf("Waitpid child processes\n");
 	while (++i < job->nb_cmds)
-		waitpid(job->cmds[i].pid, &status, 0);
-	job->msh->exec_status = WEXITSTATUS(status);
-	printf("WEXITSTATUS :d %d\n", WEXITSTATUS(status));
-//	printf("---------------------\nJob output over.\n");
-//	printf("\n\njob exec : forking DONE\n");
+		waitpid(job->cmds[i].pid, &job->msh->exit_status, 0);
+	job->msh->exec_status = INTERAC_MODE;
+	job->msh->exit_status = WEXITSTATUS(job->msh->exit_status);
 	return (0);
 }

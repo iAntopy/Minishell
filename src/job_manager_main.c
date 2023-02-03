@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/05 00:26:12 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/02/01 19:02:11 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/02/02 21:21:30 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ int	job_manager(t_msh *msh)
 	job = &msh->job;
 	if (job_init(msh) < 0)
 		return (job_clear(job, -1));
-	if (validate_syntax(job->parsed) < 0)
+	if (validate_syntax(job->parsed, &msh->exit_status) < 0)
 		return (job_clear(job, 258));
 	if (ft_strchr(job->parsed, '$')
 		&& (substitute_env_vars(msh, job) < 0 || free_swap_lines(job)))

@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/16 01:39:11 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/02/02 00:48:49 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/02/02 20:25:24 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ typedef struct s_command
 	t_job	*job;
 	pid_t	pid;
 	char	**tokens;
-	t_bltin	bltin_func;
+	t_bltin	builtin;
 	int		redir_in;
 	int		redir_out;
 	int		doa;
@@ -109,8 +109,9 @@ void	print_all_cmds(t_job *job);// in tokenizer_redirector.c
 // JOB MANAGER
 int		job_manager(t_msh *msh);
 int		job_executor(t_job *job);
-int		validate_meta_char_syntax(char *line);
-int		validate_syntax_beggining_or_ending_pipes(char *line);
+int		validate_syntax(char *line, int *exit_status);
+//int		validate_meta_char_syntax(char *line);
+//int		validate_syntax_beggining_or_ending_pipes(char *line);
 int		intercept_builtin_call(t_cmd *cmd);
 int		init_pipe(int pp[2], int *rd_pipe, int i, int nb_cmds);
 int		close_pipe(int *rd_pipe, int *wr_pipe);
@@ -124,7 +125,6 @@ int		get_heredoc_input(t_cmd *cmd, char **token_p, int *heredoc_id);
 char	*gen_tempname(char *tempfile, int heredoc_id);
 
 // PARSING UTILS
-int		validate_syntax(char *line);
 int		is_meta_char(char *c, int *mlen);
 int		contains_meta_char(char *str);
 int		spaceout_meta_chars(t_job *job);

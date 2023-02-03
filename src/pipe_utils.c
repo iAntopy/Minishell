@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 02:19:04 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/01/29 23:30:39 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/02/02 21:05:40 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ int	close_fd(int *fd)
 {
 	if (fd && *fd >= 3)
 	{
-		//printf("close fd closing fd %d\n", *fd);
 		close(*fd);
 		*fd = -1;
 	}
