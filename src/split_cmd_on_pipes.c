@@ -6,14 +6,13 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/06 23:20:16 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/02/02 18:10:58 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/02/02 23:48:41 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 /// Splits on pipes respecting quote blocks
-
 static char	is_quote(char c, char *quote_switch)
 {
 	*quote_switch = '\0';
@@ -27,7 +26,6 @@ static int	node_counter(char *s)
 	int		wcount;
 	char	quote_switch;
 
-	//printf("node counter : entered \n");
 	if (!s || *s == '\0')
 		return (0);
 	wcount = ft_strncmp(s, " | ", 3) != 0;
@@ -49,7 +47,6 @@ static int	pipe_splitter(char **tab, char *str)
 	char	quote_switch;
 	char	*s;
 
-//	printf("pipe splitter : entered \n");
 	if (!str)
 		return (-1);
 	wcount = 0;
@@ -77,7 +74,6 @@ int	split_on_pipes(t_job *job)
 {
 	int		wcount;
 
-	//printf("split pipes : entered \n");
 	if (!job || !job->parsed)
 		return (-1);
 	job->pipe_split = NULL;

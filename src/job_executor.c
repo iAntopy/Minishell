@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 00:48:45 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/02/02 20:30:35 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/02/02 22:59:16 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@ static void	setup_child_redirections(t_cmd *cmd)
 	close_fd(&cmd->job->pp[0]);
 	if (cmd->redir_in)
 	{
-		printf("REDIR IN \n");
 		close_fd(&cmd->job->rd_pipe);
 		dup2(cmd->redir_in, STDIN_FILENO);
 	}

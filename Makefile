@@ -6,7 +6,7 @@
 #    By: tbeaudoi <tbeaudoi@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/16 01:26:25 by iamongeo          #+#    #+#              #
-#    Updated: 2023/01/31 22:41:52 by iamongeo         ###   ########.fr        #
+#    Updated: 2023/02/02 22:43:45 by iamongeo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,6 +18,7 @@ _SRC		=	msh_main.c			\
 			job_manager_main.c		\
 			meta_chars_utils.c		\
 			substitute_env_vars.c		\
+			substitute_env_vars_heredoc.c		\
 			syntax_validator.c		\
 			envp_utils.c			\
 			error_handling.c		\

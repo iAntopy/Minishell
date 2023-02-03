@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/16 01:39:11 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/02/02 20:25:24 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/02/03 00:03:58 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,9 +128,11 @@ char	*gen_tempname(char *tempfile, int heredoc_id);
 int		is_meta_char(char *c, int *mlen);
 int		contains_meta_char(char *str);
 int		spaceout_meta_chars(t_job *job);
-int		substitute_env_vars(t_msh *msh, t_job *job);
+int		is_valid_env_char(char c, int is_first);
+int		substitute_env_vars(t_msh *msh, char *str, char **ret);
+int		substitute_env_vars_heredoc(t_msh *msh, char *str, char **ret);
 int		split_on_pipes(t_job *job);
-char	**tokenize(t_job *job, char *cmd);
+//char	**tokenize(t_job *job, char *cmd);
 char	*skip_valid_envp_var_chars(char *var);
 
 // BUILTINS

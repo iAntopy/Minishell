@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strchr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iamongeo <marvin@42quebec.com>             +#+  +:+       +#+        */
+/*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/28 15:54:45 by iamongeo          #+#    #+#             */
-/*   Updated: 2022/09/21 23:03:11 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/02/02 22:42:19 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,5 +23,13 @@ char	*ft_strchr(const char *s, int c)
 		s++;
 	if (*s == cc)
 		return ((char *)s);
+	return (NULL);
+}
+
+char	*ft_strchr_p(const char *s, int c, char **ret)
+{
+	*ret = ft_strchr(s, c);
+	if (*ret)
+		return (*ret);
 	return (NULL);
 }
