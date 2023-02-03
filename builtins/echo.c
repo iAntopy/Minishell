@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 05:39:33 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/02/02 16:38:41 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/02/02 21:40:09 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	msh_builtin_echo(t_job *job, t_cmd *cmd)
 	i = 1;
 	if (!cmd->tokens[1])
 		return (printf("\n") & 0);
-	if (!ft_strncmp(cmd->tokens[1], "-n", 3))
+	while (!ft_strncmp(cmd->tokens[i], "-n", 3))
 		i++;
 	while (cmd->tokens[i])
 	{
@@ -37,5 +37,6 @@ int	msh_builtin_echo(t_job *job, t_cmd *cmd)
 	}
 	if (ft_strncmp(cmd->tokens[1], "-n", 3))
 		printf("\n");
-	return (0);
+	job->msh->exit_status = 0;
+	return (job->msh->exit_status);
 }

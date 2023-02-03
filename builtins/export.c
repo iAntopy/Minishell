@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 08:22:03 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/02/02 21:02:04 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/02/02 21:39:49 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,11 +96,12 @@ static void	no_arg_export_cmd(t_job *job)
 
 int	msh_builtin_export(t_job *job, t_cmd *cmd)
 {
+	job->msh->exit_status = 0;
 	if (cmd->tokens == NULL)
 		return (-1);
 	if (cmd->tokens[1] == NULL)
 		no_arg_export_cmd(job);
 	if (pre_parse(job, cmd->tokens) < 0)
-		return (-1);
-	return (0);
+		return (job->msh->exit_status);
+	return (job->msh->exit_status);
 }

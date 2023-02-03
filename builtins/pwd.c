@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tbeaudoi <tbeaudoi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 05:06:50 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/01/30 18:52:20 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/02/02 19:46:53 by tbeaudoi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,5 +22,6 @@ int	msh_builtin_pwd(t_job *job, t_cmd *cmd)
 	if (getcwd(buff, PATH_MAX + 1) == NULL)
 		return (-1);
 	ft_printf("%s\n", buff);
-	return (0);
+	job->msh->exit_status = 0;
+	return (job->msh->exit_status);
 }

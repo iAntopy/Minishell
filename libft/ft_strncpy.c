@@ -6,7 +6,7 @@
 /*   By: iamongeo <marvin@42quebec.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/01 20:41:48 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/02/01 20:52:05 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/02/02 21:41:00 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 char	*ft_strncpy(char *dst, const char *src, size_t n)
 {
 	char	*d;
+	
 	if (!dst || !src)
 		return (NULL);
 	d = dst;

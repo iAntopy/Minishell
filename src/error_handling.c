@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error_handling.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tbeaudoi <tbeaudoi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 07:27:37 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/02/01 00:22:51 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/02/02 18:39:17 by tbeaudoi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ int	report_max_nb_cmds_exceeded(t_job *job)
 
 int	report_file_error(char *filename, t_cmd *cmd)//int *doa_flag)
 {
-	ft_eprintf("minishell error :: %s : %s\n", strerror(errno), filename);
+	ft_eprintf("Minishell error :: %s : %s\n", strerror(errno), filename);
 	cmd->doa = 1;
 	cmd->job->msh->exit_status = errno;
 	return (-1);
