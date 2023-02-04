@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/16 19:16:03 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/02/02 19:31:26 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/02/03 22:51:44 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,30 +39,37 @@ int	msh_init(t_msh *msh, char **envp)
 	return (0);
 }
 
+t_msh	*get_msh(void)
+{
+	static t_msh	msh;
+
+	return (&msh);
+}
+
 int	main(int argc, char **argv, char **envp)
 {
-	t_msh	msh;
+	t_msh	*msh;
 
 	(void)argc;
 	(void)argv;
-	ft_memclear(&msh, sizeof(t_msh));
-	if (msh_init(&msh, envp) < 0)
-		return (msh_clear(&msh, E_MSH_INIT));
-	while (!msh.request_exit)
+	msh = get_msh();
+//	ft_memclear(&msh, sizeof(t_msh));
+	if (msh_init(msh, envp) < 0)
+		return (msh_clear(msh, E_MSH_INIT));
+	while (!msh->request_exit)
 	{
-		msh.exec_status = INTERAC_MODE;
-		handlers_control(&msh);
-		if (msh.rawline)
-			msh_clear(&msh, E_RAWLINE_CLR_ERR);
-		msh.rawline = readline(READLINE_PROMPT);
-		if (msh.rawline == NULL)
+		handlers_control(msh, INTERAC_MODE);
+		if (msh->rawline)
+			msh_clear(msh, E_RAWLINE_CLR_ERR);
+		msh->rawline = readline(READLINE_PROMPT);
+		if (msh->rawline == NULL)
 			break ;
-		if (msh.rawline[0] != '\0')
+		if (msh->rawline[0] != '\0')
 		{
-			add_history(msh.rawline);
-			job_manager(&msh);
+			add_history(msh->rawline);
+			job_manager(msh);
 		}
-		ft_free_p((void **)&msh.rawline);
+		ft_free_p((void **)&msh->rawline);
 	}
-	return (msh_clear(&msh, msh.shell_exit_status));
+	return (msh_clear(msh, msh->shell_exit_status));
 }

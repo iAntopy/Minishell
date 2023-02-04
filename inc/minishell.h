@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/16 01:39:11 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/02/03 00:03:58 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/02/03 22:18:29 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,8 @@ typedef struct s_minishell_data
 	int		shell_exit_status;
 	int		request_exit;
 	int		exec_status;
+	int		hd_pid;
+	int		tmp_fd;
 	char	nbr_buff[24];
 	int		nbr_buff_len;
 	int		stdin_fd;
@@ -85,7 +87,8 @@ typedef struct s_minishell_data
 enum	e_exec_status
 {
 	INTERAC_MODE = 0,
-	EXEC_MODE = 1
+	EXEC_MODE = 1,
+	HEREDOC_MODE = 2
 };
 
 enum	e_err_codes
@@ -107,6 +110,7 @@ enum	e_builtin_status
 void	print_all_cmds(t_job *job);// in tokenizer_redirector.c
 
 // JOB MANAGER
+t_msh	*get_msh(void);
 int		job_manager(t_msh *msh);
 int		job_executor(t_job *job);
 int		validate_syntax(char *line, int *exit_status);
@@ -134,6 +138,7 @@ int		substitute_env_vars_heredoc(t_msh *msh, char *str, char **ret);
 int		split_on_pipes(t_job *job);
 //char	**tokenize(t_job *job, char *cmd);
 char	*skip_valid_envp_var_chars(char *var);
+int		strip_quotes(char *str);
 
 // BUILTINS
 int		msh_builtin_echo(t_job *job, t_cmd *cmd);
@@ -168,7 +173,7 @@ int		report_cmd_not_found(char *cmdname, t_cmd *cmd, int exit_code);
 int		report_unclosed_quotes(void);
 
 // SIGNALS
-void	handlers_control(t_msh *msh);
+void	handlers_control(t_msh *msh, int mode);
 void	sig_handler(int signum, siginfo_t *info, void *context);
 
 #endif

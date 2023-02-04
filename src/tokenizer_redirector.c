@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer_redirector.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tbeaudoi <tbeaudoi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/20 20:54:13 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/02/02 21:38:52 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/02/03 20:36:54 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,24 @@ void	print_all_cmds(t_job *job)
 	}
 }
 */
+int	strip_quotes(char *s)
+{
+	char	*quote;
+	size_t	len;
+
+	printf("strip_quotes : init string : %s\n", s);
+	quote = ft_strchr_set(s, "\'\"");
+	while (quote)
+	{
+		printf("str : %s\n", s);
+		len = ft_strlen(quote + 1);
+		ft_memcpy(quote, quote + 1, len);
+		quote[len - 1] = '\0';
+		quote = ft_strchr_set(s, "\'\"");
+	}
+	printf("strip_quotes : end string : %s\n", s);
+	return (0);
+}
 
 static int	apply_redirections_for_single_cmd(t_cmd *cmd)
 {

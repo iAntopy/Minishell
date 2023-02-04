@@ -3,13 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strncmp.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iamongeo <marvin@42quebec.com>             +#+  +:+       +#+        */
+/*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/28 15:53:40 by iamongeo          #+#    #+#             */
-/*   Updated: 2022/04/14 16:35:12 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/02/03 22:26:20 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include "libft.h"
+
 
 int	ft_strncmp(const char *s1, const char *s2, size_t n)
 {

@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/05 00:26:12 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/02/02 23:47:21 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/02/03 22:51:59 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ static int	job_init(t_msh *msh)
 {
 	t_job	*job;
 
-	strtab_clear(&msh->paths);
+	strtab_clear(&msh->paths);	
 	msh->paths = get_env_paths(msh->envp);
 	if (!msh->paths)
 		return (report_jm_mlc_err(__FUNCTION__));
@@ -70,6 +70,7 @@ int	job_manager(t_msh *msh)
 {
 	t_job	*job;
 
+	printf("main pid : %d\n", getpid());
 	job = &msh->job;
 	if (job_init(msh) < 0)
 		return (job_clear(job, -1));
@@ -86,6 +87,7 @@ int	job_manager(t_msh *msh)
 		job->sc = substring_substitution(job->parsed, &job->parsed2);
 	if (job->sc < 0 || free_swap_lines(job))
 		return (job_clear(job, report_jm_mlc_err(__FUNCTION__)));
+	handlers_control(job->msh, EXEC_MODE);
 	if (split_on_pipes(job) < 0 || setup_cmds(job) < 0 || job_executor(job) < 0)
 		return (job_clear(job, -1));
 	return (job_clear(job, job->msh->exit_status));
