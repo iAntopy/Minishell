@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/20 20:54:13 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/02/05 00:42:54 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/02/05 07:01:16 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@ int	strip_quotes(char *s)
 	char	*quote;
 	size_t	len;
 
-	printf("strip_quotes : init string : %s\n", s);
 	quote = ft_strchr_set(s, "\'\"");
 	while (quote)
 	{
@@ -41,7 +40,6 @@ int	strip_quotes(char *s)
 		quote[len - 1] = '\0';
 		quote = ft_strchr_set(s, "\'\"");
 	}
-	printf("strip_quotes : end string : %s\n", s);
 	return (0);
 }
 

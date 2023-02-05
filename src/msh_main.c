@@ -6,11 +6,26 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/16 19:16:03 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/02/05 01:12:24 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/02/05 07:28:47 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+static int	msh_clear_pipelines(t_msh *msh, int return_value)
+{
+	int	i;
+
+	i = 0;
+	while (i < msh->nb_plns)
+	{
+		ft_free_p((void **)&msh->pipelines[i]);
+		msh->pl_meta_bools[i] = 0;
+		i++;
+	}
+	msh->nb_plns = 0;
+	return (return_value);
+}
 
 int	msh_clear(t_msh *msh, int exit_code)
 {
@@ -23,10 +38,10 @@ int	msh_clear(t_msh *msh, int exit_code)
 	rl_clear_history();
 	close_fd(&msh->stdin_fd);
 	close_fd(&msh->stdout_fd);
-	return (exit_code);
+	return (msh_clear_pipelines(msh, exit_code));
 }
 
-int	msh_init(t_msh *msh, char **envp)
+static int	msh_init(t_msh *msh, char **envp)
 {
 	if (!msh || !envp)
 		return (report_missing_input(__FUNCTION__));
@@ -46,6 +61,27 @@ t_msh	*get_msh(void)
 	return (&msh);
 }
 
+static int	msh_pipelines_manager(t_msh *msh)
+{
+	int	i;
+	int	bl;
+
+	if (validate_syntax(msh->rawline, &msh->exit_status) < 0
+		|| split_on_bools(msh) < 0)
+		return (msh_clear_pipelines(msh, -1));
+	i = -1;
+	while (++i < msh->nb_plns && msh->exit_status != EXIT_SIGINT)
+	{
+		bl = msh->pl_meta_bools[i];
+		if (job_manager(msh, msh->pipelines[i]) < 0)
+			break ;
+		if (bl && ((bl == BOOL_AND && msh->exit_status != EXIT_SUCCESS)
+			|| (bl == BOOL_OR && msh->exit_status == EXIT_SUCCESS)))
+			break ;
+	}
+	return (msh_clear_pipelines(msh, 0));
+}
+
 int	main(int argc, char **argv, char **envp)
 {
 	t_msh	*msh;
@@ -53,7 +89,6 @@ int	main(int argc, char **argv, char **envp)
 	(void)argc;
 	(void)argv;
 	msh = get_msh();
-//	ft_memclear(&msh, sizeof(t_msh));
 	if (msh_init(msh, envp) < 0)
 		return (msh_clear(msh, E_MSH_INIT));
 	while (!msh->request_exit)
@@ -64,10 +99,10 @@ int	main(int argc, char **argv, char **envp)
 		msh->rawline = readline(READLINE_PROMPT);
 		if (msh->rawline == NULL)
 			break ;
-		if (msh->rawline[0] != '\0')
+		if (msh->rawline[0] != '\0' && *skip_spaces(&msh->rawline, 0, 0) != '\0')
 		{
 			add_history(msh->rawline);
-			job_manager(msh);
+			msh_pipelines_manager(msh);
 		}
 		ft_free_p((void **)&msh->rawline);
 	}

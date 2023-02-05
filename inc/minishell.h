@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/16 01:39:11 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/02/05 01:09:40 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/02/05 07:00:16 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@
 # define READLINE_PROMPT "minishell> "
 # define _META_CHARS "<>|&*"
 # define MAX_CMDS 1024
+# define MAX_PIPELINES 128
 # define HDOC_SIZE 0xffffff
 //# define E_REDIRECT_FAILED SIZE_MAX
 
@@ -83,6 +84,9 @@ typedef struct s_minishell_data
 	int		nbr_buff_len;
 	int		stdin_fd;
 	int		stdout_fd;
+	char	*pipelines[MAX_PIPELINES];
+	int		pl_meta_bools[MAX_PIPELINES];
+	int		nb_plns;
 }	t_msh;
 
 enum	e_exec_status
@@ -107,12 +111,23 @@ enum	e_builtin_status
 	BUILTIN_NOT_FOUND = -2
 };
 
+enum	e_boolean_meta_chars_markers
+{
+	BOOL_AND = 0xf0,
+	BOOL_OR = 0xf1
+};
+
+enum	e_signal_exit_codes
+{
+	EXIT_SIGINT = 3
+};
+
 // DEBUG FUNCTIONS (DELETE)
 void	print_all_cmds(t_job *job);// in tokenizer_redirector.c
 
 // JOB MANAGER
 t_msh	*get_msh(void);
-int		job_manager(t_msh *msh);
+int		job_manager(t_msh *msh, char *rawline);
 int		job_executor(t_job *job);
 int		validate_syntax(char *line, int *exit_status);
 //int		validate_meta_char_syntax(char *line);
@@ -136,9 +151,11 @@ int		spaceout_meta_chars(t_job *job);
 int		is_valid_env_char(char c, int is_first);
 int		substitute_env_vars(t_msh *msh, char *str, char **ret);
 int		substitute_env_vars_heredoc(t_msh *msh, char *str, char **ret);
+int		split_on_bools(t_msh *msh);//, t_job *job);
 int		split_on_pipes(t_job *job);
 //char	**tokenize(t_job *job, char *cmd);
 char	*skip_valid_envp_var_chars(char *var);
+char	*skip_spaces(char **line, int init_offset, int chg_inplace);
 int		strip_quotes(char *str);
 
 // BUILTINS
@@ -170,6 +187,7 @@ int		report_pipe_err(const char *fn);
 int		report_parsing_error(const char *fn, char *meta_c, int len);
 int		report_builtin_failure(const char *fn);
 int		report_max_nb_cmds_exceeded(t_job *job);
+int		report_max_nb_pipelines_exceeded(t_msh *msh);
 int		report_cmd_not_found(char *cmdname, t_cmd *cmd, int exit_code);
 int		report_unclosed_quotes(void);
 

@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 20:33:23 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/02/05 01:39:52 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/02/05 07:40:10 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,11 +94,11 @@ static void	sig_handler_heredoc_child(int signum)
 		printf("SIGINT handled by heredoc child\n");
 		job_clear(&msh->job, 0);
 		msh_clear(msh, 0);
-		exit(3);
+		exit(EXIT_SIGINT);
 	}
 }
 
-static void	hd_rl_env_sub(t_msh *msh, t_cmd *cmd, char *limiter, char *tmp)//, char **ret_line)
+static void	hd_rl_env_sub(t_msh *msh, t_cmd *cmd, char *limiter, char *tmp)
 {
 	char	*rl;
 	char	*nrl;
@@ -107,34 +107,27 @@ static void	hd_rl_env_sub(t_msh *msh, t_cmd *cmd, char *limiter, char *tmp)//, c
 	printf("CHILD : entered \n");
 	msh->is_hd_child = 1;
 	signal(SIGINT, sig_handler_heredoc_child);
-	printf("CHILD : opening tmpfile %s\n", tmp);
 	cmd->job->tmp_fd = open(tmp, O_CREAT | O_TRUNC | O_WRONLY, 0644);
 	if (cmd->job->tmp_fd < 0)
 	{
-		printf("heredoc CHILD : open tmpfile %s failed\n", tmp);
+		ft_eprintf("minishell :: heredoc tmpfile critical failure\n");
 		exit(job_clear(cmd->job, 0) | msh_clear(cmd->job->msh, -1));
 	}
-	printf("CHILD : tmpfile fd %d opened\n", cmd->job->tmp_fd);
 	limlen = ft_strlen(limiter);
 	rl = NULL;
 	nrl = NULL;
 	while (ft_free_p((void **)&rl) && ft_free_p((void **)&nrl))
 	{
-		printf("CHILD : readline \n");
 		rl = readline("> ");
-		printf("CHILD : readline done\n");
-
 		if (!rl)
 		{
 			printf("heredoc CHILD : rl == NULL. SIGQUIT received\n");
-			//exit(close_pipe(&fd, &cmd->redir_in) + 1);
-			exit(job_clear(cmd->job, 0) | msh_clear(msh, 1));
+			exit(job_clear(cmd->job, 0) | msh_clear(msh, 0));
 		}
 		if (substitute_env_vars_heredoc(msh, rl, &nrl) < 0)
 			exit(job_clear(cmd->job, 0) | msh_clear(msh, -1));
 		if (ft_strncmp(rl, limiter, limlen) == 0)
 			break ;
-		printf("heredoc CHILD rl != limiter : writing to tmp_fd\n");
 		write(cmd->job->tmp_fd, nrl, ft_strlen(nrl));
 	}
 	printf("CHILD : quit while\n");
@@ -152,6 +145,7 @@ int	get_heredoc_input(t_msh *msh, t_cmd *cmd, char **tks_p)
 
 //	cmd->job->msh->tmp_fd = open(gen_tempname(tmp, (*id_p)++),
 //		O_CREAT | O_TRUNC | O_WRONLY, 0644);
+	printf("Get heredoc input entered \n");
 	gen_tempname(tmp, msh->hd_id++);
 	if (cmd->job->tmp_fd < 0)
 		return (report_file_error(tmp, cmd));
@@ -167,12 +161,13 @@ int	get_heredoc_input(t_msh *msh, t_cmd *cmd, char **tks_p)
 	waitpid(msh->hd_pid, &status, 0);
 	handlers_control(msh, INTERAC_MODE);
 	printf("waitpid status : %d\n", WEXITSTATUS(status));
-	if (WEXITSTATUS(status) == 1)
-		printf("SIGQUIT occured in heredoc\n");
-	else if (WEXITSTATUS(status) == 3)
+
+//	if (WEXITSTATUS(status) == 1)
+//		printf("SIGQUIT occured in heredoc\n");
+	if (WEXITSTATUS(status) == EXIT_SIGINT)
 	{
 		printf("SIGINT occured in heredoc\n");
-//		cmd->doa = 1;
+		msh->exit_status = 130;
 		return (-1);
 	}
 	msh->hd_pid = 0;

@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/05 05:04:41 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/02/03 01:15:19 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/02/05 08:35:53 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,9 +84,8 @@ static size_t	find_subst_str_size(t_msh *msh, char *l, char **vals)
 	size = 0;
 	while (skip_open_quotes(&l, NULL, &size))
 	{
-		if (*l == '$' && !(*(l + 1) == '\'' || *(l + 1) == '\"'))
+		if (*l == '$' && *(l + 1) && !ft_strchr(" \'\"", *(l + 1)))// && !(*(l + 1) == '\'' || *(l + 1) == '\"'))
 		{
-			p = l;
 			p = skip_valid_envp_var_chars(l + 1);
 			ft_strncpy(var, l + 1, p - (l + 1));
 			*vals = msh_getenv(msh, var);
@@ -98,6 +97,7 @@ static size_t	find_subst_str_size(t_msh *msh, char *l, char **vals)
 		size++;
 		l++;
 	}
+	printf("find subst str size at exit : %zu\n", size);
 	return (size + 1);
 }
 
@@ -109,7 +109,7 @@ int	substitute_env_vars(t_msh *msh, char *s, char **ret)
 	int		v;
 //	char	qte;
 
-	//printf("sub entered\n");
+	printf("sub entered: s : %s : s len : %zu\n", s, ft_strlen(s));
 	ft_memclear(vals, sizeof(char *) * 1024);
 	if (!ft_malloc_p(find_subst_str_size(msh, s, (char **)vals), (void **)ret))
 		return (report_malloc_err(__FUNCTION__));
@@ -119,7 +119,7 @@ int	substitute_env_vars(t_msh *msh, char *s, char **ret)
 //	printf("WOWWY!\n");
 	while (*s)
 	{
-//		printf("whiling s : %s\n", s);
+		printf("whiling s : %s\n", s);
 	//	if (*s == '\'' || *s == '\"')
 	//		qte = (*s) * (qte == 0);
 		if (*s == '\'')
@@ -127,9 +127,9 @@ int	substitute_env_vars(t_msh *msh, char *s, char **ret)
 		//if (*s == '$' && qte != '\'' && *(s + 1) && !ft_strchr(" \'\"", *(s + 1)))
 		if (*s == '$' && *(s + 1) && !ft_strchr(" \'\"", *(s + 1)))
 		{
-//			printf("s env char before skip : %s\n", s);
+			printf("s env char before skip : %s\n", s);
 			s = skip_valid_envp_var_chars(s + 1);
-//			printf("s env char after skip : %s\n", s);
+			printf("s env char after skip : %s\n", s);
 //			printf("r val cpy before skip : %s\n", r);
 			r += ft_strlcpy(r, vals[v], ft_strlen(vals[v]) + 1);
 //			printf("r - 5 val cpy after skip : %s\n", r - 5);

@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 00:48:45 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/02/03 22:46:21 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/02/05 08:42:56 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static void	setup_child_redirections(t_cmd *cmd)
 	close_fd(&cmd->job->pp[0]);
 	if (cmd->redir_in)
 	{
-		printf("REDIR IN : %d -> %d\n", cmd->redir_in, 0);
+//		printf("REDIR IN : %d -> %d\n", cmd->redir_in, 0);
 		close_fd(&cmd->job->rd_pipe);
 		dup2(cmd->redir_in, STDIN_FILENO);
 	}
@@ -40,7 +40,7 @@ static void	setup_child_redirections(t_cmd *cmd)
 		dup2(cmd->job->rd_pipe, STDIN_FILENO);
 	if (cmd->redir_out)
 	{
-		printf("REDIR OUT : %d -> %d\n", cmd->redir_out, 1);
+//		printf("REDIR OUT : %d -> %d\n", cmd->redir_out, 1);
 		close_fd(&cmd->job->pp[1]);
 		dup2(cmd->redir_out, STDOUT_FILENO);
 	}
@@ -96,7 +96,10 @@ int	job_executor(t_job *job)
 		if (!job->cmds[0].doa)
 			setup_child_redirections(&job->cmds[0]);
 		if (!job->cmds[0].doa && job->cmds[0].builtin(job, &job->cmds[0]) != 0)
+		{
+			printf("job exec: builtin returned with exit code : %d\n", job->msh->exit_status);
 			return (report_builtin_failure(__FUNCTION__));
+		}
 		if (!job->cmds[0].doa && job->cmds[0].redir_in >= 3)
 			dup2(job->msh->stdin_fd, STDIN_FILENO);
 		if (!job->cmds[0].doa && job->cmds[0].redir_out >= 3)
@@ -108,7 +111,7 @@ int	job_executor(t_job *job)
 	i = -1;
 	while (++i < job->nb_cmds)
 		waitpid(job->cmds[i].pid, &job->msh->exit_status, 0);
-	printf("exec waitpid return \n");
+//	printf("exec waitpid return \n");
 //	job->msh->exec_status = INTERAC_MODE;
 	job->msh->exit_status = WEXITSTATUS(job->msh->exit_status);
 	return (0);

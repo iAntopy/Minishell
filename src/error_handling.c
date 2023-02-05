@@ -6,7 +6,7 @@
 /*   By: tbeaudoi <tbeaudoi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 07:27:37 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/02/02 18:39:17 by tbeaudoi         ###   ########.fr       */
+/*   Updated: 2023/02/05 05:06:33 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,13 @@ int	report_max_nb_cmds_exceeded(t_job *job)
 {
 	ft_eprintf("Minishell: Max number of cmds in pipeline exceeded : %d / %d\n",
 		job->nb_cmds, MAX_CMDS);
+	return (-1);
+}
+
+int	report_max_nb_pipelines_exceeded(t_msh *msh)
+{
+	ft_eprintf("Minishell: Max number of pipelines exceeded : %d / %d\n",
+		msh->nb_plns, MAX_PIPELINES);
 	return (-1);
 }
 
