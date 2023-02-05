@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/20 20:54:13 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/02/03 20:36:54 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/02/05 00:42:54 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ static int	apply_redirections_for_single_cmd(t_cmd *cmd)
 	{
 		status = 0;
 		if (ft_strncmp(tks[i], "<<", 2) == 0)
-			status = get_heredoc_input(cmd, tks + i, &cmd->job->heredoc_id);
+			status = get_heredoc_input(cmd->job->msh, cmd, tks + i);
 		else if (ft_strncmp(tks[i], ">>", 2) == 0)
 			status = redirect_outfile(cmd, tks + i, O_APPEND);
 		else if (ft_strncmp(tks[i], "<", 1) == 0)

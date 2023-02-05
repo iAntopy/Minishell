@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/05 00:26:12 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/02/03 22:51:59 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/02/05 01:15:17 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,10 @@ int	job_clear(t_job *job, int return_status)
 		close_pipe(&job->cmds[i].redir_in, &job->cmds[i].redir_out);
 	}
 	close_pipe(job->pp, job->pp + 1);
-	close_pipe(&job->rd_pipe, NULL);
-	while (job->heredoc_id > 0)
-		unlink(gen_tempname(tempname, --job->heredoc_id));
+	close_pipe(&job->rd_pipe, &job->tmp_fd);
+	if (!job->msh->is_hd_child)
+		while (job->msh->hd_id > 0)
+			unlink(gen_tempname(tempname, --job->msh->hd_id));
 	return (return_status);
 }
 
@@ -70,7 +71,7 @@ int	job_manager(t_msh *msh)
 {
 	t_job	*job;
 
-	printf("main pid : %d\n", getpid());
+//	printf("main pid : %d\n", getpid());
 	job = &msh->job;
 	if (job_init(msh) < 0)
 		return (job_clear(job, -1));

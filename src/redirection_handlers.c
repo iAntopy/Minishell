@@ -6,17 +6,26 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 20:33:23 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/02/03 23:01:28 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/02/05 01:39:52 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+static void	remove_redir_token(char **tks_p)
+{
+	int	cur_len;
+
+	cur_len = strtab_len(tks_p);
+	ft_free_p((void **)tks_p);
+	ft_memmove(tks_p, tks_p + 1, (cur_len - 1) * sizeof(char *));
+	tks_p[cur_len - 1] = NULL;
+}
+
 int	redirect_infile(t_cmd *cmd, char **tks_p)
 {
 	char	*filename;
 	int		fd;
-	int		cur_len;
 
 	if (!tks_p)
 		return (-1);
@@ -29,10 +38,11 @@ int	redirect_infile(t_cmd *cmd, char **tks_p)
 	if (fd < 0)
 		return (report_file_error(filename, cmd));
 	cmd->redir_in = fd;
-	cur_len = strtab_len(tks_p);
-	ft_free_p((void **)tks_p);
-	ft_memmove(tks_p, tks_p + 1, (cur_len - 1) * sizeof(char *));
-	tks_p[cur_len - 1] = NULL;
+	remove_redir_token(tks_p);
+//	cur_len = strtab_len(tks_p);
+//	ft_free_p((void **)tks_p);
+//	ft_memmove(tks_p, tks_p + 1, (cur_len - 1) * sizeof(char *));
+//	tks_p[cur_len - 1] = NULL;
 	return (1);
 }
 
@@ -40,12 +50,12 @@ int	redirect_outfile(t_cmd *cmd, char **tks_p, int add_mode)
 {
 	char	*filename;
 	int		fd;
-	int		cur_len;
+	int		mlen;
 
 	if (!tks_p)
 		return (-1);
-	is_meta_char(*tks_p, &cur_len);
-	filename = *tks_p + cur_len;
+	is_meta_char(*tks_p, &mlen);
+	filename = *tks_p + mlen;
 	strip_quotes(filename);
 	close_fd(&cmd->redir_out);
 	if (access(filename, F_OK) == 0 && access(filename, W_OK) < 0)
@@ -54,94 +64,125 @@ int	redirect_outfile(t_cmd *cmd, char **tks_p, int add_mode)
 	if (fd < 0)
 		return (report_file_error(filename, cmd));
 	cmd->redir_out = fd;
-	cur_len = strtab_len(tks_p);
-	ft_free_p((void **)tks_p);
-	ft_memmove(tks_p, tks_p + 1, (cur_len - 1) * sizeof(char *));
-	tks_p[cur_len - 1] = NULL;
+	remove_redir_token(tks_p);
+//	cur_len = strtab_len(tks_p);
+//	ft_free_p((void **)tks_p);
+//	ft_memmove(tks_p, tks_p + 1, (cur_len - 1) * sizeof(char *));
+//	tks_p[cur_len - 1] = NULL;
 	return (1);
 }
 
-char	*gen_tempname(char *tempfile, int id)
+char	*gen_tempname(char *tmpfile, int id)
 {
 	char	*base_end;
 	char	*num_end;
 
-	base_end = tempfile + 12;
-	ft_strlcpy(tempfile, "tmp/.heredoc", PATH_MAX);
+	base_end = tmpfile + 12;
+	ft_strlcpy(tmpfile, "tmp/.heredoc", PATH_MAX);
 	num_end = base_end + ft_putnbr_buff(base_end, id);
 	ft_strlcpy(num_end, ".tmp", PATH_MAX);
-	return (tempfile);
+	return (tmpfile);
 }
 
+static void	sig_handler_heredoc_child(int signum)
+{
+	t_msh	*msh;
 
-static void	hd_rl_env_sub(t_cmd *cmd, char *limiter, int fd)//, char **ret_line)
+	if (signum == SIGINT)
+	{
+		msh = get_msh();
+		printf("SIGINT handled by heredoc child\n");
+		job_clear(&msh->job, 0);
+		msh_clear(msh, 0);
+		exit(3);
+	}
+}
+
+static void	hd_rl_env_sub(t_msh *msh, t_cmd *cmd, char *limiter, char *tmp)//, char **ret_line)
 {
 	char	*rl;
 	char	*nrl;
+	ssize_t	limlen;
 
 	printf("CHILD : entered \n");
+	msh->is_hd_child = 1;
+	signal(SIGINT, sig_handler_heredoc_child);
+	printf("CHILD : opening tmpfile %s\n", tmp);
+	cmd->job->tmp_fd = open(tmp, O_CREAT | O_TRUNC | O_WRONLY, 0644);
+	if (cmd->job->tmp_fd < 0)
+	{
+		printf("heredoc CHILD : open tmpfile %s failed\n", tmp);
+		exit(job_clear(cmd->job, 0) | msh_clear(cmd->job->msh, -1));
+	}
+	printf("CHILD : tmpfile fd %d opened\n", cmd->job->tmp_fd);
+	limlen = ft_strlen(limiter);
 	rl = NULL;
 	nrl = NULL;
-	while (1)
+	while (ft_free_p((void **)&rl) && ft_free_p((void **)&nrl))
 	{
 		printf("CHILD : readline \n");
 		rl = readline("> ");
 		printf("CHILD : readline done\n");
 
 		if (!rl)
-			exit(close_pipe(&fd, &cmd->redir_in) + 1);
-		if (substitute_env_vars_heredoc(cmd->job->msh, rl, &nrl) < 0)
-			exit(-1);
-		if (ft_strncmp(rl, limiter, ft_strlen(limiter)) == 0)
+		{
+			printf("heredoc CHILD : rl == NULL. SIGQUIT received\n");
+			//exit(close_pipe(&fd, &cmd->redir_in) + 1);
+			exit(job_clear(cmd->job, 0) | msh_clear(msh, 1));
+		}
+		if (substitute_env_vars_heredoc(msh, rl, &nrl) < 0)
+			exit(job_clear(cmd->job, 0) | msh_clear(msh, -1));
+		if (ft_strncmp(rl, limiter, limlen) == 0)
 			break ;
-		write(fd, nrl, ft_strlen(nrl));
-		ft_free_p((void **)&rl);
-		ft_free_p((void **)&nrl);
+		printf("heredoc CHILD rl != limiter : writing to tmp_fd\n");
+		write(cmd->job->tmp_fd, nrl, ft_strlen(nrl));
 	}
 	printf("CHILD : quit while\n");
 	ft_free_p((void **)&rl);
-	close_pipe(&fd, &cmd->redir_in);
-	exit(job_clear(cmd->job, 0) | msh_clear(cmd->job->msh, 0));
+	ft_free_p((void **)&nrl);
+	close_pipe(&cmd->job->tmp_fd, &cmd->redir_in);
+	exit(job_clear(cmd->job, 0) | msh_clear(msh, 0));
 }
 
-int	get_heredoc_input(t_cmd *cmd, char **tks_p, int *id_p)
+int	get_heredoc_input(t_msh *msh, t_cmd *cmd, char **tks_p)
 {
 	char	*limiter;
-//	int		fd;
-//	char	*rl;
 	char	tmp[PATH_MAX];
-	int		cur_len;
 	int		status;
 
-	cmd->job->msh->tmp_fd = open(gen_tempname(tmp, (*id_p)++),
-		O_CREAT | O_TRUNC | O_WRONLY, 0644);
-	if (cmd->job->msh->tmp_fd < 0)
+//	cmd->job->msh->tmp_fd = open(gen_tempname(tmp, (*id_p)++),
+//		O_CREAT | O_TRUNC | O_WRONLY, 0644);
+	gen_tempname(tmp, msh->hd_id++);
+	if (cmd->job->tmp_fd < 0)
 		return (report_file_error(tmp, cmd));
 	limiter = *tks_p + 2;
 	strip_quotes(limiter);
-
-	handlers_control(cmd->job->msh, HEREDOC_MODE);
-	cmd->job->msh->hd_pid = fork();
-	if (cmd->job->msh->hd_pid < 0)
+	handlers_control(msh, HEREDOC_MODE);
+	msh->hd_pid = fork();
+	if (msh->hd_pid < 0)
 		return (report_fork_err(__FUNCTION__));
-	if (cmd->job->msh->hd_pid == 0)
-		hd_rl_env_sub(cmd, limiter, cmd->job->msh->tmp_fd);
+	if (msh->hd_pid == 0)
+		hd_rl_env_sub(msh, cmd, limiter, tmp);
 
-	waitpid(cmd->job->msh->hd_pid, &status, 0);
-
+	waitpid(msh->hd_pid, &status, 0);
+	handlers_control(msh, INTERAC_MODE);
 	printf("waitpid status : %d\n", WEXITSTATUS(status));
-	if (status == 1)
+	if (WEXITSTATUS(status) == 1)
 		printf("SIGQUIT occured in heredoc\n");
-	else if (status == 3)
+	else if (WEXITSTATUS(status) == 3)
+	{
 		printf("SIGINT occured in heredoc\n");
-
-	cmd->job->msh->hd_pid = 0;
-	handlers_control(cmd->job->msh, INTERAC_MODE);
-	close_pipe(&cmd->redir_in, &cmd->job->msh->tmp_fd);
-	cmd->redir_in = open(tmp, O_RDONLY);//cmd->job->msh->tmp_fd;
-	cur_len = strtab_len(tks_p);
-	ft_free_p((void **)tks_p);
-	ft_memmove(tks_p, tks_p + 1, (cur_len - 1) * sizeof(char *));
-	tks_p[cur_len - 1] = NULL;
+//		cmd->doa = 1;
+		return (-1);
+	}
+	msh->hd_pid = 0;
+	close_fd(&cmd->redir_in);
+	cmd->redir_in = open(tmp, O_RDONLY);
+	if (cmd->redir_in < 0)
+	{
+		perror("heredoc PARENT : failed to open tmpfile");
+		return (-1);
+	}
+	remove_redir_token(tks_p);
 	return (1);
 }

@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/16 01:39:11 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/02/03 22:18:29 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/02/05 01:09:40 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,10 +59,10 @@ typedef struct s_job
 	char	*parsed2;
 	char	**pipe_split;
 	t_cmd	cmds[MAX_CMDS];
-	int		heredoc_id;
 	int		nb_cmds;
 	int		pp[2];
 	int		rd_pipe;
+	int		tmp_fd;
 }	t_job;
 
 //exec_status = interactive mode/execution mode. Used for signals.
@@ -76,8 +76,9 @@ typedef struct s_minishell_data
 	int		shell_exit_status;
 	int		request_exit;
 	int		exec_status;
+	int		is_hd_child;
+	int		hd_id;
 	int		hd_pid;
-	int		tmp_fd;
 	char	nbr_buff[24];
 	int		nbr_buff_len;
 	int		stdin_fd;
@@ -125,7 +126,7 @@ int		setup_cmds(t_job *job);
 // REDIRECTION HANDLERS
 int		redirect_infile(t_cmd *cmd, char **tks_p);
 int		redirect_outfile(t_cmd *cmd, char **tks_p, int add_mode);
-int		get_heredoc_input(t_cmd *cmd, char **token_p, int *heredoc_id);
+int		get_heredoc_input(t_msh *msh, t_cmd *cmd, char **token_p);
 char	*gen_tempname(char *tempfile, int heredoc_id);
 
 // PARSING UTILS

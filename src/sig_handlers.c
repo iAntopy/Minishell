@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/12 20:01:38 by tbeaudoi          #+#    #+#             */
-/*   Updated: 2023/02/03 23:08:31 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/02/05 01:17:12 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void	sig_handler_heredoc(int signum, siginfo_t *info, void *context)
 	msh = get_msh();
 	if (signum == SIGINT)
 	{
-		close_fd(&msh->tmp_fd);
+		close_fd(&msh->job.tmp_fd);
 		//write(1, "\n", 1);
 		//rl_on_new_line();
 		kill(msh->hd_pid, SIGQUIT);
