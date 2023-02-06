@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tbeaudoi <tbeaudoi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/16 01:39:11 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/02/02 20:25:24 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/02/06 12:30:19 by tbeaudoi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ typedef struct s_job
 	int		nb_cmds;
 	int		pp[2];
 	int		rd_pipe;
+	int		tmp_fd;
 }	t_job;
 
 //exec_status = interactive mode/execution mode. Used for signals.
@@ -76,16 +77,22 @@ typedef struct s_minishell_data
 	int		shell_exit_status;
 	int		request_exit;
 	int		exec_status;
+	int		hd_id;
+	int		hd_pid;
 	char	nbr_buff[24];
 	int		nbr_buff_len;
 	int		stdin_fd;
 	int		stdout_fd;
+	char	*pipelines[MAX_PIPELINES];
+	int		pl_meta_bools[MAX_PIPELINES];
+	int		nb_plns;
 }	t_msh;
 
 enum	e_exec_status
 {
 	INTERAC_MODE = 0,
-	EXEC_MODE = 1
+	EXEC_MODE = 1,
+	HEREDOC_MODE = 2
 };
 
 enum	e_err_codes
@@ -107,6 +114,7 @@ enum	e_builtin_status
 void	print_all_cmds(t_job *job);// in tokenizer_redirector.c
 
 // JOB MANAGER
+t_msh	*get_msh(void);
 int		job_manager(t_msh *msh);
 int		job_executor(t_job *job);
 int		validate_syntax(char *line, int *exit_status);
@@ -166,7 +174,7 @@ int		report_cmd_not_found(char *cmdname, t_cmd *cmd, int exit_code);
 int		report_unclosed_quotes(void);
 
 // SIGNALS
-void	handlers_control(t_msh *msh);
+void	handlers_control(t_msh *msh, int mode);
 void	sig_handler(int signum, siginfo_t *info, void *context);
 
 #endif

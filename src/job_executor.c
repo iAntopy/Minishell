@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   job_executor.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tbeaudoi <tbeaudoi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 00:48:45 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/02/02 20:30:35 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/02/03 20:18:25 by tbeaudoi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,8 @@ int	job_executor(t_job *job)
 
 	if (!job)
 		return (report_missing_input(__FUNCTION__));
+	// job->msh->exec_status = EXEC_MODE;
+	// handlers_control(job->msh);
 	if (job->nb_cmds == 1 && job->cmds[0].builtin)
 	{
 		if (!job->cmds[0].doa)
@@ -103,7 +105,6 @@ int	job_executor(t_job *job)
 	}
 	if (fork_child_processes(job) < 0)
 		return (-1);
-	job->msh->exec_status = EXEC_MODE;
 	i = -1;
 	while (++i < job->nb_cmds)
 		waitpid(job->cmds[i].pid, &job->msh->exit_status, 0);

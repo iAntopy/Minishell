@@ -6,7 +6,7 @@
 /*   By: tbeaudoi <tbeaudoi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 04:08:20 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/02/02 20:32:30 by tbeaudoi         ###   ########.fr       */
+/*   Updated: 2023/02/06 12:21:22 by tbeaudoi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,7 @@ int	msh_builtin_exit(t_job *job, t_cmd *cmd)
 	int	exit_status;
 	int	must_exit;	
 
+	job->msh->exit_status = 0;
 	if (!job || !cmd->tokens)
 		return (-1);
 	ft_eprintf("exit\n");
