@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   syntax_validator.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tbeaudoi <tbeaudoi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/20 18:45:09 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/02/06 03:06:34 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/02/06 15:42:16 by tbeaudoi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	report_syntax_error(char *near, int mlen, int *exit_status, char quote)
 			report_unclosed_quotes();
 		else
 			ft_eprintf("minishell: syntax error near \
-				unexpected token 'newline'\n");
+unexpected token 'newline'\n");
 	}
 	else
 	{

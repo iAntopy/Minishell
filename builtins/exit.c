@@ -6,7 +6,7 @@
 /*   By: tbeaudoi <tbeaudoi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 04:08:20 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/02/02 20:32:30 by tbeaudoi         ###   ########.fr       */
+/*   Updated: 2023/02/06 13:00:35 by tbeaudoi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 static int	report_exit_too_many_args(t_job *job)
 {
 	ft_eprintf("minishell: exit: too many arguments\n");
-	job->msh->exit_status = 255;
+	job->msh->exit_status = 1;
 	return (-1);
 }
 
@@ -70,6 +70,7 @@ int	msh_builtin_exit(t_job *job, t_cmd *cmd)
 	int	exit_status;
 	int	must_exit;	
 
+	job->msh->exit_status = 0;
 	if (!job || !cmd->tokens)
 		return (-1);
 	ft_eprintf("exit\n");
