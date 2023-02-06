@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/02 16:47:43 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/02/02 23:46:55 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/02/06 02:59:33 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 int	is_meta_char(char *c, int *len)
 {
-	const int	meta_lens[8] = {2, 2, 1, 1, 2, 1, 2, 1};
-	const char	*meta_chars[9] = {
-		"<<", ">>", "<", ">", "||", "|", "&&", "*", NULL};
+	const int	meta_lens[7] = {2, 2, 1, 1, 2, 1, 2};
+	const char	*meta_chars[8] = {
+		"<<", ">>", "<", ">", "||", "|", "&&", NULL};
 	int			i;
 
 	if (len)

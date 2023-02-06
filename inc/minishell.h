@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/16 01:39:11 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/02/05 07:00:16 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/02/06 02:55:21 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include <stdlib.h>
 # include <unistd.h>
 # include <fcntl.h>
+# include <dirent.h>
 # include <stdio.h>
 # include <string.h>
 # include <errno.h>
@@ -153,10 +154,12 @@ int		substitute_env_vars(t_msh *msh, char *str, char **ret);
 int		substitute_env_vars_heredoc(t_msh *msh, char *str, char **ret);
 int		split_on_bools(t_msh *msh);//, t_job *job);
 int		split_on_pipes(t_job *job);
+int		skip_open_quotes(char **str);
 //char	**tokenize(t_job *job, char *cmd);
 char	*skip_valid_envp_var_chars(char *var);
 char	*skip_spaces(char **line, int init_offset, int chg_inplace);
 int		strip_quotes(char *str);
+int		wildcard_expand_all_tokens(t_cmd *cmd);
 
 // BUILTINS
 int		msh_builtin_echo(t_job *job, t_cmd *cmd);

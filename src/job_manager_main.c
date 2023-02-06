@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/05 00:26:12 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/02/05 07:07:36 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/02/06 05:19:27 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ int	job_manager(t_msh *msh, char *rawline)
 
 //	printf("main pid : %d\n", getpid());
 	job = &msh->job;
-	printf("rawline : %s\n", rawline);
+//	printf("rawline : %s\n", rawline);
 	if (job_init(msh, rawline) < 0)
 		return (job_clear(job, -1));
 	if (contains_meta_char(job->parsed)

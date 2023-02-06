@@ -6,13 +6,13 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/05 01:59:49 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/02/05 07:05:55 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/02/06 02:20:18 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int	skip_open_quotes(char **line)
+int	skip_open_quotes(char **line)
 {
 	if (!**line)
 		return (0);

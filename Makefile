@@ -6,7 +6,7 @@
 #    By: tbeaudoi <tbeaudoi@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/16 01:26:25 by iamongeo          #+#    #+#              #
-#    Updated: 2023/02/05 04:07:34 by iamongeo         ###   ########.fr        #
+#    Updated: 2023/02/06 01:40:33 by iamongeo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,7 +29,8 @@ _SRC		=	msh_main.c			\
 			sig_handlers.c			\
 			intercept_builtin_calls.c	\
 			tokenizer_redirector.c	\
-			redirection_handlers.c
+			redirection_handlers.c	\
+			wildcard_expansion.c
 
 _BLT		=	cd.c		\
 			echo.c		\

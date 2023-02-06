@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/16 19:16:03 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/02/05 07:28:47 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/02/06 02:46:36 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ static int	msh_init(t_msh *msh, char **envp)
 {
 	if (!msh || !envp)
 		return (report_missing_input(__FUNCTION__));
+
 	msh->paths = get_env_paths(envp);
 	if (!msh->paths || msh_envp_copy(envp, &msh->envp) < 0)
 		return (report_malloc_err(__FUNCTION__));

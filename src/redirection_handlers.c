@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 20:33:23 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/02/05 07:40:10 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/02/06 00:50:54 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,6 @@ static void	hd_rl_env_sub(t_msh *msh, t_cmd *cmd, char *limiter, char *tmp)
 {
 	char	*rl;
 	char	*nrl;
-	ssize_t	limlen;
 
 	printf("CHILD : entered \n");
 	msh->is_hd_child = 1;
@@ -113,7 +112,6 @@ static void	hd_rl_env_sub(t_msh *msh, t_cmd *cmd, char *limiter, char *tmp)
 		ft_eprintf("minishell :: heredoc tmpfile critical failure\n");
 		exit(job_clear(cmd->job, 0) | msh_clear(cmd->job->msh, -1));
 	}
-	limlen = ft_strlen(limiter);
 	rl = NULL;
 	nrl = NULL;
 	while (ft_free_p((void **)&rl) && ft_free_p((void **)&nrl))
@@ -126,7 +124,7 @@ static void	hd_rl_env_sub(t_msh *msh, t_cmd *cmd, char *limiter, char *tmp)
 		}
 		if (substitute_env_vars_heredoc(msh, rl, &nrl) < 0)
 			exit(job_clear(cmd->job, 0) | msh_clear(msh, -1));
-		if (ft_strncmp(rl, limiter, limlen) == 0)
+		if (ft_strncmp(nrl, limiter, ft_strlen(rl)) == 0)
 			break ;
 		write(cmd->job->tmp_fd, nrl, ft_strlen(nrl));
 	}

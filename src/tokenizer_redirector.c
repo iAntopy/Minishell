@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/20 20:54:13 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/02/05 07:01:16 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/02/06 03:21:57 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,6 +111,7 @@ int	setup_cmds(t_job *job)
 		cmd->tokens = ft_split_space(job->pipe_split[i]);
 		if (!cmd->tokens)
 			return (report_jm_mlc_err(__FUNCTION__));
+		wildcard_expand_all_tokens(cmd);
 		if (apply_redirections_for_single_cmd(cmd) == -1)
 			return (-1);
 		restore_substrings_in_tab(cmd->tokens, cmd->job->sc, 1);
