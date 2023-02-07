@@ -6,26 +6,12 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/20 20:54:13 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/02/06 03:21:57 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/02/07 04:59:32 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-/*
-/// DELETE ME
-void	print_all_cmds(t_job *job)
-{
-	int	i;
-
-	i = -1;
-	while (++i < job->nb_cmds)
-	{
-		ft_eprintf("\nCMD %d : \n", i + 1);
-		strtab_print(job->cmds[i].tokens);
-	}
-}
-*/
 int	strip_quotes(char *s)
 {
 	char	*quote;
@@ -34,7 +20,6 @@ int	strip_quotes(char *s)
 	quote = ft_strchr_set(s, "\'\"");
 	while (quote)
 	{
-		printf("str : %s\n", s);
 		len = ft_strlen(quote + 1);
 		ft_memcpy(quote, quote + 1, len);
 		quote[len - 1] = '\0';
@@ -110,7 +95,7 @@ int	setup_cmds(t_job *job)
 		cmd->job = job;
 		cmd->tokens = ft_split_space(job->pipe_split[i]);
 		if (!cmd->tokens)
-			return (report_jm_mlc_err(__FUNCTION__));
+			return (report_malloc_err());
 		wildcard_expand_all_tokens(cmd);
 		if (apply_redirections_for_single_cmd(cmd) == -1)
 			return (-1);

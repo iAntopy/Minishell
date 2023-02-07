@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 06:08:27 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/02/06 21:57:09 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/02/07 04:51:17 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,15 +41,15 @@ int	msh_envp_add_entry(t_msh *msh, char *var, char *value)
 	int		i;
 
 	if (!msh || !msh->envp || !var || !value)
-		return (report_missing_input(__FUNCTION__));
+		return (-1);
 	envp = msh->envp;
 	len = strtab_len(envp);
 	new_envp = NULL;
 	if (build_new_envp_entry(var, value, &entry) < 0)
-		return (report_malloc_err(__FUNCTION__));
+		return (report_malloc_err());
 	if (!ft_malloc_p(sizeof(char *) * (len + 2), (void **)&new_envp))
 		return (ft_free_p((void **)&entry)
-			+ report_malloc_err(__FUNCTION__));
+			+ report_malloc_err());
 	i = -1;
 	while (envp[++i])
 		new_envp[i] = envp[i];
@@ -67,7 +67,7 @@ int	msh_envp_remove_entry(t_msh *msh, char *var)
 	int		i;
 
 	if (!msh || !msh->envp || !var)
-		return (report_missing_input(__FUNCTION__));
+		return (-1);
 	if (!(*var))
 		return (0);
 	len = ft_strlen(var);
@@ -89,11 +89,11 @@ int	msh_envp_copy(char **envp, char ***ret)
 	char	**envp_cpy;
 
 	if (!envp || !ret)
-		return (report_missing_input(__FUNCTION__));
+		return (-1);
 	envp_cpy = NULL;
 	envp_cpy = strtab_copy(envp);
 	if (!envp_cpy)
-		return (report_malloc_err(__FUNCTION__));
+		return (report_malloc_err());
 	*ret = envp_cpy;
 	return (0);
 }
@@ -102,7 +102,6 @@ char	*msh_getenv(t_msh *msh, char *var)
 {
 	char	**envp;
 	int		i;
-//	int		var_len;
 	char	var_buff[1024];
 
 	if (!msh || !msh->envp || !var)
@@ -116,7 +115,6 @@ char	*msh_getenv(t_msh *msh, char *var)
 	while (envp[++i])
 	{
 		ft_strlcpy(var_buff, envp[i], ft_strchr(envp[i], '=') - envp[i] + 1);
-//		printf("envp subst : cmp var vs var_cpy : %s vs %s\n", var, var_buff);
 		if (ft_strcmp(var, var_buff) == 0)
 			return (ft_strchr(envp[i], '=') + 1);
 	}

@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/02 16:47:43 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/02/06 02:59:33 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/02/07 04:49:38 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 int	is_meta_char(char *c, int *len)
 {
-	const int	meta_lens[7] = {2, 2, 1, 1, 2, 1, 2};
-	const char	*meta_chars[8] = {
-		"<<", ">>", "<", ">", "||", "|", "&&", NULL};
+	const int	meta_lens[8] = {2, 2, 1, 1, 2, 1, 2, 1};
+	const char	*meta_chars[9] = {
+		"<<", ">>", "<", ">", "||", "|", "&&", ";", NULL};
 	int			i;
 
 	if (len)
@@ -99,7 +99,7 @@ int	spaceout_meta_chars(t_job *job)
 	job->parsed2 = NULL;
 	if (!job->parsed
 		|| !ft_malloc_p(spaced_size(job->parsed), (void **)&job->parsed2))
-		return (report_jm_mlc_err(__FUNCTION__));
+		return (report_malloc_err());
 	quote_switch = 0;
 	p = job->parsed;
 	r = job->parsed2;

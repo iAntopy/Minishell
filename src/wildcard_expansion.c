@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/06 01:39:29 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/02/06 05:24:16 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/02/07 04:48:21 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ static int	wildcard_expansion(t_cmd *cmd, char *tk, char **mchs, int *nb_mch)
 	struct dirent	*dent;
 
 	if (!tk)
-		return (report_missing_input(__FUNCTION__));
+		return (-1);
 	if (!contains_wildcard(tk))
 		return (0);
 	restore_substring(tk, cmd->job->sc, 1);

@@ -6,7 +6,7 @@
 /*   By: tbeaudoi <tbeaudoi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 04:08:20 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/02/06 13:00:35 by tbeaudoi         ###   ########.fr       */
+/*   Updated: 2023/02/07 05:11:17 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ static int	parse_exit_cmd(t_job *job, char **cmd, int *exit_status)
 	if (cmd[1])
 	{
 		if (!exit_status)
-			report_malloc_err(__FUNCTION__);
+			report_malloc_err();
 		else if (!validate_is_all_num(cmd[1])
 			&& report_exit_alpha_arg(job, cmd[1]))
 			*exit_status = -1;

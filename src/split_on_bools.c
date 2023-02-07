@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/05 01:59:49 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/02/06 02:20:18 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/02/07 06:49:01 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	skip_open_quotes(char **line)
 	if (!**line)
 		return (0);
 	if (**line == '\'' || **line == '\"')
-		*line = ft_strchr(*line + 1, **line);		
+		*line = ft_strchr(*line + 1, **line);
 	return (1);
 }
 
@@ -45,10 +45,10 @@ static int	add_pln_swap_line(t_msh *msh, char **line, char **r_p, int bl)
 int	split_on_bools(t_msh *msh)
 {
 	char	*r;
-	int	mlen;
+	int		mlen;
 
 	if (!msh->rawline)
-		return (report_missing_input(__FUNCTION__));
+		return (-1);
 	r = msh->rawline;
 	while (*r && skip_open_quotes(&r))
 	{
@@ -61,6 +61,9 @@ int	split_on_bools(t_msh *msh)
 				&& add_pln_swap_line(msh, &msh->rawline, &r, BOOL_OR) == -1)
 				return (-1);
 		}
+		else if (is_meta_char(r, &mlen) && *r == ';'
+			&& add_pln_swap_line(msh, &msh->rawline, &r, SEMI_COL) == -1)
+			return (-1);
 		r++;
 	}
 	msh->pipelines[msh->nb_plns++] = msh->rawline;

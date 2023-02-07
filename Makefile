@@ -6,7 +6,7 @@
 #    By: tbeaudoi <tbeaudoi@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/16 01:26:25 by iamongeo          #+#    #+#              #
-#    Updated: 2023/02/06 01:40:33 by iamongeo         ###   ########.fr        #
+#    Updated: 2023/02/07 07:02:14 by iamongeo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,6 +15,7 @@ SRC_B_DIR	= src_bonus/
 BLT_DIR		= builtins/
 
 _SRC		=	msh_main.c			\
+			pipelines_manager.c		\
 			job_manager_main.c		\
 			meta_chars_utils.c		\
 			substitute_env_vars.c		\
@@ -22,6 +23,7 @@ _SRC		=	msh_main.c			\
 			syntax_validator.c		\
 			envp_utils.c			\
 			error_handling.c		\
+			error_handling2.c		\
 			split_cmd_on_pipes.c		\
 			split_on_bools.c		\
 			job_executor.c			\
@@ -30,6 +32,7 @@ _SRC		=	msh_main.c			\
 			intercept_builtin_calls.c	\
 			tokenizer_redirector.c	\
 			redirection_handlers.c	\
+			heredoc_utils.c		\
 			wildcard_expansion.c
 
 _BLT		=	cd.c		\

@@ -6,7 +6,7 @@
 /*   By: tbeaudoi <tbeaudoi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/20 18:45:09 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/02/06 15:42:16 by tbeaudoi         ###   ########.fr       */
+/*   Updated: 2023/02/07 06:46:43 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,19 +88,17 @@ int	validate_syntax(char *l, int *exit_status)
 
 	if (!l || !(*l))
 		return (-1);
-	if (skip_spaces(&l, 0, 1) && is_meta_char(l, &mlen) && *l != '<' && *l != '>')
-//	if (l[0] == '|' || l[ft_strlen(l) - 1] == '|')
+	if (skip_spaces(&l, 0, 1) && is_meta_char(l, &mlen)
+		&& !ft_strchr("<>", *l))
 		return (report_syntax_error(l, mlen, exit_status, 0));
 	error = 0;
 	while (skip_open_quotes_syntax(&l, &error, exit_status) && *l)
 	{
 		if (is_meta_char(l, &mlen))
 		{
-			k = l + mlen;
-			skip_spaces(&k, 0, 1);
-			if (!*k || (is_meta_char(k, &mlen2) && !is_valid_meta_combo(l, mlen, k)))
-//			if ((*l == '<' || *l == '>' || *l == '&' || (*l == '|' && mlen == 2))
-//				&& (!*k || is_meta_char(k, &mlen2)))
+			k = skip_spaces(&l, mlen, 0);
+			if (!*k || (is_meta_char(k, &mlen2)
+					&& !is_valid_meta_combo(l, mlen, k)))
 				return (report_syntax_error(k, mlen2, exit_status, 0));
 			l += mlen;
 		}

@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/05 05:04:41 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/02/07 01:12:08 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/02/07 06:55:32 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,39 +26,30 @@ char	*skip_valid_envp_var_chars(char *var)
 {
 	char	*start;
 
-//	printf("var start : %s\n", var);
 	start = var;
 	while (is_valid_env_char(*var, start == var))
 		var++;
 	if (start == var && (*var != '\'' || *var != '\"'))
 		return (var + 1);
-//	printf("var end : %s\n", var);
 	return (var);
 }
 
-static int	skip_cpy_open_quotes(char **line, char **cpy, size_t *size, char *qte)
+static int	skip_cpy_open_qts(char **line, char **cpy, size_t *size, char *qte)
 {
 	char	*quote;
 	size_t	len;
-	
 
-//	l = *line;
-//	printf("skip quote line start : %s\n", *line);
 	if (line && *line && !**line)
 		return (0);
 	if (**line == '\"')
 		*qte = **line * (*qte == '\0');
-//	printf("qte : %c\n", *qte);
 	if (!*qte && **line == '\'')
 	{
 		quote = ft_strchr(*line + 1, '\'');
 		len = quote - *line;
-//		printf("skip : line before : %s\n", *line);
 		if (cpy)
 		{
-//			printf("quote - *line : %ld\n", quote - *line);
 			ft_strncpy(*cpy, *line, len);
-			printf("len : %zu\n", len);
 			*line += len;
 			*cpy += len;
 		}
@@ -68,16 +59,11 @@ static int	skip_cpy_open_quotes(char **line, char **cpy, size_t *size, char *qte
 			if (size)
 				*size += len;
 		}
-//		while (*(++l) && *l != '\'')
-//			continue ;
-		//printf("skip : line after : %s\n", *line);
 	}
-//	*line = l;
-	printf("skip quote line after: %s\n", *line);
 	return (1);
 }
 
-static size_t	find_subst_str_size(t_msh *msh, char *l, char **vals)
+static size_t	find_subst_size(t_msh *msh, char *l, char **vals)
 {
 	char	var[4096];
 	size_t	size;
@@ -86,15 +72,13 @@ static size_t	find_subst_str_size(t_msh *msh, char *l, char **vals)
 
 	size = 0;
 	qte = '\0';
-	printf("find subst init strlen : %zu\n", ft_strlen(l));
-	while (skip_cpy_open_quotes(&l, NULL, &size, &qte))
+	while (skip_cpy_open_qts(&l, NULL, &size, &qte))
 	{
-		if (*l == '$' && *(l + 1) && !ft_strchr(" \'\"", *(l + 1)))// && !(*(l + 1) == '\'' || *(l + 1) == '\"'))
+		if (*l == '$' && *(l + 1) && !ft_strchr(" \'\"", *(l + 1)))
 		{
 			p = skip_valid_envp_var_chars(l + 1);
 			ft_strncpy(var, l + 1, p - (l + 1));
 			*vals = msh_getenv(msh, var);
-			//printf("val found (%s) at l : %s\n", *vals, l);
 			size += ft_strlen(*vals);
 			l = p - 1 + (**vals == '\0' && *p != '\0');
 			vals++;
@@ -102,7 +86,6 @@ static size_t	find_subst_str_size(t_msh *msh, char *l, char **vals)
 		size++;
 		l++;
 	}
-	printf("find subst str size at exit : %zu\n", size);
 	return (size + 1);
 }
 
@@ -114,37 +97,23 @@ int	substitute_env_vars(t_msh *msh, char *s, char **ret)
 	int		v;
 	char	qte;
 
-//	printf("sub entered: s : %s : s len : %zu\n", s, ft_strlen(s));
 	ft_memclear(vals, sizeof(char *) * 1024);
-	if (!ft_malloc_p(find_subst_str_size(msh, s, (char **)vals), (void **)ret))
-		return (report_malloc_err(__FUNCTION__));
+	if (!ft_malloc_p(find_subst_size(msh, s, (char **)vals), (void **)ret))
+		return (report_malloc_err());
 	qte = 0;
 	v = 0;
 	r = *ret;
-	printf("WOWWY!\n");
-//	printf("vals[0] : %s\n", vals[0]);
-	while (skip_cpy_open_quotes(&s, &r, NULL, &qte))
+	while (skip_cpy_open_qts(&s, &r, NULL, &qte))
 	{
-//		printf("whiling s : %s\n", s);
-//		if (!qte && *s == '\'')
-//			skip_cpy_open_quotes(&s, &r, NULL);
-//		if (*s == '\"')
-//			qte = (*s) * (qte == 0);
-		//if (*s == '$' && qte != '\'' && *(s + 1) && !ft_strchr(" \'\"", *(s + 1)))
 		if (*s == '$' && *(s + 1) && !ft_strchr(" \'\"", *(s + 1)))
 		{
-//			printf("s env char before skip : %s\n", s);
 			s = skip_valid_envp_var_chars(s + 1);
-//			printf("s env char after skip : %s\n", s);
-//			printf("r val cpy before skip : %s\n", r);
 			r += ft_strlcpy(r, vals[v], ft_strlen(vals[v]) + 1);
-//			printf("r - 5 val cpy after skip : %s\n", r - 5);
 			v++;
 		}
 		else
 			*(r++) = *(s++);
 	}
 	*r = '\0';
-	//printf("sub exit : %s\n", *ret);
 	return (0);
 }

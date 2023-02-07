@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/16 01:39:11 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/02/06 02:55:21 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/02/07 07:05:31 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,8 @@ enum	e_builtin_status
 enum	e_boolean_meta_chars_markers
 {
 	BOOL_AND = 0xf0,
-	BOOL_OR = 0xf1
+	BOOL_OR = 0xf1,
+	SEMI_COL = 0xf2
 };
 
 enum	e_signal_exit_codes
@@ -123,16 +124,12 @@ enum	e_signal_exit_codes
 	EXIT_SIGINT = 3
 };
 
-// DEBUG FUNCTIONS (DELETE)
-void	print_all_cmds(t_job *job);// in tokenizer_redirector.c
-
 // JOB MANAGER
 t_msh	*get_msh(void);
+int		msh_pipelines_manager(t_msh *msh);
 int		job_manager(t_msh *msh, char *rawline);
 int		job_executor(t_job *job);
 int		validate_syntax(char *line, int *exit_status);
-//int		validate_meta_char_syntax(char *line);
-//int		validate_syntax_beggining_or_ending_pipes(char *line);
 int		intercept_builtin_call(t_cmd *cmd);
 int		init_pipe(int pp[2], int *rd_pipe, int i, int nb_cmds);
 int		close_pipe(int *rd_pipe, int *wr_pipe);
@@ -178,17 +175,15 @@ char	*msh_getenv(t_msh *msh, char *var);
 
 // CLEAR FUNCTIONS
 int		msh_clear(t_msh *msh, int exit_code);
+int		msh_clear_pipelines(t_msh *msh, int exit_code);
 int		job_clear(t_job *job, int exit_code);
 
 // ERROR HANDLING
-int		report_missing_input(const char *fn);
 int		report_file_error(char *filename, t_cmd *cmd);
-int		report_malloc_err(const char *fn);
-int		report_fork_err(const char *fn);
-int		report_jm_mlc_err(const char *fn);
-int		report_pipe_err(const char *fn);
+int		report_malloc_err(void);
+int		report_fork_err(void);
+int		report_pipe_err(void);
 int		report_parsing_error(const char *fn, char *meta_c, int len);
-int		report_builtin_failure(const char *fn);
 int		report_max_nb_cmds_exceeded(t_job *job);
 int		report_max_nb_pipelines_exceeded(t_msh *msh);
 int		report_cmd_not_found(char *cmdname, t_cmd *cmd, int exit_code);
@@ -197,5 +192,6 @@ int		report_unclosed_quotes(void);
 // SIGNALS
 void	handlers_control(t_msh *msh, int mode);
 void	sig_handler(int signum, siginfo_t *info, void *context);
+void	sig_handler_heredoc_child(int signum);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/06 23:20:16 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/02/03 18:18:51 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/02/07 07:15:19 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,12 +31,13 @@ static int	node_counter(char *s)
 	wcount = ft_strncmp(s, " | ", 3) != 0;
 	while (*s)
 	{
+		printf("node_counter : s : %s\n", s);
 		if (is_quote(*s, &quote_switch))
 			while (*s && *(++s) && *s && *s != is_quote(*s, &quote_switch))
 				continue ;
 		else
 			wcount += (ft_strncmp(s, " | ", 3) == 0);
-		s++;
+		s += (*s != '\0');
 	}
 	return (wcount);
 }
@@ -65,7 +66,7 @@ static int	pipe_splitter(char **tab, char *str)
 		}
 		else if (!(*s) || !(*(s + 1)))
 			tab[wcount++] = ft_strndup(str, SIZE_MAX);
-		s++;
+		s += (*s != '\0');
 	}
 	return (wcount);
 }
@@ -79,11 +80,11 @@ int	split_on_pipes(t_job *job)
 	job->pipe_split = NULL;
 	wcount = node_counter(job->parsed);
 	if (!ft_calloc_p(sizeof(char *) * (wcount + 1), (void **)&job->pipe_split))
-		return (-1);
+		return (report_malloc_err());
 	if (wcount && pipe_splitter(job->pipe_split, job->parsed) <= 0)
 	{
 		strtab_clear(&job->pipe_split);
-		return (report_jm_mlc_err(__FUNCTION__));
+		return (report_malloc_err());
 	}
 	return (0);
 }
