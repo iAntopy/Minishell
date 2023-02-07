@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   msh_main.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tbeaudoi <tbeaudoi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/16 19:16:03 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/02/07 07:02:37 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/02/07 14:44:21 by tbeaudoi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,11 +54,11 @@ int	main(int argc, char **argv, char **envp)
 	(void)argc;
 	(void)argv;
 	msh = get_msh();
+	handlers_control(msh, INTERAC_MODE);
 	if (msh_init(msh, envp) < 0)
 		return (msh_clear(msh, E_MSH_INIT));
 	while (!msh->request_exit)
 	{
-		handlers_control(msh, INTERAC_MODE);
 		if (msh->rawline)
 			msh_clear(msh, E_RAWLINE_CLR_ERR);
 		msh->rawline = readline(READLINE_PROMPT);
@@ -71,6 +71,7 @@ int	main(int argc, char **argv, char **envp)
 			msh_pipelines_manager(msh);
 		}
 		ft_free_p((void **)&msh->rawline);
+		handlers_control(msh, INTERAC_MODE);
 	}
 	return (msh_clear(msh, msh->shell_exit_status));
 }
