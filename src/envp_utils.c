@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 06:08:27 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/02/03 00:21:00 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/02/06 21:57:09 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,8 @@ char	*msh_getenv(t_msh *msh, char *var)
 {
 	char	**envp;
 	int		i;
+//	int		var_len;
+	char	var_buff[1024];
 
 	if (!msh || !msh->envp || !var)
 		return ("");
@@ -110,12 +112,13 @@ char	*msh_getenv(t_msh *msh, char *var)
 	if (*var == '?')
 		return (msh->nbr_buff);
 	envp = msh->envp;
-	i = 0;
-	while (envp[i])
+	i = -1;
+	while (envp[++i])
 	{
-		if (ft_strncmp(envp[i], var, ft_strchr(envp[i], '=') - envp[i]) == 0)
+		ft_strlcpy(var_buff, envp[i], ft_strchr(envp[i], '=') - envp[i] + 1);
+//		printf("envp subst : cmp var vs var_cpy : %s vs %s\n", var, var_buff);
+		if (ft_strcmp(var, var_buff) == 0)
 			return (ft_strchr(envp[i], '=') + 1);
-		i++;
 	}
 	return ("");
 }
