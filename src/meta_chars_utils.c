@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/02 16:47:43 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/02/07 04:49:38 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/02/07 23:54:39 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ static int	parse_single_meta_char(char **r_p, char **str_p, int *meta_len)
 	str = *str_p;
 	*(r++) = ' ';
 	r = ft_memcpy(r, str, *meta_len) + *meta_len;
-	if (*str == '|' || *str == '&')
+	if (ft_strchr("|&;", *str))
 		*(r++) = ' ';
 	str += *meta_len;
 	while (*str && ft_isspace(*str))

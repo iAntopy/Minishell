@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/06 23:20:16 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/02/07 07:15:19 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/02/07 16:52:47 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@ static int	node_counter(char *s)
 	wcount = ft_strncmp(s, " | ", 3) != 0;
 	while (*s)
 	{
-		printf("node_counter : s : %s\n", s);
 		if (is_quote(*s, &quote_switch))
 			while (*s && *(++s) && *s && *s != is_quote(*s, &quote_switch))
 				continue ;

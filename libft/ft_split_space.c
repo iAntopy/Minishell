@@ -6,7 +6,7 @@
 /*   By: iamongeo <marvin@42quebec.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/28 15:55:00 by iamongeo          #+#    #+#             */
-/*   Updated: 2022/10/24 18:09:54 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/02/07 21:20:52 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,5 +66,6 @@ char	**ft_split_space(char const *s)
 		return (NULL);
 	if (wcount && word_splitter(tab, s) <= 0)
 		return (strtab_clear(&tab));
+	tab[wcount] = NULL;
 	return (tab);
 }

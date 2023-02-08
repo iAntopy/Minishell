@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 03:43:47 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/02/07 03:44:23 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/02/07 20:32:38 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,4 +35,6 @@ void	sig_handler_heredoc_child(int signum)
 		msh_clear(msh, 0);
 		exit(EXIT_SIGINT);
 	}
+	else if (signum == SIGQUIT)
+		printf("heredoc child catches SIGQUIT and plays it cool\n");
 }

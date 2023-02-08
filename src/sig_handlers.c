@@ -6,7 +6,7 @@
 /*   By: tbeaudoi <tbeaudoi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/12 20:01:38 by tbeaudoi          #+#    #+#             */
-/*   Updated: 2023/02/07 16:01:05 by tbeaudoi         ###   ########.fr       */
+/*   Updated: 2023/02/07 22:38:20 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,7 @@ void	sig_int(int signum)
 	msh = get_msh();
 	close_fd(&msh->job.tmp_fd);
 	kill(msh->hd_pid, 0);
+	msh->sigint_flag = 1;
 	write(1, "\n", 1);
 	rl_on_new_line();
 }

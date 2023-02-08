@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/16 01:39:11 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/02/07 07:05:31 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/02/07 23:41:16 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,9 +75,11 @@ typedef struct s_minishell_data
 	char	**paths;
 	char	*rawline;
 	int		exit_status;
+	int		sigint_flag;
 	int		shell_exit_status;
 	int		request_exit;
 	int		exec_status;
+	int		read_script_fd;
 	int		is_hd_child;
 	int		hd_id;
 	int		hd_pid;

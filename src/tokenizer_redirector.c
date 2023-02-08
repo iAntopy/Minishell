@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/20 20:54:13 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/02/07 04:59:32 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/02/07 21:38:27 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,8 @@ int	find_and_validate_cmd_file(t_cmd *cmd)
 	if (cmd->builtin)
 		return (0);
 	cmdname = cmd->tokens[0];
-	if (ft_strncmp(cmdname, "./", 2) == 0)
+	cmd_path = NULL;
+	if (ft_strchr(cmdname, '/'))
 	{
 		if (access(cmdname, F_OK | X_OK) == 0)
 			return (0);
