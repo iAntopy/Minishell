@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tbeaudoi <tbeaudoi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 04:00:34 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/02/02 20:16:49 by tbeaudoi         ###   ########.fr       */
+/*   Updated: 2023/02/08 21:53:04 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ int	msh_builtin_cd(t_job *job, t_cmd *cmd)
 		swap_pwd(job->msh, new_pwd, old_pwd);
 	else
 	{
-		printf("cd: %s: No such file or directory\n", path);
+		fperror("Minishell : %s", path);
 		job->msh->exit_status = 1;
 		return (job->msh->exit_status);
 	}

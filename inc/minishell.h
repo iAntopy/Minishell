@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/16 01:39:11 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/02/07 23:41:16 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/02/08 22:12:19 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,7 @@ typedef struct s_minishell_data
 	char	*rawline;
 	int		exit_status;
 	int		sigint_flag;
+	int		sigquit_flag;
 	int		shell_exit_status;
 	int		request_exit;
 	int		exec_status;
@@ -123,7 +124,8 @@ enum	e_boolean_meta_chars_markers
 
 enum	e_signal_exit_codes
 {
-	EXIT_SIGINT = 3
+	EXIT_SIGINT = 130,
+	EXIT_SIGQUIT = 131
 };
 
 // JOB MANAGER
@@ -182,6 +184,7 @@ int		job_clear(t_job *job, int exit_code);
 
 // ERROR HANDLING
 int		report_file_error(char *filename, t_cmd *cmd);
+int		report_no_paths_error(void);
 int		report_malloc_err(void);
 int		report_fork_err(void);
 int		report_pipe_err(void);

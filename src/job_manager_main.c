@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/05 00:26:12 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/02/07 19:09:51 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/02/08 22:19:49 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,6 @@ static int	job_init(t_msh *msh, char *rawline)
 
 	strtab_clear(&msh->paths);
 	msh->paths = get_env_paths(msh->envp);
-	if (!msh->paths)
-		return (report_malloc_err());
 	job = &msh->job;
 	msh->nbr_buff_len = ft_putnbr_buff(msh->nbr_buff, msh->exit_status);
 	ft_memclear(job, sizeof(t_job));

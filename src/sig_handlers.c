@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sig_handlers.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tbeaudoi <tbeaudoi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/12 20:01:38 by tbeaudoi          #+#    #+#             */
-/*   Updated: 2023/02/07 22:38:20 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/02/08 21:45:53 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,22 @@
 // 	}
 // }
 
+void	sig_heredoc(int signum)
+{
+	t_msh	*msh;
+
+	if (signum == SIGINT || signum == SIGQUIT)
+	{
+		msh = get_msh();
+		job_clear(&msh->job, 0);
+		msh_clear(msh, 0);
+		if (signum == SIGINT)
+			exit(EXIT_SIGINT);
+		else
+			exit(EXIT_SIGQUIT);
+	}
+}
+
 void	sig_int(int signum)
 {
 	t_msh	*msh;
@@ -92,7 +108,7 @@ void	sig_int(int signum)
 	rl_on_new_line();
 }
 
-void	sig_int_interac(int signum)
+void	sig_interac(int signum)
 {
 	(void)signum;
 	write(1, "\n", 1);
@@ -113,18 +129,12 @@ void	sig_quit(int signum)
 	rl_on_new_line();
 }
 
-void	sig_quit_interac(int signum)
-{
-	(void)signum;
-	(void)SIGQUIT;
-}
-
 void	handlers_control(t_msh *msh, int mode)
 {
 	(void)msh;
 	if (mode == INTERAC_MODE)
 	{
-		signal(SIGINT, sig_int_interac);
+		signal(SIGINT, sig_interac);
 		signal(SIGQUIT, SIG_IGN);
 	}
 	if (mode == EXEC_MODE)
@@ -134,7 +144,7 @@ void	handlers_control(t_msh *msh, int mode)
 	}
 	if (mode == HEREDOC_MODE)
 	{
-		signal(SIGINT, sig_int);
-		signal(SIGQUIT, sig_quit);
+		signal(SIGINT, sig_heredoc);
+		signal(SIGQUIT, sig_heredoc);
 	}
 }

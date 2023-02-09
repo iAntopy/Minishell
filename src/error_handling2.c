@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error_handling2.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tbeaudoi <tbeaudoi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 07:27:37 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/02/07 06:13:56 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/02/08 22:13:44 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,5 +39,11 @@ int	report_cmd_not_found(char *cmdname, t_cmd *cmd, int exit_code)
 	ft_eprintf("Minishell: %s: command not found\n", cmdname);
 	cmd->doa = 1;
 	cmd->job->msh->exit_status = exit_code;
+	return (-1);
+}
+
+int	report_no_paths_error(void)
+{
+	ft_eprintf("Minishell error :: No such file or director\n");
 	return (-1);
 }

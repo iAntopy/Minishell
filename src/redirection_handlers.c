@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 20:33:23 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/02/07 23:55:11 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/02/08 21:43:47 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ static void	hd_rl_env_sub(t_msh *msh, t_cmd *cmd, char *limiter, char *tmp)
 	char	*nrl;
 
 	msh->is_hd_child = 1;
-	signal(SIGINT, sig_handler_heredoc_child);
+	handlers_control(msh, HEREDOC_MODE);
 	cmd->job->tmp_fd = open(tmp, O_CREAT | O_TRUNC | O_WRONLY, 0644);
 	if (cmd->job->tmp_fd < 0)
 		exit(job_clear(cmd->job, 0) | msh_clear(cmd->job->msh, -1));
@@ -97,21 +97,20 @@ int	get_heredoc_input(t_msh *msh, t_cmd *cmd, char **tks_p)
 {
 	char	*limiter;
 	char	tmp[PATH_MAX];
-	int		status;
 
 	gen_tempname(tmp, msh->hd_id++);
 	limiter = *tks_p + 2;
 	strip_quotes(limiter);
-	handlers_control(msh, HEREDOC_MODE);
+	handlers_control(msh, EXEC_MODE);
 	msh->hd_pid = fork();
 	if (msh->hd_pid < 0)
 		return (report_fork_err());
 	if (msh->hd_pid == 0)
 		hd_rl_env_sub(msh, cmd, limiter, tmp);
-	waitpid(msh->hd_pid, &status, 0);
+	waitpid(msh->hd_pid, &msh->exit_status, 0);
 	handlers_control(msh, INTERAC_MODE);
-	msh->exit_status = 130 * (WEXITSTATUS(status) == EXIT_SIGINT);
-	if (WEXITSTATUS(status) == EXIT_SIGINT)
+	msh->exit_status = WEXITSTATUS(msh->exit_status);
+	if (msh->exit_status)
 		return (-1);
 	msh->hd_pid = 0;
 	close_fd(&cmd->redir_in);

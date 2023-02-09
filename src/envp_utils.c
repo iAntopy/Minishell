@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 06:08:27 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/02/07 04:51:17 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/02/08 21:38:20 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,18 +63,19 @@ int	msh_envp_add_entry(t_msh *msh, char *var, char *value)
 int	msh_envp_remove_entry(t_msh *msh, char *var)
 {
 	char	**envp;
-	size_t	len;
 	int		i;
+	char	var_buff[1024];
 
 	if (!msh || !msh->envp || !var)
 		return (-1);
 	if (!(*var))
 		return (0);
-	len = ft_strlen(var);
 	i = 0;
-	envp = msh->envp;
-	while (envp[i] && ft_strncmp(var, envp[i], len) != 0)
-		i++;
+	envp = msh->envp - 1;
+	while (envp[++i] && ft_strlcpy(var_buff, envp[i],
+			ft_strchr(envp[i], '=') - envp[i] + 1))
+		if (ft_strcmp(var, var_buff) == 0)
+			break ;
 	if (!envp[i])
 		return (0);
 	ft_free_p((void **)envp + i);
