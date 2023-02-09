@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/02 16:47:43 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/02/02 23:46:55 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/02/07 23:54:39 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int	is_meta_char(char *c, int *len)
 {
 	const int	meta_lens[8] = {2, 2, 1, 1, 2, 1, 2, 1};
 	const char	*meta_chars[9] = {
-		"<<", ">>", "<", ">", "||", "|", "&&", "*", NULL};
+		"<<", ">>", "<", ">", "||", "|", "&&", ";", NULL};
 	int			i;
 
 	if (len)
@@ -78,7 +78,7 @@ static int	parse_single_meta_char(char **r_p, char **str_p, int *meta_len)
 	str = *str_p;
 	*(r++) = ' ';
 	r = ft_memcpy(r, str, *meta_len) + *meta_len;
-	if (*str == '|' || *str == '&')
+	if (ft_strchr("|&;", *str))
 		*(r++) = ' ';
 	str += *meta_len;
 	while (*str && ft_isspace(*str))
@@ -99,7 +99,7 @@ int	spaceout_meta_chars(t_job *job)
 	job->parsed2 = NULL;
 	if (!job->parsed
 		|| !ft_malloc_p(spaced_size(job->parsed), (void **)&job->parsed2))
-		return (report_jm_mlc_err(__FUNCTION__));
+		return (report_malloc_err());
 	quote_switch = 0;
 	p = job->parsed;
 	r = job->parsed2;

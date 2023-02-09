@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/05 05:04:41 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/02/02 23:03:52 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/02/07 06:54:49 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,12 @@ static char	*skip_valid_envp_var_chars_hd(char *var)
 	start = var;
 	while (is_valid_env_char(*var, start == var))
 		var++;
-	if (start == var && (*var != '\'' || *var != '\"'))
+	if (start == var && !ft_strchr(" \'\"", *var))
 		return (var + 1);
 	return (var);
 }
 
-static size_t	find_subst_str_size_hd(t_msh *msh, char *l, char **vals)
+static size_t	find_subst_size(t_msh *msh, char *l, char **vals)
 {
 	char	var[4096];
 	size_t	size;
@@ -35,7 +35,7 @@ static size_t	find_subst_str_size_hd(t_msh *msh, char *l, char **vals)
 	l--;
 	while (*(++l))
 	{
-		if (*l == '$')
+		if (*l == '$' && *(l + 1) && !ft_strchr(" \'\"", *(l + 1)))
 		{
 			p = l;
 			p = skip_valid_envp_var_chars_hd(l + 1);
@@ -54,23 +54,23 @@ static size_t	find_subst_str_size_hd(t_msh *msh, char *l, char **vals)
 int	substitute_env_vars_heredoc(t_msh *msh, char *s, char **ret)
 {
 	char	*vals[1024];
-	size_t	size;
 	char	*r;
 	int		v;
 
 	if (!msh || !msh->envp || !s)
-		return (report_missing_input(__FUNCTION__));
-	size = find_subst_str_size_hd(msh, s, (char **)vals);
-	if (!ft_malloc_p(sizeof(char) * size, (void **)ret))
-		return (report_malloc_err(__FUNCTION__));
+		return (-1);
+	if (!ft_malloc_p(sizeof(char) * find_subst_size(msh, s, vals),
+			(void **)ret))
+		return (report_malloc_err());
 	v = 0;
 	r = *ret;
 	while (s && *s)
 	{
-		if (*s == '$' && is_valid_env_char(*(s + 1), 1))
+		if (*s == '$' && *(s + 1) && !ft_strchr(" \'\"", *(s + 1)))
 		{
 			s = skip_valid_envp_var_chars(s + 1);
-			r += ft_strlcpy(r, vals[v++], size);
+			r += ft_strlcpy(r, vals[v], ft_strlen(vals[v]) + 1);
+			v++;
 		}
 		else
 			*(r++) = *(s++);

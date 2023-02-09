@@ -3,29 +3,30 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer_redirector.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tbeaudoi <tbeaudoi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/20 20:54:13 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/02/02 21:38:52 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/02/08 21:07:17 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-/*
-/// DELETE ME
-void	print_all_cmds(t_job *job)
+int	strip_quotes(char *s)
 {
-	int	i;
+	char	*quote;
+	size_t	len;
 
-	i = -1;
-	while (++i < job->nb_cmds)
+	quote = ft_strchr_set(s, "\'\"");
+	while (quote)
 	{
-		ft_eprintf("\nCMD %d : \n", i + 1);
-		strtab_print(job->cmds[i].tokens);
+		len = ft_strlen(quote + 1);
+		ft_memcpy(quote, quote + 1, len);
+		quote[len - 1] = '\0';
+		quote = ft_strchr_set(s, "\'\"");
 	}
+	return (0);
 }
-*/
 
 static int	apply_redirections_for_single_cmd(t_cmd *cmd)
 {
@@ -40,7 +41,7 @@ static int	apply_redirections_for_single_cmd(t_cmd *cmd)
 	{
 		status = 0;
 		if (ft_strncmp(tks[i], "<<", 2) == 0)
-			status = get_heredoc_input(cmd, tks + i, &cmd->job->heredoc_id);
+			status = get_heredoc_input(cmd->job->msh, cmd, tks + i);
 		else if (ft_strncmp(tks[i], ">>", 2) == 0)
 			status = redirect_outfile(cmd, tks + i, O_APPEND);
 		else if (ft_strncmp(tks[i], "<", 1) == 0)
@@ -62,7 +63,8 @@ int	find_and_validate_cmd_file(t_cmd *cmd)
 	if (cmd->builtin)
 		return (0);
 	cmdname = cmd->tokens[0];
-	if (ft_strncmp(cmdname, "./", 2) == 0)
+	cmd_path = NULL;
+	if (ft_strchr(cmdname, '/'))
 	{
 		if (access(cmdname, F_OK | X_OK) == 0)
 			return (0);
@@ -94,9 +96,9 @@ int	setup_cmds(t_job *job)
 		cmd->job = job;
 		cmd->tokens = ft_split_space(job->pipe_split[i]);
 		if (!cmd->tokens)
-			return (report_jm_mlc_err(__FUNCTION__));
-		if (apply_redirections_for_single_cmd(cmd) == -1)
-			return (-1);
+			return (report_malloc_err());
+		wildcard_expand_all_tokens(cmd);
+		apply_redirections_for_single_cmd(cmd);
 		restore_substrings_in_tab(cmd->tokens, cmd->job->sc, 1);
 		if (cmd->tokens[0] && find_and_validate_cmd_file(cmd) < 0)
 			return (-1);

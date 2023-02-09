@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 00:48:45 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/02/02 22:59:16 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/02/08 21:09:57 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ static int	job_executor_force_exit(t_job *job, int *rd_pipe)
 	int	i;
 
 	if (!job)
-		return (report_missing_input(__FUNCTION__));
+		return (-1);
 	close_pipe(job->pp, job->pp + 1);
 	close_pipe(rd_pipe, NULL);
 	i = -1;
@@ -27,7 +27,7 @@ static int	job_executor_force_exit(t_job *job, int *rd_pipe)
 	return (-1);
 }
 
-static void	setup_child_redirections(t_cmd *cmd)
+static int	setup_child_redirections(t_cmd *cmd)
 {
 	close_fd(&cmd->job->pp[0]);
 	if (cmd->redir_in)
@@ -42,8 +42,9 @@ static void	setup_child_redirections(t_cmd *cmd)
 		close_fd(&cmd->job->pp[1]);
 		dup2(cmd->redir_out, STDOUT_FILENO);
 	}
-	else if (cmd->job->pp[1] != STDOUT_FILENO)
+	else if (cmd->job->pp[1] >= 3)
 		dup2(cmd->job->pp[1], STDOUT_FILENO);
+	return (1);
 }
 
 static void	execute_child_task(t_job *job, t_cmd *cmd)
@@ -87,13 +88,12 @@ int	job_executor(t_job *job)
 	int	i;
 
 	if (!job)
-		return (report_missing_input(__FUNCTION__));
+		return (-1);
+	job->msh->exec_status = EXEC_MODE;
 	if (job->nb_cmds == 1 && job->cmds[0].builtin)
 	{
-		if (!job->cmds[0].doa)
-			setup_child_redirections(&job->cmds[0]);
-		if (!job->cmds[0].doa && job->cmds[0].builtin(job, &job->cmds[0]) != 0)
-			return (report_builtin_failure(__FUNCTION__));
+		if (!job->cmds[0].doa && setup_child_redirections(&job->cmds[0]))
+			job->cmds[0].builtin(job, &job->cmds[0]);
 		if (!job->cmds[0].doa && job->cmds[0].redir_in >= 3)
 			dup2(job->msh->stdin_fd, STDIN_FILENO);
 		if (!job->cmds[0].doa && job->cmds[0].redir_out >= 3)
@@ -102,11 +102,9 @@ int	job_executor(t_job *job)
 	}
 	if (fork_child_processes(job) < 0)
 		return (-1);
-	job->msh->exec_status = EXEC_MODE;
 	i = -1;
 	while (++i < job->nb_cmds)
 		waitpid(job->cmds[i].pid, &job->msh->exit_status, 0);
-	job->msh->exec_status = INTERAC_MODE;
 	job->msh->exit_status = WEXITSTATUS(job->msh->exit_status);
 	return (0);
 }

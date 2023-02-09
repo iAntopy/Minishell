@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 06:08:27 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/02/03 00:21:00 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/02/08 21:38:20 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,15 +41,15 @@ int	msh_envp_add_entry(t_msh *msh, char *var, char *value)
 	int		i;
 
 	if (!msh || !msh->envp || !var || !value)
-		return (report_missing_input(__FUNCTION__));
+		return (-1);
 	envp = msh->envp;
 	len = strtab_len(envp);
 	new_envp = NULL;
 	if (build_new_envp_entry(var, value, &entry) < 0)
-		return (report_malloc_err(__FUNCTION__));
+		return (report_malloc_err());
 	if (!ft_malloc_p(sizeof(char *) * (len + 2), (void **)&new_envp))
 		return (ft_free_p((void **)&entry)
-			+ report_malloc_err(__FUNCTION__));
+			+ report_malloc_err());
 	i = -1;
 	while (envp[++i])
 		new_envp[i] = envp[i];
@@ -63,18 +63,19 @@ int	msh_envp_add_entry(t_msh *msh, char *var, char *value)
 int	msh_envp_remove_entry(t_msh *msh, char *var)
 {
 	char	**envp;
-	size_t	len;
 	int		i;
+	char	var_buff[1024];
 
 	if (!msh || !msh->envp || !var)
-		return (report_missing_input(__FUNCTION__));
+		return (-1);
 	if (!(*var))
 		return (0);
-	len = ft_strlen(var);
 	i = 0;
-	envp = msh->envp;
-	while (envp[i] && ft_strncmp(var, envp[i], len) != 0)
-		i++;
+	envp = msh->envp - 1;
+	while (envp[++i] && ft_strlcpy(var_buff, envp[i],
+			ft_strchr(envp[i], '=') - envp[i] + 1))
+		if (ft_strcmp(var, var_buff) == 0)
+			break ;
 	if (!envp[i])
 		return (0);
 	ft_free_p((void **)envp + i);
@@ -89,11 +90,11 @@ int	msh_envp_copy(char **envp, char ***ret)
 	char	**envp_cpy;
 
 	if (!envp || !ret)
-		return (report_missing_input(__FUNCTION__));
+		return (-1);
 	envp_cpy = NULL;
 	envp_cpy = strtab_copy(envp);
 	if (!envp_cpy)
-		return (report_malloc_err(__FUNCTION__));
+		return (report_malloc_err());
 	*ret = envp_cpy;
 	return (0);
 }
@@ -102,6 +103,7 @@ char	*msh_getenv(t_msh *msh, char *var)
 {
 	char	**envp;
 	int		i;
+	char	var_buff[1024];
 
 	if (!msh || !msh->envp || !var)
 		return ("");
@@ -110,12 +112,12 @@ char	*msh_getenv(t_msh *msh, char *var)
 	if (*var == '?')
 		return (msh->nbr_buff);
 	envp = msh->envp;
-	i = 0;
-	while (envp[i])
+	i = -1;
+	while (envp[++i])
 	{
-		if (ft_strncmp(envp[i], var, ft_strchr(envp[i], '=') - envp[i]) == 0)
+		ft_strlcpy(var_buff, envp[i], ft_strchr(envp[i], '=') - envp[i] + 1);
+		if (ft_strcmp(var, var_buff) == 0)
 			return (ft_strchr(envp[i], '=') + 1);
-		i++;
 	}
 	return ("");
 }

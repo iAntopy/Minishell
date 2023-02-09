@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 02:19:04 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/02/02 21:05:40 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/02/07 05:08:02 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int	init_pipe(int pp[2], int *rd_pipe, int i, int nb_cmds)
 	isfirst = (i == 0);
 	islast = (i == (nb_cmds - 1));
 	if (!islast && pipe(pp) < 0)
-		return (report_pipe_err(__FUNCTION__));
+		return (report_pipe_err());
 	if (isfirst)
 		*rd_pipe = STDIN_FILENO;
 	if (islast)

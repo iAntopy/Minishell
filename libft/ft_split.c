@@ -6,7 +6,7 @@
 /*   By: iamongeo <marvin@42quebec.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/28 15:55:00 by iamongeo          #+#    #+#             */
-/*   Updated: 2022/12/06 21:01:27 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/02/07 21:20:16 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,23 +63,3 @@ char	**ft_split(char const *s, char c)
 		return (strtab_clear(&tab));
 	return (tab);
 }
-/*
-int	main(int argc, char **argv)
-{
-	char	*str = "";
-	char	del = 'a';
-	char	**tab;
-
-	if (argc < 2)
-		return (1);
-	tab = ft_split(argv[1], ' ');
-	if (!tab)
-	{
-		ft_printf("tab is NULL \n");
-		return (0);
-	}
-	strtab_print(tab);
-	strtab_clear(&tab);
-	return (0);
-}
-*/

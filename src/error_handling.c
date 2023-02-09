@@ -6,48 +6,28 @@
 /*   By: tbeaudoi <tbeaudoi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 07:27:37 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/02/02 18:39:17 by tbeaudoi         ###   ########.fr       */
+/*   Updated: 2023/02/07 06:15:13 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	report_missing_input(const char *fn)
+int	report_malloc_err(void)
 {
-	if (fn)
-		ft_eprintf("%s : missing input\n", fn);
+	ft_eprintf("Minishell : malloc error\n");
 	return (-1);
 }
 
-int	report_malloc_err(const char *fn)
+int	report_fork_err(void)
 {
-	if (fn)
-		ft_eprintf("%s : malloc error\n", fn);
+	ft_eprintf("Minishell : fork failed\n");
 	return (-1);
 }
 
-int	report_fork_err(const char *fn)
+int	report_pipe_err(void)
 {
-	if (fn)
-		ft_eprintf("%s : fork failed\n", fn);
+	ft_eprintf("Minishell : pipe failed\n");
 	return (-1);
-}
-
-int	report_jm_mlc_err(const char *fn)
-{
-	if (fn)
-		ft_eprintf("%s : malloc error\n", fn);
-//	errno = ENOMEM;
-//	return (errno);
-	return (-1);
-}
-
-int	report_pipe_err(const char *fn)
-{
-	if (fn)
-		ft_eprintf("%s : pipe init failed\n", fn);
-	return (-1);
-//	return (errno);
 }
 
 int	report_parsing_error(const char *fn, char *meta_c, int len)
@@ -60,37 +40,6 @@ int	report_parsing_error(const char *fn, char *meta_c, int len)
 	meta_buff[len] = '\0';
 	if (fn)
 		ft_eprintf("Minishell %s: parsing error near \'%s\'\n", fn, meta_buff);
-	return (-1);
-}
-
-int	report_builtin_failure(const char *fn)
-{
-	if (fn)
-		ft_eprintf("Minishell: %s: a builtin failed to execute\n", fn);
-	return (-1);
-//	return (errno);
-}
-
-int	report_max_nb_cmds_exceeded(t_job *job)
-{
-	ft_eprintf("Minishell: Max number of cmds in pipeline exceeded : %d / %d\n",
-		job->nb_cmds, MAX_CMDS);
-	return (-1);
-}
-
-int	report_file_error(char *filename, t_cmd *cmd)//int *doa_flag)
-{
-	ft_eprintf("Minishell error :: %s : %s\n", strerror(errno), filename);
-	cmd->doa = 1;
-	cmd->job->msh->exit_status = errno;
-	return (-1);
-}
-
-int	report_cmd_not_found(char *cmdname, t_cmd *cmd, int exit_code)
-{
-	ft_eprintf("Minishell: %s: command not found\n", cmdname);
-	cmd->doa = 1;
-	cmd->job->msh->exit_status = exit_code;
 	return (-1);
 }
 
