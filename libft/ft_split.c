@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iamongeo <marvin@42quebec.com>             +#+  +:+       +#+        */
+/*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/28 15:55:00 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/02/07 21:20:16 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/02/09 15:33:22 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static int	word_counter(const char *s, char c)
 		return (0);
 	wcount = *s != c;
 	while (*(++s))
-		wcount += (*(s - 1) == c) && (*s != c);
+		wcount += ((*(s - 1) == c) && (*s != c));
 	return (wcount);
 }
 

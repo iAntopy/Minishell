@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/16 01:39:11 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/02/08 22:12:19 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/02/09 15:06:14 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -176,6 +176,7 @@ int		msh_envp_add_entry(t_msh *msh, char *var, char *value);
 int		msh_envp_remove_entry(t_msh *msh, char *var);
 int		msh_envp_copy(char **envp, char ***ret);
 char	*msh_getenv(t_msh *msh, char *var);
+int		msh_getenv_export(t_msh *msh, char *var, char **ret_val);
 
 // CLEAR FUNCTIONS
 int		msh_clear(t_msh *msh, int exit_code);
@@ -184,7 +185,6 @@ int		job_clear(t_job *job, int exit_code);
 
 // ERROR HANDLING
 int		report_file_error(char *filename, t_cmd *cmd);
-int		report_no_paths_error(void);
 int		report_malloc_err(void);
 int		report_fork_err(void);
 int		report_pipe_err(void);
@@ -193,6 +193,7 @@ int		report_max_nb_cmds_exceeded(t_job *job);
 int		report_max_nb_pipelines_exceeded(t_msh *msh);
 int		report_cmd_not_found(char *cmdname, t_cmd *cmd, int exit_code);
 int		report_unclosed_quotes(void);
+int		report_heredoc_sig_interupt(t_cmd *cmd);
 
 // SIGNALS
 void	handlers_control(t_msh *msh, int mode);

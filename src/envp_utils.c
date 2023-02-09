@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 06:08:27 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/02/08 21:38:20 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/02/09 15:24:39 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,9 +105,7 @@ char	*msh_getenv(t_msh *msh, char *var)
 	int		i;
 	char	var_buff[1024];
 
-	if (!msh || !msh->envp || !var)
-		return ("");
-	if (!var[0])
+	if (!msh || !msh->envp || !var || !var[0])
 		return ("");
 	if (*var == '?')
 		return (msh->nbr_buff);

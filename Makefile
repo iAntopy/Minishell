@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: tbeaudoi <tbeaudoi@student.42.fr>          +#+  +:+       +#+         #
+#    By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/16 01:26:25 by iamongeo          #+#    #+#              #
-#    Updated: 2023/02/07 07:02:14 by iamongeo         ###   ########.fr        #
+#    Updated: 2023/02/09 15:35:43 by iamongeo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -38,6 +38,7 @@ _SRC		=	msh_main.c			\
 _BLT		=	cd.c		\
 			echo.c		\
 			export.c	\
+			export_utils.c	\
 			unset.c		\
 			exit.c		\
 			pwd.c		\
@@ -82,6 +83,7 @@ all:	$(NAME) $(NAME_BONUS)
 
 clean:
 		rm -f $(OBJ_M) $(OBJ_B) $(LIBFT)
+		make -C libft/ clean
 #		@$(MAKE) -s clean -C $(LIBRD_DIR)
 
 fclean:		clean

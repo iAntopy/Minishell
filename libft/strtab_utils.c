@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   strtab_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tbeaudoi <tbeaudoi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/28 04:23:34 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/02/01 07:31:03 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/02/09 15:12:03 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,14 +61,12 @@ void	strtab_print(char **tab)
 		return ;
 	}
 	i = 1;
-	ft_printf("\n@----------String Table-----------@\n");
 	while (*tab)
 	{
-		ft_printf("| %d - %s$\n", i, *tab);
+		ft_printf("%s\n", *tab);
 		i++;
 		tab++;
 	}
-	ft_printf("@---------------@@@--------------@\n");
 }
 
 char	**strtab_copy(char **tab)

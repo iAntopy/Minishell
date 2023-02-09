@@ -6,13 +6,11 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 04:00:34 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/02/08 21:53:04 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/02/09 16:04:09 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-// Done, for now
 
 static int	swap_pwd(t_msh *msh, char *new_pwd, char *old_pwd)
 {
