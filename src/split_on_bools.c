@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/05 01:59:49 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/02/07 22:20:28 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/02/08 23:39:00 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,16 +26,21 @@ static int	add_pln_swap_line(t_msh *msh, char **line, char **r_p, int bl)
 	char	*new_line;
 	char	*r;
 	int		mlen;
+	char	*trim;
 
 	if (msh->nb_plns >= MAX_PIPELINES)
 		return (report_max_nb_pipelines_exceeded(msh));
 	r = *r_p;
-	msh->pipelines[msh->nb_plns] = ft_strndup(*line, r - *line);
+	trim = ft_strndup(*line, r - *line);
+	msh->pipelines[msh->nb_plns] = ft_strtrim(trim, " ()");
+	ft_free_p((void **)&trim);
 	if (!msh->pipelines[msh->nb_plns])
 		return (-1);
 	msh->pl_meta_bools[msh->nb_plns++] = bl;
 	is_meta_char(r, &mlen);
-	new_line = ft_strndup(r + mlen, ft_strlen(r + mlen));
+	trim = ft_strndup(r + mlen, ft_strlen(r + mlen));
+	new_line = ft_strtrim(trim, " ()");
+	ft_free_p((void **)&trim);
 	if (!new_line)
 		return (-1);
 	ft_free_p((void **)line);
