@@ -3,16 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tbeaudoi <tbeaudoi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 05:06:50 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/02/02 19:46:53 by tbeaudoi         ###   ########.fr       */
+/*   Updated: 2023/02/09 16:04:30 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// Done, for now
 int	msh_builtin_pwd(t_job *job, t_cmd *cmd)
 {
 	char	buff[PATH_MAX + 2];
