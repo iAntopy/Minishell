@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 07:27:37 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/02/08 22:13:44 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/02/09 15:05:12 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,8 @@ int	report_cmd_not_found(char *cmdname, t_cmd *cmd, int exit_code)
 	return (-1);
 }
 
-int	report_no_paths_error(void)
+int	report_heredoc_sig_interupt(t_cmd *cmd)
 {
-	ft_eprintf("Minishell error :: No such file or director\n");
+	cmd->doa = 1;
 	return (-1);
 }

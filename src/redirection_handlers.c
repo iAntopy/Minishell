@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 20:33:23 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/02/08 21:43:47 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/02/09 15:06:00 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,7 @@ int	get_heredoc_input(t_msh *msh, t_cmd *cmd, char **tks_p)
 	handlers_control(msh, INTERAC_MODE);
 	msh->exit_status = WEXITSTATUS(msh->exit_status);
 	if (msh->exit_status)
-		return (-1);
+		return (report_heredoc_sig_interupt(cmd));
 	msh->hd_pid = 0;
 	close_fd(&cmd->redir_in);
 	cmd->redir_in = open(tmp, O_RDONLY);

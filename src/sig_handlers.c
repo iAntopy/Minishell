@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/12 20:01:38 by tbeaudoi          #+#    #+#             */
-/*   Updated: 2023/02/08 21:45:53 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/02/09 14:49:15 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,6 +125,7 @@ void	sig_quit(int signum)
 	msh = get_msh();
 	close_fd(&msh->job.tmp_fd);
 	kill(msh->hd_pid, 0);
+	msh->sigquit_flag = 1;
 	write(1, "\n", 1);
 	rl_on_new_line();
 }

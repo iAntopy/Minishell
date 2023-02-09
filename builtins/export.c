@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 08:22:03 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/02/08 21:28:27 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/02/09 15:27:00 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,8 +63,7 @@ static int	pre_parse(t_job *job, char **token_tab)
 	{
 		if (parse_export_cmd(job, token_tab[i], var, &value) == 0)
 		{
-			existing_value = msh_getenv(job->msh, var);
-			if (existing_value && existing_value[0])
+			if (msh_getenv_export(job->msh, var, &existing_value))
 				msh_envp_remove_entry(job->msh, var);
 			if (msh_envp_add_entry(job->msh, var, value) < 0)
 			{
