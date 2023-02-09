@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/05 00:26:12 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/02/08 22:19:49 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/02/09 03:24:18 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ static int	job_init(t_msh *msh, char *rawline)
 {
 	t_job	*job;
 
+	printf("job_init rawline : %s\n", rawline);
 	strtab_clear(&msh->paths);
 	msh->paths = get_env_paths(msh->envp);
 	job = &msh->job;
@@ -50,8 +51,12 @@ static int	job_init(t_msh *msh, char *rawline)
 	ft_memclear(job, sizeof(t_job));
 	job->msh = msh;
 	job->parsed = ft_strtrim(rawline, " ");
+	printf("rawline : %s\n", rawline);
 	if (!job->parsed)
+	{
+		printf("job init failed : malloc error\n");
 		return (report_malloc_err());
+	}
 	return (0);
 }
 

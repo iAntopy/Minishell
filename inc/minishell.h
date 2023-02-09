@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/16 01:39:11 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/02/08 22:12:19 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/02/09 02:45:13 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -193,6 +193,7 @@ int		report_max_nb_cmds_exceeded(t_job *job);
 int		report_max_nb_pipelines_exceeded(t_msh *msh);
 int		report_cmd_not_found(char *cmdname, t_cmd *cmd, int exit_code);
 int		report_unclosed_quotes(void);
+int		report_syntax_error(char *near, int mlen, int *exit_code, char quote);
 
 // SIGNALS
 void	handlers_control(t_msh *msh, int mode);

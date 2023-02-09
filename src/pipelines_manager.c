@@ -6,7 +6,7 @@
 /*   By: iamongeo <iamongeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 07:01:40 by iamongeo          #+#    #+#             */
-/*   Updated: 2023/02/07 22:38:13 by iamongeo         ###   ########.fr       */
+/*   Updated: 2023/02/09 03:25:19 by iamongeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ int	msh_pipelines_manager(t_msh *msh)
 	if (validate_syntax(msh->rawline, &msh->exit_status) < 0
 		|| split_on_bools(msh) < 0)
 		return (msh_clear_pipelines(msh, -1));
+	printf("pipelines manager : nb_plns : %d\n", msh->nb_plns);
 	i = -1;
 	while (++i < msh->nb_plns && !msh->sigint_flag)
 	{
